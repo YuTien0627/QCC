@@ -148,7 +148,7 @@
                 <h2 class="section-title text-2xl font-bold text-gray-800 pl-3 mb-4" data-section-title="品管改善步驟（QC Story）">3. 品管改善步驟（QC Story）</h2>
                 <p class="text-gray-600 mb-6">以下列舉「問題解決型」品管圈的典型十個步驟，並說明每個階段的重點工作。</p>
                 
-                <!-- QCC 步驟表格 (表格內容省略以保持程式碼簡潔，表格 ID: qcc-steps-table) -->
+                <!-- QCC 步驟表格 -->
                 <div class="overflow-x-auto rounded-lg shadow-md" id="qcc-steps-table">
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
@@ -166,7 +166,7 @@
                             <tr><td class="px-3 py-4 font-medium text-green-600">4</td><td class="px-3 py-4 whitespace-nowrap">目標設定</td><td class="px-6 py-4">根據現況把握結果，設定具體、可行、有時限的改善目標值。</td><td class="px-6 py-4">查檢表、圖表</td></tr>
                             <tr><td class="px-3 py-4 font-medium text-green-600">5</td><td class="px-3 py-4 whitespace-nowrap">解析</td><td class="px-6 py-4">利用科學方法，深入分析影響問題的主要原因，找出「真因」。</td><td class="px-6 py-4">特性要因圖、散佈圖、關聯圖</td></tr>
                             <tr><td class="px-3 py-4 font-medium text-green-600">6</td><td class="px-3 py-4 whitespace-nowrap">對策擬定與實施</td><td class="px-6 py-4">針對真因，腦力激盪出有效的對策，評估後進行實施。</td><td class="px-6 py-4">系統圖、矩陣圖、PDPC</td></tr>
-                            <tr><td class="px-3 py-4 font-medium text-green-600">7</td><td class="px-3 py-4 whitespace-nowrap">效果確認</td><td class="px-6 py-4">收集實施對策後的數據，與改善前（現況把握）及目標值比較，確認改善成效。</td></td><td class="px-6 py-4">圖表、管制圖、柏拉圖</td></tr>
+                            <tr><td class="px-3 py-4 font-medium text-green-600">7</td><td class="px-3 py-4 whitespace-nowrap">效果確認</td><td class="px-6 py-4">收集實施對策後的數據，與改善前（現況把握）及目標值比較，確認改善成效。</td><td class="px-6 py-4">圖表、管制圖、柏拉圖</td></tr>
                             <tr><td class="px-3 py-4 font-medium text-green-600">8</td><td class="px-3 py-4 whitespace-nowrap">標準化</td><td class="px-6 py-4">將有效的對策納入標準作業流程（SOP），防止問題再發。</td><td class="px-6 py-4">流程圖、文件化</td></tr>
                             <tr><td class="px-3 py-4 font-medium text-green-600">9</td><td class="px-3 py-4 whitespace-nowrap">殘留問題與未來展望</td><td class="px-6 py-4">檢討活動過程中的優缺點、分析未解決的殘留問題，並規劃下一階段的持續改善方向。</td><td class="px-6 py-4">檢討會、魚骨圖（殘留問題）</td></tr>
                         </tbody>
@@ -192,13 +192,98 @@
                 <!-- 舊QC七手法表格 -->
                 <h3 class="font-bold text-xl text-green-700 mb-3 border-b pb-1">舊QC七手法（QC 7 Tools）- 數據分析與統計</h3>
                 <div class="overflow-x-auto rounded-lg shadow-md mb-8">
-                    <!-- Table content... -->
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-green-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">工具名稱</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">主要功能</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">適用步驟</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200 text-sm text-gray-700">
+                            <tr>
+                                <td class="px-6 py-4 font-medium whitespace-nowrap">查檢表 (Check Sheet)</td>
+                                <td class="px-6 py-4">系統性地收集數據、記錄次數。</td>
+                                <td class="px-6 py-4">現況把握、效果確認（原始數據收集）</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 font-medium whitespace-nowrap">柏拉圖 (Pareto Chart)</td>
+                                <td class="px-6 py-4">將數據依發生頻率排序，找出影響最大的「重要少數」。</td>
+                                <td class="px-6 py-4">現況把握（決定攻堅重點）、效果確認</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 font-medium whitespace-nowrap">層別法 (Stratification)</td>
+                                <td class="px-6 py-4">將數據按不同屬性分類（如時間、人員、地點），釐清問題的真正發生源。</td>
+                                <td class="px-6 py-4">現況把握、解析</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 font-medium whitespace-nowrap">特性要因圖 (Fishbone Diagram)</td>
+                                <td class="px-6 py-4">將問題結果（特性）與所有可能原因（要因）進行系統性整理。</td>
+                                <td class="px-6 py-4">解析（找出可能原因）</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 font-medium whitespace-nowrap">散佈圖 (Scatter Diagram)</td>
+                                <td class="px-6 py-4">分析兩組數據之間是否存在相關性（正相關、負相關或無相關）。</td>
+                                <td class="px-6 py-4">解析（驗證要因間關係）</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 font-medium whitespace-nowrap">直方圖 (Histogram)</td>
+                                <td class="px-6 py-4">顯示數據的分佈形態，了解過程的穩定性與集中趨勢。</td>
+                                <td class="px-6 py-4">現況把握、效果確認</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 font-medium whitespace-nowrap">管制圖 (Control Chart)</td>
+                                <td class="px-6 py-4">監控製程是否處於統計管制狀態，用於長期品質維持。</td>
+                                <td class="px-6 py-4">效果確認、標準化（效果維持監控）</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
 
                 <!-- 新QC七手法表格 -->
                 <h3 class="font-bold text-xl text-blue-700 mb-3 border-b pb-1">新QC七手法（New QC 7 Tools）- 語言資料整理與創新</h3>
                 <div class="overflow-x-auto rounded-lg shadow-md mb-8">
-                    <!-- Table content... -->
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-blue-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">工具名稱</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">主要功能</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">適用步驟</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200 text-sm text-gray-700">
+                            <tr>
+                                <td class="px-6 py-4 font-medium whitespace-nowrap">親和圖 (Affinity Diagram)</td>
+                                <td class="px-6 py-4">將大量發散的語言資料/想法，依據內在相似性分組歸納，整理複雜問題。</td>
+                                <td class="px-6 py-4">主題選定、解析、對策擬定（想法收斂）</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 font-medium whitespace-nowrap">關聯圖 (Relation Diagram)</td>
+                                <td class="px-6 py-4">釐清複雜問題中，各因素之間糾結的因果關係，找到關鍵點。</td>
+                                <td class="px-6 py-4">解析（複雜原因分析）</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 font-medium whitespace-nowrap">系統圖 (Systematic Diagram)</td>
+                                <td class="px-6 py-4">將目標系統性地分解為達成該目標所需要的手段、方策。</td>
+                                <td class="px-6 py-4">訂定活動計畫、對策擬定</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 font-medium whitespace-nowrap">矩陣圖 (Matrix Diagram)</td>
+                                <td class="px-6 py-4">分析兩組或多組要素之間的相互關係與強度。</td>
+                                <td class="px-6 py-4">對策擬定（評估對策與真因的關係）</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 font-medium whitespace-nowrap">箭線圖法 (Arrow Diagram)</td>
+                                <td class="px-6 py-4">規劃複雜工作的時程，找出關鍵路徑，控制進度。</td>
+                                <td class="px-6 py-4">訂定活動計畫（時程管理）</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 font-medium whitespace-nowrap">過程決策計畫圖 (PDPC)</td>
+                                <td class="px-6 py-4">預測在計畫實施過程中可能發生的問題，並預先準備應變措施。</td>
+                                <td class="px-6 py-4">對策實施（風險預防）</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
                  <!-- AI 輔助提問區塊 -->
                 <div class="mt-8 pt-4 border-t border-gray-100">
@@ -306,6 +391,7 @@
             const chatInput = container.querySelector('.chat-text-input');
             const sendButton = container.querySelector('.chat-send-button');
 
+            // System Instruction is crucial for context
             const systemInstruction = `你是一位友善且知識豐富的品質管理專家。請根據『${sectionTitle}』的主題，回答使用者的提問。你的回答必須簡潔、專業且富有啟發性。`;
 
             // Function to add a message to the display
@@ -344,16 +430,21 @@
                 sendButton.innerHTML = `<div class="loading-spinner"></div>`;
 
                 // 3. Prepare chat history for API
-                chatHistory.push({ role: "user", parts: [{ text: userText }] });
+                // Keep only the last 5 user/model turns to prevent token overflow
+                const historyForApi = chatHistory.slice(-10); 
+                historyForApi.push({ role: "user", parts: [{ text: userText }] });
 
                 // 4. Call AI
-                const aiResponse = await fetchLLMResponse(chatHistory, systemInstruction);
+                const aiResponse = await fetchLLMResponse(historyForApi, systemInstruction);
 
-                // 5. Display AI message
-                addMessage('ai', aiResponse, true);
+                // 5. Update full chat history
+                chatHistory.push({ role: "user", parts: [{ text: userText }] });
                 chatHistory.push({ role: "model", parts: [{ text: aiResponse }] });
 
-                // 6. Reset thinking state
+                // 6. Display AI message
+                addMessage('ai', aiResponse, true);
+
+                // 7. Reset thinking state
                 isThinking = false;
                 sendButton.disabled = false;
                 sendButton.innerHTML = `發問`;
