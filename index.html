@@ -1,26 +1,40 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-TW" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>品管圈（QCC）新手入門指南</title>
+    <title>品管圈（QCC）新手入門互動指南</title>
     <!-- 載入 Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- 設置字體為 Inter -->
     <style>
+        /* 使用 Inter 字體 */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f7f9fb;
+            background-color: #ecfdf5; /* 輕盈的淺綠背景 */
         }
+        /* 區塊標題樣式 */
         .section-title {
-            border-left: 6px solid #10b981; /* 翠綠色側邊裝飾 */
+            border-left: 6px solid #0d9488; /* 深青色側邊裝飾 */
+            padding-left: 0.75rem;
+            transition: all 0.3s ease-in-out;
+        }
+        /* Tab/Nav 按鈕樣式 */
+        .nav-button {
+            transition: all 0.3s ease-in-out;
+            border-bottom: 3px solid transparent;
+        }
+        .nav-button.active {
+            color: #0d9488; /* 深青色文字 */
+            border-color: #0d9488; /* 深青色底線 */
+            font-weight: 700;
         }
         .ai-chat-response {
             white-space: pre-wrap; /* 保持換行和空格 */
         }
         .loading-spinner {
             border: 4px solid #f3f3f3;
-            border-top: 4px solid #10b981;
+            border-top: 4px solid #0d9488; /* 搭配主題色 */
             border-radius: 50%;
             width: 24px;
             height: 24px;
@@ -30,6 +44,30 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        /* 針對特定內容區塊的邊界顏色，讓視覺上有所區分 */
+        #qcc-steps { border-left: 4px solid #f08080; } /* 珊瑚紅 */
+        #qc-tools { border-left: 4px solid #4682b4; } /* 鋼青色 */
+
+        /* --- 新增：回到頂端按鈕樣式 --- */
+        #backToTopBtn {
+            /* 固定位置，靠右下方 */
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1000;
+            /* 隱藏但準備好淡入 */
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+            cursor: pointer;
+            width: 3rem;
+            height: 3rem;
+        }
+        /* 按鈕顯示時的樣式 */
+        #backToTopBtn.show {
+            opacity: 1;
+            visibility: visible;
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -38,23 +76,39 @@
     <div class="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8">
 
         <!-- 標題區塊 -->
-        <header class="text-center py-10 bg-white shadow-lg rounded-xl mb-10">
-            <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-900 mb-2">品管圈（QCC）新手入門指南</h1>
-            <p class="text-xl text-gray-500">從概念到實踐，快速掌握品質改善的利器</p>
+        <header id="header" class="text-center py-10 bg-white shadow-xl rounded-xl mb-6 border-t-8 border-teal-600">
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-900 mb-2">品管圈（QCC）新手入門互動指南</h1>
+            <p class="text-xl text-gray-500">從概念到實踐，品質改善的旅程由此開始！</p>
         </header>
 
-        <!-- 內容區塊 -->
-        <main class="space-y-12">
+        <!-- 導航按鈕 (Scroll Nav) -->
+        <nav class="sticky top-0 z-10 flex justify-center bg-white p-2 rounded-xl shadow-lg mb-8 space-x-4">
+            <!-- 首頁按鈕：回到頁面頂部 -->
+            <button id="nav-btn-home" onclick="scrollToSection('header', 'nav-btn-home')" class="nav-button active text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">
+                🚀 首頁 (活動總覽)
+            </button>
+            <!-- 書面格式按鈕：跳轉到 QCC 步驟區塊 -->
+            <button id="nav-btn-format" onclick="scrollToSection('qcc-steps', 'nav-btn-format')" class="nav-button text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">
+                📝 書面格式 (QC Story)
+            </button>
+            <!-- 參考資料按鈕：跳轉到 QC 工具區塊 -->
+            <button id="nav-btn-tools" onclick="scrollToSection('qc-tools', 'nav-btn-tools')" class="nav-button text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">
+                🛠️ 參考資料 (品管工具)
+            </button>
+        </nav>
 
-            <!-- 1. 什麼是品管圈（QCC）？ -->
-            <section id="what-is-qcc" class="bg-white p-6 sm:p-8 rounded-xl shadow-lg">
-                <h2 class="section-title text-2xl font-bold text-gray-800 pl-3 mb-4" data-section-title="什麼是品管圈（QCC）？">1. 什麼是品管圈？</h2>
+        <!-- 內容區塊 (全部集中在首頁，透過滾動呈現) -->
+        <main id="main-content" class="space-y-12">
+
+            <!-- 區塊 A: 什麼是品管圈（QCC）？ (作為首頁主要內容) -->
+            <section id="what-is-qcc" class="bg-white p-6 sm:p-8 rounded-xl shadow-lg border-l-4 border-teal-500 hover:shadow-2xl transition duration-300">
+                <h2 class="section-title text-2xl font-bold text-gray-800 mb-4" data-section-title="什麼是品管圈（QCC）？">1. 什麼是品管圈（QCC）？</h2>
                 <div class="text-gray-600 leading-relaxed space-y-4">
-                    <p>品管圈（Quality Control Circle, QCC）是一種持續改善活動，鼓勵<strong class="font-semibold text-green-600">基層同仁</strong>組成小組，共同運用各種品管工具和手法，以系統性的步驟解決工作現場的問題，或達成特定的改善目標。</p>
-                    <p>它不僅是一種管理工具，更是一種<strong class="font-semibold text-green-600">品質文化</strong>的養成過程。透過這樣的活動，能培養同仁的品管意識、團隊合作能力，進而持續不斷地提升服務品質與工作效率。</p>
+                    <p>品管圈（Quality Control Circle, QCC）是一種持續改善活動，鼓勵<strong class="font-semibold text-teal-600">基層同仁</strong>組成小組，共同運用各種品管工具和手法，以系統性的步驟解決工作現場的問題，或達成特定的改善目標。</p>
+                    <p>它不僅是一種管理工具，更是一種<strong class="font-semibold text-teal-600">品質文化</strong>的養成過程。透過這樣的活動，能培養同仁的品管意識、團隊合作能力，進而持續不斷地提升服務品質與工作效率。</p>
                 </div>
                 <!-- AI 輔助提問區塊 -->
-                <div class="mt-8 pt-4 border-t border-gray-100">
+                <div class="mt-8 pt-4 border-t border-gray-200">
                     <h4 class="font-semibold text-lg text-gray-700 mb-3 flex items-center">
                         <svg class="w-5 h-5 mr-2 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 13a2 2 0 012-2h10a2 2 0 012 2v1a2 2 0 01-2 2H7a2 2 0 01-2-2v-1z"></path></svg>
                         AI 輔助提問：想問點關於本節內容嗎？
@@ -64,75 +118,46 @@
                     </div>
                 </div>
             </section>
-
-            <!-- 2. 運用合適的品管工具解決問題（五大改善類型） -->
-            <section id="tool-selection" class="bg-white p-6 sm:p-8 rounded-xl shadow-lg">
-                <h2 class="section-title text-2xl font-bold text-gray-800 pl-3 mb-4" data-section-title="運用合適的品管工具解決問題（五大改善類型）">2. 運用合適的品管工具解決問題（五大改善類型）</h2>
+            
+            <!-- 區塊 B: 運用合適的品管工具解決問題（五大改善類型） -->
+            <section id="tool-selection" class="bg-white p-6 sm:p-8 rounded-xl shadow-lg border-l-4 border-teal-500 hover:shadow-2xl transition duration-300">
+                <h2 class="section-title text-2xl font-bold text-gray-800 mb-4" data-section-title="運用合適的品管工具解決問題（五大改善類型）">2. 運用合適的品管工具解決問題（五大改善類型）</h2>
                 <p class="text-gray-600 mb-6">品質改善活動應依據問題的性質、發生時機與目標，選擇最合適的手法和工具，以達到事半功倍的效果。</p>
                 
                 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <!-- 類型 1: 問題解決型 -->
-                    <div class="border-t-4 border-red-500 bg-red-50 p-4 rounded-lg shadow-md">
+                    <div class="border-t-4 border-red-500 bg-red-50 p-4 rounded-lg shadow-md hover:shadow-lg transition duration-300">
                         <h3 class="font-bold text-xl text-red-700 mb-2">1. 問題解決型（回溯）</h3>
                         <p class="text-sm font-semibold text-red-600 mb-2">處理已發生的負面落差。</p>
                         <p class="text-sm text-gray-600">適用於**「現狀與應有狀態」之間存在負面落差**的情況。目標是解決已經發生的問題，消除不良、錯誤或低效率。</p>
-                        <ul class="list-disc list-inside mt-2 space-y-1 text-gray-600 text-sm pl-2">
-                            <li><strong>主要手法：</strong> 品管圈 (QCC - 問題型)</li>
-                            <li><strong>情境範例：</strong> 病人跌倒率、檢體退件率、文書錯誤率過高。</li>
-                            <li><strong>常用工具：</strong> 舊QC七手法、特性要因圖、柏拉圖。</li>
-                        </ul>
                     </div>
-
                     <!-- 類型 2: 課題達成型 -->
-                    <div class="border-t-4 border-blue-500 bg-blue-50 p-4 rounded-lg shadow-md">
+                    <div class="border-t-4 border-blue-500 bg-blue-50 p-4 rounded-lg shadow-md hover:shadow-lg transition duration-300">
                         <h3 class="font-bold text-xl text-blue-700 mb-2">2. 課題達成型（創新型）</h3>
                         <p class="text-sm font-semibold text-blue-600 mb-2">處理現狀與理想狀態的正面差距。</p>
-                        <p class="text-sm text-gray-600">適用於<strong class="font-semibold">「現狀與理想狀態」之間存在正面差距</strong>的情況。目標是達成更高層次的挑戰性目標，進行創新或突破現狀。</p>
-                        <ul class="list-disc list-inside mt-2 space-y-1 text-gray-600 text-sm pl-2">
-                            <li><strong>主要手法：</strong> 品管圈 (QCC - 課達型)、護理專案。</li>
-                            <li><strong>情境範例：</strong> 開發創新服務、提升顧客滿意度至業界標竿、導入新技術。</li>
-                            <li><strong>常用工具：</strong> 新QC七手法、系統圖、親和圖。</li>
-                        </ul>
+                        <p class="text-sm text-gray-600">目標是達成更高層次的挑戰性目標，進行創新或突破現狀。</p>
                     </div>
-                    
                     <!-- 類型 3: 預先防範型 -->
-                    <div class="border-t-4 border-green-500 bg-green-50 p-4 rounded-lg shadow-md">
+                    <div class="border-t-4 border-green-500 bg-green-50 p-4 rounded-lg shadow-md hover:shadow-lg transition duration-300">
                         <h3 class="font-bold text-xl text-green-700 mb-2">3. 預先防範型（主動預防）</h3>
-                        <p class="text-sm font-semibold text-green-600 mb-2">預測並消除潛在的失敗模式。</p>
-                        <p class="text-sm text-gray-600">是一種<strong class="font-semibold">主動預防</strong>的風險管理工具，系統性地分析**新流程或高風險流程**中所有潛在的失敗模式、發生的影響與可能性。</p>
-                        <ul class="list-disc list-inside mt-2 space-y-1 text-gray-600 text-sm pl-2">
-                            <li><strong>主要手法：</strong> HFMEA (Healthcare FMEA, 醫療失誤模式與效應分析)</li>
-                            <li><strong>情境範例：</strong> 新藥品導入、新設備操作流程、重大手術標準化。</li>
-                            <li><strong>常用工具：</strong> PDPC（預先決策計畫圖）。</li>
-                        </ul>
+                        <p class="text-sm font-semibold text-green-600 mb-2">預測並消除潛在的失敗模式 (如 HFMEA)。</p>
+                        <p class="text-sm text-gray-600">系統性地分析**新流程或高風險流程**中所有潛在的失敗模式。</p>
                     </div>
-
                     <!-- 類型 4: 回溯型 -->
-                    <div class="border-t-4 border-purple-500 bg-purple-50 p-4 rounded-lg shadow-md">
+                    <div class="border-t-4 border-purple-500 bg-purple-50 p-4 rounded-lg shadow-md hover:shadow-lg transition duration-300">
                         <h3 class="font-bold text-xl text-purple-700 mb-2">4. 回溯型（嚴重事件分析）</h3>
-                        <p class="text-sm font-semibold text-purple-600 mb-2">針對已發生嚴重事件追溯原因。</p>
-                        <p class="text-sm text-gray-600">針對<strong class="font-semibold">已發生或近乎發生的嚴重事件</strong>（如異常、事故）進行深入、系統性的分析，找出所有潛藏的系統性、根本性原因。</p>
-                        <ul class="list-disc list-inside mt-2 space-y-1 text-gray-600 text-sm pl-2">
-                            <li><strong>主要手法：</strong> RCA (Root Cause Analysis, 根本原因分析)</li>
-                            <li><strong>情境範例：</strong> 病人自殺事件、手術部位感染群聚、設備重大損壞。</li>
-                            <li><strong>常用工具：</strong> 魚骨圖、5個Why。</li>
-                        </ul>
+                        <p class="text-sm font-semibold text-purple-600 mb-2">針對已發生嚴重事件追溯原因 (如 RCA)。</p>
+                        <p class="text-sm text-gray-600">針對<strong class="font-semibold">已發生或近乎發生的嚴重事件</strong>進行深入、系統性的分析。</p>
                     </div>
-
                     <!-- 類型 5: 流程分析與改造 -->
-                    <div class="border-t-4 border-yellow-500 bg-yellow-50 p-4 rounded-lg shadow-md">
+                    <div class="border-t-4 border-yellow-500 bg-yellow-50 p-4 rounded-lg shadow-md hover:shadow-lg transition duration-300">
                         <h3 class="font-bold text-xl text-yellow-700 mb-2">5. 流程優化與改造（效率）</h3>
-                        <p class="text-sm font-semibold text-yellow-600 mb-2">著重於效率、成本或動線的改善。</p>
-                        <p class="text-sm text-gray-600">運用IE（工業工程）思維，對現有作業流程進行診斷，找出**流程中的浪費、瓶頸和非必要環節**，並進行**根本性的重新設計**。</p>
-                        <ul class="list-disc list-inside mt-2 space-y-1 text-gray-600 text-sm pl-2">
-                            <li><strong>主要手法：</strong> 流程分析 (Process Analysis)、流程改造 (Process Redesign)。</li>
-                            <li><strong>情境範例：</strong> 門診等待時間過長、庫存盤點效率低、文件遞送動線複雜。</li>
-                            <li><strong>常用工具：</strong> 流程圖、動線圖、時間研究。</li>
-                        </ul>
+                        <p class="text-sm font-semibold text-yellow-600 mb-2">著重於效率、成本或動線的改善 (IE 思維)。</p>
+                        <p class="text-sm text-gray-600">對現有作業流程進行診斷，找出**流程中的浪費、瓶頸**。</p>
                     </div>
                 </div>
                 <!-- AI 輔助提問區塊 -->
-                <div class="mt-8 pt-4 border-t border-gray-100">
+                <div class="mt-8 pt-4 border-t border-gray-200">
                     <h4 class="font-semibold text-lg text-gray-700 mb-3 flex items-center">
                         <svg class="w-5 h-5 mr-2 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2m-3 10h.01M9 19v2m6-2v2M5 13a2 2 0 012-2h10a2 2 0 012 2v1a2 2 0 01-2 2H7a2 2 0 01-2-2v-1z"></path></svg>
                         AI 輔助提問：想問點關於本節內容嗎？
@@ -143,153 +168,109 @@
                 </div>
             </section>
             
-            <!-- 3. 品管手法與應用步驟 (原 3. 不變) -->
-            <section id="qcc-steps" class="bg-white p-6 sm:p-8 rounded-xl shadow-lg">
-                <h2 class="section-title text-2xl font-bold text-gray-800 pl-3 mb-4" data-section-title="品管改善步驟（QC Story）">3. 品管改善步驟（QC Story）</h2>
-                <p class="text-gray-600 mb-6">以下列舉「問題解決型」品管圈的典型十個步驟，並說明每個階段的重點工作。</p>
+            <!-- 區塊 C: 書面格式 (Document Format) - 專注於步驟與文件撰寫 -->
+            <section id="qcc-steps" class="bg-white p-6 sm:p-8 rounded-xl shadow-lg border-l-4 border-fuchsia-500 mt-12">
+                <h2 class="section-title text-2xl font-bold text-gray-800 mb-4" data-section-title="品管改善步驟與書面格式重點">📝 品管改善步驟與書面格式重點 (QC Story)</h2>
+                <p class="text-gray-600 mb-6">問題解決型品管圈通常遵循以下十個標準步驟，這也是您撰寫報告時的骨幹結構。</p>
                 
                 <!-- QCC 步驟表格 -->
-                <div class="overflow-x-auto rounded-lg shadow-md" id="qcc-steps-table">
+                <div class="overflow-x-auto rounded-lg shadow-md border-2 border-fuchsia-100">
                     <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
+                        <thead class="bg-fuchsia-50">
                             <tr>
-                                <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/12">步驟</th>
-                                <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-3/12">名稱</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-5/12">主要工作內容</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-3/12">適用工具（部分）</th>
+                                <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider w-1/12">No.</th>
+                                <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider w-3/12">步驟名稱</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider w-5/12">書面報告重點 (What to Write)</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider w-3/12">關鍵工具</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200 text-sm text-gray-700">
-                            <tr><td class="px-3 py-4 font-medium text-green-600">1</td><td class="px-3 py-4 whitespace-nowrap">組圈與主題選定</td><td class="px-6 py-4">設定圈的組織、選定一個明確且有價值的改善主題。</td><td class="px-6 py-4">腦力激盪、親和圖、流程圖</td></tr>
-                            <tr><td class="px-3 py-4 font-medium text-green-600">2</td><td class="px-3 py-4 whitespace-nowrap">訂定活動計畫</td><td class="px-6 py-4">擬定詳細的活動時間表與分工，確保活動能按時完成。</td><td class="px-6 py-4">系統圖、箭線圖</td></tr>
-                            <tr><td class="px-3 py-4 font-medium text-green-600">3</td><td class="px-3 py-4 whitespace-nowrap">現況把握</td><td class="px-6 py-4">收集與主題相關的現狀數據，確認問題的嚴重性、範圍與真因所在。</td><td class="px-6 py-4">查檢表、層別法、柏拉圖、直方圖</td></tr>
-                            <tr><td class="px-3 py-4 font-medium text-green-600">4</td><td class="px-3 py-4 whitespace-nowrap">目標設定</td><td class="px-6 py-4">根據現況把握結果，設定具體、可行、有時限的改善目標值。</td><td class="px-6 py-4">查檢表、圖表</td></tr>
-                            <tr><td class="px-3 py-4 font-medium text-green-600">5</td><td class="px-3 py-4 whitespace-nowrap">解析</td><td class="px-6 py-4">利用科學方法，深入分析影響問題的主要原因，找出「真因」。</td><td class="px-6 py-4">特性要因圖、散佈圖、關聯圖</td></tr>
-                            <tr><td class="px-3 py-4 font-medium text-green-600">6</td><td class="px-3 py-4 whitespace-nowrap">對策擬定與實施</td><td class="px-6 py-4">針對真因，腦力激盪出有效的對策，評估後進行實施。</td><td class="px-6 py-4">系統圖、矩陣圖、PDPC</td></tr>
-                            <tr><td class="px-3 py-4 font-medium text-green-600">7</td><td class="px-3 py-4 whitespace-nowrap">效果確認</td><td class="px-6 py-4">收集實施對策後的數據，與改善前（現況把握）及目標值比較，確認改善成效。</td><td class="px-6 py-4">圖表、管制圖、柏拉圖</td></tr>
-                            <tr><td class="px-3 py-4 font-medium text-green-600">8</td><td class="px-3 py-4 whitespace-nowrap">標準化</td><td class="px-6 py-4">將有效的對策納入標準作業流程（SOP），防止問題再發。</td><td class="px-6 py-4">流程圖、文件化</td></tr>
-                            <tr><td class="px-3 py-4 font-medium text-green-600">9</td><td class="px-3 py-4 whitespace-nowrap">殘留問題與未來展望</td><td class="px-6 py-4">檢討活動過程中的優缺點、分析未解決的殘留問題，並規劃下一階段的持續改善方向。</td><td class="px-6 py-4">檢討會、魚骨圖（殘留問題）</td></tr>
+                            <tr class="hover:bg-gray-50"><td class="px-3 py-4 font-medium text-fuchsia-600">1</td><td class="px-3 py-4 whitespace-nowrap">組圈與主題選定</td><td class="px-6 py-4">說明團隊成員、圈名、選定主題的理由（急迫性、重要性）。</td><td class="px-6 py-4">腦力激盪、親和圖</td></tr>
+                            <tr class="hover:bg-gray-50"><td class="px-3 py-4 font-medium text-fuchsia-600">2</td><td class="px-3 py-4 whitespace-nowrap">訂定活動計畫</td><td class="px-6 py-4">呈現甘特圖或時程表，標註各步驟預計完成時間與分工。</td><td class="px-6 py-4">系統圖、箭線圖</td></tr>
+                            <tr class="hover:bg-gray-50"><td class="px-3 py-4 font-medium text-fuchsia-600">3</td><td class="px-3 py-4 whitespace-nowrap">現況把握</td><td class="px-6 py-4">用數據證明問題嚴重性，使用柏拉圖確立**攻堅重點**。</td><td class="px-6 py-4">查檢表、柏拉圖、層別法</td></tr>
+                            <tr class="hover:bg-gray-50"><td class="px-3 py-4 font-medium text-fuchsia-600">4</td><td class="px-3 py-4 whitespace-nowrap">目標設定</td><td class="px-6 py-4">設定具體、可量化、可達成（**SMART**原則）的目標值。</td><td class="px-6 py-4">圖表</td></tr>
+                            <tr class="hover:bg-gray-50"><td class="px-3 py-4 font-medium text-fuchsia-600">5</td><td class="px-3 py-4 whitespace-nowrap">解析</td><td class="px-6 py-4">繪製特性要因圖，並針對主要要因收集數據進行驗證，找出**真因**。</td><td class="px-6 py-4">特性要因圖、散佈圖</td></tr>
+                            <tr class="hover:bg-gray-50"><td class="px-3 py-4 font-medium text-fuchsia-600">6</td><td class="px-3 py-4 whitespace-nowrap">對策擬定與實施</td><td class="px-6 py-4">列出所有對策，說明篩選/評估標準，以及對策實施的詳細過程。</td><td class="px-6 py-4">系統圖、矩陣圖、PDPC</td></tr>
+                            <tr class="hover:bg-gray-50"><td class="px-3 py-4 font-medium text-fuchsia-600">7</td><td class="px-3 py-4 whitespace-nowrap">效果確認</td><td class="px-6 py-4">比較改善前後數據（有形成果）和圈員成長（無形成果），與目標值對照。</td><td class="px-6 py-4">圖表、管制圖</td></tr>
+                            <tr class="hover:bg-gray-50"><td class="px-3 py-4 font-medium text-fuchsia-600">8</td><td class="px-3 py-4 whitespace-nowrap">標準化</td><td class="px-6 py-4">提出將有效的對策納入 SOP 或規範的文件化說明。</td><td class="px-6 py-4">流程圖、文件化</td></tr>
+                            <tr class="hover:bg-gray-50"><td class="px-3 py-4 font-medium text-fuchsia-600">9</td><td class="px-3 py-4 whitespace-nowrap">殘留問題與未來展望</td><td class="px-6 py-4">自我檢討活動過程，說明未達成的目標或待持續改善的方向。</td><td class="px-6 py-4">檢討會</td></tr>
                         </tbody>
                     </table>
                 </div>
+
+                <h3 class="text-xl font-bold text-fuchsia-700 mt-8 mb-3">📄 報告撰寫技巧：</h3>
+                <ul class="list-disc list-outside ml-5 space-y-2 text-gray-600">
+                    <li>**視覺化優先：** 盡量使用圖表、照片來代替文字，使審查者能快速掌握重點。</li>
+                    <li>**數據說話：** 所有結論都必須有數據（查檢表、柏拉圖等）作為佐證。</li>
+                    <li>**遵循流程：** 報告的章節和順序必須嚴格遵循 QC Story 的步驟。</li>
+                    <li>**簡潔有力：** 避免過多不必要的贅述，每個步驟聚焦於核心產出。</li>
+                </ul>
                 <!-- AI 輔助提問區塊 -->
-                <div class="mt-8 pt-4 border-t border-gray-100">
+                <div class="mt-8 pt-4 border-t border-gray-200">
                     <h4 class="font-semibold text-lg text-gray-700 mb-3 flex items-center">
                         <svg class="w-5 h-5 mr-2 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        AI 輔助提問：想問點關於本節內容嗎？
+                        AI 輔助提問：想問點關於格式嗎？
                     </h4>
-                    <div id="chat-qcc-steps">
+                    <div id="chat-qcc-format">
                         <!-- Chat UI will be initialized here -->
                     </div>
                 </div>
             </section>
 
-            <!-- 4. 常用品管工具總覽（QC七手法） -->
-            <section id="qc-tools" class="bg-white p-6 sm:p-8 rounded-xl shadow-lg">
-                <h2 class="section-title text-2xl font-bold text-gray-800 pl-3 mb-4" data-section-title="常用品管工具總覽（QC七手法）">4. 常用品管工具總覽（QC七手法）</h2>
-                <p class="text-gray-600 mb-6">品管工具是QCC活動中用來收集、整理、分析數據與資訊的輔助手段。以下為兩大類常用工具的詳細介紹：</p>
+            <!-- 區塊 D: 參考資料 (References/Tools) - 專注於工具介紹 -->
+            <section id="qc-tools" class="bg-white p-6 sm:p-8 rounded-xl shadow-lg border-l-4 border-cyan-500 mt-12">
+                <h2 class="section-title text-2xl font-bold text-gray-800 mb-4" data-section-title="常用品管工具總覽">🛠️ 常用品管工具總覽（QC 七手法與新七手法）</h2>
+                <p class="text-gray-600 mb-6">品管工具是 QCC 活動中用來收集、整理、分析數據與資訊的輔助手段。正確使用它們能大大提高改善效率！</p>
 
                 <!-- 舊QC七手法表格 -->
-                <h3 class="font-bold text-xl text-green-700 mb-3 border-b pb-1">舊QC七手法（QC 7 Tools）- 數據分析與統計</h3>
-                <div class="overflow-x-auto rounded-lg shadow-md mb-8">
+                <h3 class="font-bold text-xl text-teal-700 mb-3 border-b pb-1">舊QC七手法（QC 7 Tools）- 數據分析與統計</h3>
+                <div class="overflow-x-auto rounded-lg shadow-md mb-8 border-2 border-teal-100">
                     <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-green-50">
+                        <thead class="bg-teal-50">
                             <tr>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">工具名稱</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">主要功能</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">主要功能（用途）</th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">適用步驟</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200 text-sm text-gray-700">
-                            <tr>
-                                <td class="px-6 py-4 font-medium whitespace-nowrap">查檢表 (Check Sheet)</td>
-                                <td class="px-6 py-4">系統性地收集數據、記錄次數。</td>
-                                <td class="px-6 py-4">現況把握、效果確認（原始數據收集）</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 font-medium whitespace-nowrap">柏拉圖 (Pareto Chart)</td>
-                                <td class="px-6 py-4">將數據依發生頻率排序，找出影響最大的「重要少數」。</td>
-                                <td class="px-6 py-4">現況把握（決定攻堅重點）、效果確認</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 font-medium whitespace-nowrap">層別法 (Stratification)</td>
-                                <td class="px-6 py-4">將數據按不同屬性分類（如時間、人員、地點），釐清問題的真正發生源。</td>
-                                <td class="px-6 py-4">現況把握、解析</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 font-medium whitespace-nowrap">特性要因圖 (Fishbone Diagram)</td>
-                                <td class="px-6 py-4">將問題結果（特性）與所有可能原因（要因）進行系統性整理。</td>
-                                <td class="px-6 py-4">解析（找出可能原因）</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 font-medium whitespace-nowrap">散佈圖 (Scatter Diagram)</td>
-                                <td class="px-6 py-4">分析兩組數據之間是否存在相關性（正相關、負相關或無相關）。</td>
-                                <td class="px-6 py-4">解析（驗證要因間關係）</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 font-medium whitespace-nowrap">直方圖 (Histogram)</td>
-                                <td class="px-6 py-4">顯示數據的分佈形態，了解過程的穩定性與集中趨勢。</td>
-                                <td class="px-6 py-4">現況把握、效果確認</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 font-medium whitespace-nowrap">管制圖 (Control Chart)</td>
-                                <td class="px-6 py-4">監控製程是否處於統計管制狀態，用於長期品質維持。</td>
-                                <td class="px-6 py-4">效果確認、標準化（效果維持監控）</td>
-                            </tr>
+                            <tr class="hover:bg-gray-50"><td class="px-6 py-4 font-medium whitespace-nowrap">柏拉圖 (Pareto Chart)</td><td class="px-6 py-4">找出影響最大的「重要少數」（80/20法則）。</td><td class="px-6 py-4">現況把握、效果確認</td></tr>
+                            <tr class="hover:bg-gray-50"><td class="px-6 py-4 font-medium whitespace-nowrap">特性要因圖 (Fishbone)</td><td class="px-6 py-4">系統性整理問題的所有可能原因（找出要因）。</td><td class="px-6 py-4">解析</td></tr>
+                            <tr class="hover:bg-gray-50"><td class="px-6 py-4 font-medium whitespace-nowrap">查檢表 (Check Sheet)</td><td class="px-6 py-4">系統性地收集數據、記錄次數。</td><td class="px-6 py-4">現況把握、效果確認</td></tr>
+                            <tr class="hover:bg-gray-50"><td class="px-6 py-4 font-medium whitespace-nowrap">層別法 (Stratification)</td><td class="px-6 py-4">將數據按不同屬性分類，釐清問題的發生源。</td><td class="px-6 py-4">現況把握、解析</td></tr>
+                            <tr class="hover:bg-gray-50"><td class="px-6 py-4 font-medium whitespace-nowrap">散佈圖 (Scatter Diagram)</td><td class="px-6 py-4">分析兩組數據之間是否存在相關性。</td><td class="px-6 py-4">解析</td></tr>
+                            <tr class="hover:bg-gray-50"><td class="px-6 py-4 font-medium whitespace-nowrap">管制圖 (Control Chart)</td><td class="px-6 py-4">監控過程是否處於穩定狀態，用於長期品質維持。</td><td class="px-6 py-4">效果確認、標準化</td></tr>
+                            <tr class="hover:bg-gray-50"><td class="px-6 py-4 font-medium whitespace-nowrap">直方圖 (Histogram)</td><td class="px-6 py-4">顯示數據的分佈形態與集中趨勢。</td><td class="px-6 py-4">現況把握、效果確認</td></tr>
                         </tbody>
                     </table>
                 </div>
 
                 <!-- 新QC七手法表格 -->
                 <h3 class="font-bold text-xl text-blue-700 mb-3 border-b pb-1">新QC七手法（New QC 7 Tools）- 語言資料整理與創新</h3>
-                <div class="overflow-x-auto rounded-lg shadow-md mb-8">
+                <div class="overflow-x-auto rounded-lg shadow-md border-2 border-blue-100">
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-blue-50">
                             <tr>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">工具名稱</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">主要功能</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">主要功能（用途）</th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">適用步驟</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200 text-sm text-gray-700">
-                            <tr>
-                                <td class="px-6 py-4 font-medium whitespace-nowrap">親和圖 (Affinity Diagram)</td>
-                                <td class="px-6 py-4">將大量發散的語言資料/想法，依據內在相似性分組歸納，整理複雜問題。</td>
-                                <td class="px-6 py-4">主題選定、解析、對策擬定（想法收斂）</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 font-medium whitespace-nowrap">關聯圖 (Relation Diagram)</td>
-                                <td class="px-6 py-4">釐清複雜問題中，各因素之間糾結的因果關係，找到關鍵點。</td>
-                                <td class="px-6 py-4">解析（複雜原因分析）</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 font-medium whitespace-nowrap">系統圖 (Systematic Diagram)</td>
-                                <td class="px-6 py-4">將目標系統性地分解為達成該目標所需要的手段、方策。</td>
-                                <td class="px-6 py-4">訂定活動計畫、對策擬定</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 font-medium whitespace-nowrap">矩陣圖 (Matrix Diagram)</td>
-                                <td class="px-6 py-4">分析兩組或多組要素之間的相互關係與強度。</td>
-                                <td class="px-6 py-4">對策擬定（評估對策與真因的關係）</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 font-medium whitespace-nowrap">箭線圖法 (Arrow Diagram)</td>
-                                <td class="px-6 py-4">規劃複雜工作的時程，找出關鍵路徑，控制進度。</td>
-                                <td class="px-6 py-4">訂定活動計畫（時程管理）</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 font-medium whitespace-nowrap">過程決策計畫圖 (PDPC)</td>
-                                <td class="px-6 py-4">預測在計畫實施過程中可能發生的問題，並預先準備應變措施。</td>
-                                <td class="px-6 py-4">對策實施（風險預防）</td>
-                            </tr>
+                            <tr class="hover:bg-gray-50"><td class="px-6 py-4 font-medium whitespace-nowrap">親和圖 (Affinity Diagram)</td><td class="px-6 py-4">整理大量發散的語言資料/想法，進行分組歸納。</td><td class="px-6 py-4">主題選定、解析</td></tr>
+                            <tr class="hover:bg-gray-50"><td class="px-6 py-4 font-medium whitespace-nowrap">關聯圖 (Relation Diagram)</td><td class="px-6 py-4">釐清複雜問題中，各因素之間糾結的因果關係。</td><td class="px-6 py-4">解析（複雜原因分析）</td></tr>
+                            <tr class="hover:bg-gray-50"><td class="px-6 py-4 font-medium whitespace-nowrap">系統圖 (Systematic Diagram)</td><td class="px-6 py-4">將目標系統性地分解為達成該目標所需要的手段。</td><td class="px-6 py-4">對策擬定、訂定活動計畫</td></tr>
+                            <tr class="hover:bg-gray-50"><td class="px-6 py-4 font-medium whitespace-nowrap">矩陣圖 (Matrix Diagram)</td><td class="px-6 py-4">分析兩組要素之間的相互關係與強度。</td><td class="px-6 py-4">對策擬定</td></tr>
+                            <tr class="hover:bg-gray-50"><td class="px-6 py-4 font-medium whitespace-nowrap">過程決策計畫圖 (PDPC)</td><td class="px-6 py-4">預測計畫實施中可能發生的問題，預先準備應變措施（風險預防）。</td><td class="px-6 py-4">對策實施</td></tr>
+                            <tr class="hover:bg-gray-50"><td class="px-6 py-4 font-medium whitespace-nowrap">箭線圖法 (Arrow Diagram)</td><td class="px-6 py-4">規劃複雜工作的時程，找出關鍵路徑，控制進度。</td><td class="px-6 py-4">訂定活動計畫</td></tr>
                         </tbody>
                     </table>
                 </div>
-                 <!-- AI 輔助提問區塊 -->
-                <div class="mt-8 pt-4 border-t border-gray-100">
+                <!-- AI 輔助提問區塊 -->
+                <div class="mt-8 pt-4 border-t border-gray-200">
                     <h4 class="font-semibold text-lg text-gray-700 mb-3 flex items-center">
                         <svg class="w-5 h-5 mr-2 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        AI 輔助提問：想問點關於本節內容嗎？
+                        AI 輔助提問：想問點關於工具嗎？
                     </h4>
                     <div id="chat-qc-tools">
                         <!-- Chat UI will be initialized here -->
@@ -300,15 +281,71 @@
         </main>
 
         <!-- 頁尾 -->
-        <footer class="text-center py-6 mt-10 text-sm text-gray-500 border-t border-gray-200">
-            <p>品質改善是一段持續的旅程。祝您的品管圈活動順利成功！</p>
+        <footer class="text-center py-6 mt-10 text-sm border-t border-gray-300 flex justify-between items-center">
+            <p class="text-gray-500">品質改善是一段持續的旅程。祝您的品管圈活動順利成功！</p>
+            <div class="text-right text-gray-700 font-medium">
+                <p>奇美醫院品質管理部醫療品質科 製</p>
+                <p class="text-xs text-gray-500" id="last-updated">最後更新日期: 2025年12月01日</p>
+            </div>
         </footer>
 
     </div>
+    
+    <!-- 快速回到頂端按鈕 -->
+    <button id="backToTopBtn" 
+            class="bg-teal-600 hover:bg-teal-700 text-white shadow-xl 
+                   p-3 rounded-full flex items-center justify-center 
+                   focus:outline-none focus:ring-4 focus:ring-teal-300 active:bg-teal-800 
+                   transform hover:scale-105 transition duration-200"
+            aria-label="快速回到頂端">
+        <!-- SVG 向上箭頭圖標 -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+        </svg>
+    </button>
+
 
     <script>
         // -----------------------------------------------------
-        // 1. AI Assistant Logic (Gemini API Integration)
+        // 1. Navigation and Scroll Logic (互動性提升)
+        // -----------------------------------------------------
+
+        /**
+         * 平滑滾動至目標區塊並更新導航按鈕的狀態
+         * @param {string} targetId - 目標區塊的 ID（例如 'qcc-steps'），或 'header' 回到頂部。
+         * @param {string} buttonId - 被點擊按鈕的 ID。
+         */
+        function scrollToSection(targetId, buttonId) {
+            let targetElement;
+            if (targetId === 'header') {
+                // 滾動到頁面頂部
+                targetElement = document.querySelector('header');
+            } else {
+                // 滾動到特定區塊
+                targetElement = document.getElementById(targetId);
+            }
+
+            // 移除所有按鈕的 active 樣式
+            document.querySelectorAll('.nav-button').forEach(button => {
+                button.classList.remove('active');
+            });
+
+            // 為被點擊的按鈕加上 active 樣式
+            const currentButton = document.getElementById(buttonId);
+            if (currentButton) {
+                currentButton.classList.add('active');
+            }
+
+            if (targetElement) {
+                targetElement.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        }
+
+        // -----------------------------------------------------
+        // 2. AI Assistant Logic (Gemini API Integration)
         // -----------------------------------------------------
 
         // Global configuration
@@ -374,14 +411,14 @@
 
             // UI Elements Setup
             container.innerHTML = `
-                <div class="chat-display bg-gray-50 p-4 rounded-lg h-48 overflow-y-auto mb-4 border border-gray-200">
-                    <div class="message text-sm text-gray-500 mb-2">
-                        <span class="font-bold text-indigo-600">AI 助理：</span> 您好！我是您的品質管理助理，請針對<strong class="text-indigo-700">『${sectionTitle}』</strong>提出問題。
+                <div class="chat-display bg-gray-100 p-4 rounded-lg h-48 overflow-y-auto mb-4 border border-teal-200">
+                    <div class="message text-sm text-gray-600 mb-2">
+                        <span class="font-bold text-teal-600">AI 助理：</span> 您好！我是您的品管助理，請針對<strong class="text-teal-700">『${sectionTitle}』</strong>提出問題。
                     </div>
                 </div>
                 <div class="chat-input flex space-x-2">
-                    <input type="text" placeholder="輸入您的問題..." class="chat-text-input flex-grow p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm">
-                    <button class="chat-send-button bg-indigo-600 text-white p-2 rounded-lg hover:bg-indigo-700 transition duration-150 ease-in-out font-medium text-sm disabled:opacity-50 flex items-center justify-center w-20">
+                    <input type="text" placeholder="輸入您的問題..." class="chat-text-input flex-grow p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-sm">
+                    <button class="chat-send-button bg-teal-600 text-white p-2 rounded-lg hover:bg-teal-700 transition duration-150 ease-in-out font-medium text-sm disabled:opacity-50 flex items-center justify-center w-20">
                         發問
                     </button>
                 </div>
@@ -392,23 +429,29 @@
             const sendButton = container.querySelector('.chat-send-button');
 
             // System Instruction is crucial for context
-            const systemInstruction = `你是一位友善且知識豐富的品質管理專家。請根據『${sectionTitle}』的主題，回答使用者的提問。你的回答必須簡潔、專業且富有啟發性。`;
+            const systemInstruction = `你是一位友善、具備教學熱忱的品管專家。請根據『${sectionTitle}』的主題，回答使用者的提問。你的回答必須簡潔、專業且富有啟發性。`;
 
             // Function to add a message to the display
             const addMessage = (sender, text, isAi = false) => {
                 const messageDiv = document.createElement('div');
-                messageDiv.className = `message text-sm p-2 rounded-lg mb-2 max-w-[90%] ${isAi ? 'bg-indigo-100 self-start' : 'bg-green-100 ml-auto text-right'}`;
+                // 使用 flex 和 justify-end/start 來控制左右對齊
+                messageDiv.className = `flex ${isAi ? 'justify-start' : 'justify-end'} mb-2`;
+
+                const contentDiv = document.createElement('div');
+                contentDiv.className = `message text-sm p-2 rounded-lg max-w-[90%] ${isAi ? 'bg-teal-100' : 'bg-indigo-100'}`;
                 
                 const senderSpan = document.createElement('span');
-                senderSpan.className = `font-bold ${isAi ? 'text-indigo-600' : 'text-green-600'}`;
+                senderSpan.className = `font-bold ${isAi ? 'text-teal-600' : 'text-indigo-600'}`;
                 senderSpan.textContent = isAi ? 'AI 助理：' : '您：';
 
                 const textContent = document.createElement('p');
-                textContent.className = 'ai-chat-response';
+                textContent.className = 'ai-chat-response inline';
                 textContent.innerHTML = text.replace(/\n/g, '<br>'); // Use innerHTML to respect <br>
 
-                messageDiv.appendChild(senderSpan);
-                messageDiv.appendChild(textContent);
+                contentDiv.appendChild(senderSpan);
+                contentDiv.appendChild(textContent);
+                messageDiv.appendChild(contentDiv);
+
 
                 chatDisplay.appendChild(messageDiv);
                 chatDisplay.scrollTop = chatDisplay.scrollHeight; // Scroll to bottom
@@ -459,22 +502,97 @@
         }
 
         // -----------------------------------------------------
-        // 2. Initialization on Load
+        // 3. Initialization on Load and Scroll Listener
         // -----------------------------------------------------
-        window.onload = function() {
-            // Find all sections with a title attribute and initialize chat for them
-            const sections = document.querySelectorAll('section');
+        
+        // Intersection Observer 用於偵測區塊進入視窗，自動更新導航按鈕狀態
+        function setupScrollObserver() {
+            const sections = [
+                { id: 'what-is-qcc', buttonId: 'nav-btn-home' },
+                { id: 'qcc-steps', buttonId: 'nav-btn-format' },
+                { id: 'qc-tools', buttonId: 'nav-btn-tools' }
+            ];
 
-            sections.forEach(section => {
-                const titleElement = section.querySelector('.section-title');
-                const chatContainer = section.querySelector('[id^="chat-"]');
-                
-                if (titleElement && chatContainer) {
-                    const sectionTitle = titleElement.getAttribute('data-section-title');
-                    const containerId = chatContainer.id;
-                    initializeChat(containerId, sectionTitle);
+            const options = {
+                root: null, // viewport
+                rootMargin: '0px 0px -60% 0px', // 當區塊頂部進入視窗上方 40% 時觸發
+                threshold: 0 // 只需要 1px 進入即可
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // 找到對應的按鈕 ID
+                        const currentSection = sections.find(s => s.id === entry.target.id);
+                        if (currentSection) {
+                            // 移除所有按鈕的 active 樣式
+                            document.querySelectorAll('.nav-button').forEach(btn => {
+                                btn.classList.remove('active');
+                            });
+                            // 為當前區塊的按鈕加上 active 樣式
+                            document.getElementById(currentSection.buttonId).classList.add('active');
+                        }
+                    }
+                });
+            }, options);
+
+            // 觀察所有主要區塊
+            sections.forEach(s => {
+                const element = document.getElementById(s.id);
+                if (element) {
+                    observer.observe(element);
                 }
             });
+        }
+        
+        // -----------------------------------------------------
+        // 4. Back To Top Logic
+        // -----------------------------------------------------
+        function setupBackToTop() {
+            const backToTopBtn = document.getElementById('backToTopBtn');
+            const scrollThreshold = 300; 
+
+            // 監聽頁面捲動事件
+            window.addEventListener('scroll', function() {
+                const scrolled = document.documentElement.scrollTop || document.body.scrollTop;
+                
+                if (scrolled > scrollThreshold) {
+                    backToTopBtn.classList.add('show');
+                } else {
+                    backToTopBtn.classList.remove('show');
+                }
+            });
+
+            // 按鈕點擊事件：平滑捲動到頂部
+            backToTopBtn.addEventListener('click', function() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth' 
+                });
+            });
+        }
+
+        window.onload = function() {
+            // 初始化所有 AI Chat UI
+            const chatConfigs = [
+                { id: 'chat-what-is-qcc', title: '什麼是品管圈（QCC）？' },
+                { id: 'chat-tool-selection', title: '運用合適的品管工具解決問題（五大改善類型）' },
+                { id: 'chat-qcc-format', title: '品管改善步驟與書面格式重點' },
+                { id: 'chat-qc-tools', title: '常用品管工具總覽' }
+            ];
+
+            chatConfigs.forEach(config => {
+                initializeChat(config.id, config.title);
+            });
+            
+            // 啟用滾動觀察者，實現自動更新導航狀態
+            setupScrollObserver();
+
+            // 啟用回到頂端按鈕功能
+            setupBackToTop();
+            
+            // 確保一開始「首頁」按鈕是 active 狀態
+            document.getElementById('nav-btn-home').classList.add('active');
         };
     </script>
 </body>
