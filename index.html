@@ -75,19 +75,19 @@
             <button id="nav-btn-home"
                     onclick="goHome()"
                     class="nav-button active text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">
-                🚀 首頁 (活動總覽)
+                🚀 首頁
             </button>
 
             <button id="nav-btn-form"
-                    onclick="loadPage('書面格式_問題型.html')"
+                    onclick="loadExternalPage('書面格式_問題型.html', 'nav-btn-form')"
                     class="nav-button text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">
-                📝 書面格式 (QC Story)
+                📝 書面格式
             </button>
 
             <button id="nav-btn-tools"
-                    onclick="goToTools()"
+                    onclick="loadExternalPage('參考資料.html', 'nav-btn-tools')"
                     class="nav-button text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">
-                🛠️ 參考資料 (品管工具)
+                🛠️ 參考資料
             </button>
         </nav>
 
@@ -309,12 +309,12 @@
 
         </main>
 
-        <!-- 書面格式 / 參考資料 共用 iframe 區 -->
-        <section id="page-form" class="hidden mb-10">
-            <div class="w-full h-[85vh] border rounded-lg overflow-hidden shadow">
-                <iframe id="content-frame" src="" class="w-full h-full" frameborder="0"></iframe>
+        <!-- 動態載入外部 HTML 的容器（書面格式 / 參考資料） -->
+        <main id="page-dynamic" class="hidden mb-10">
+            <div id="dynamic-content" class="bg-white p-6 sm:p-8 rounded-xl shadow-lg min-h-[50vh]">
+                <!-- 這裡會用 fetch 塞入外部 HTML 的 <body> 內容 -->
             </div>
-        </section>
+        </main>
 
         <!-- 頁尾（固定框架的一部分） -->
         <footer class="text-center py-6 mt-10 text-sm border-t border-gray-300 flex justify-between items-center">
@@ -340,7 +340,7 @@
     </button>
 
     <script>
-        // ========== 小工具：切換 nav active ==========
+        // ========== 工具：切換 nav active ==========
         function setActive(buttonId) {
             document.querySelectorAll('.nav-button').forEach(btn => {
                 btn.classList.remove('active');
@@ -349,15 +349,15 @@
             if (btn) btn.classList.add('active');
         }
 
-        // ========== 首頁 / iframe 顯示切換 ==========
+        // ========== 顯示 / 隱藏首頁與動態頁 ==========
         function showHomePage() {
             document.getElementById('page-home').classList.remove('hidden');
-            document.getElementById('page-form').classList.add('hidden');
+            document.getElementById('page-dynamic').classList.add('hidden');
         }
 
-        function showFormPage() {
+        function showDynamicPage() {
             document.getElementById('page-home').classList.add('hidden');
-            document.getElementById('page-form').classList.remove('hidden');
+            document.getElementById('page-dynamic').classList.remove('hidden');
         }
 
         // ========== 首頁按鈕：回到完整首頁內容 ==========
@@ -370,195 +370,68 @@
             });
         }
 
-        // ========== 參考資料：改成 iframe 顯示參考資料.html ==========
-        function goToTools() {
-            const frame = document.getElementById('content-frame');
-            frame.src = '參考資料.html';   // ★ 這裡載入你的參考資料頁面
-            showFormPage();
-            setActive('nav-btn-tools');
-            frame.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
-        }
+        // ========== 使用 fetch 載入外部 HTML 並插入 dynamic-content ==========
+        async function loadExternalPage(pageUrl, buttonId) {
+            setActive(buttonId);
+            showDynamicPage();
 
-        // ========== 書面格式：iframe 顯示書面格式_問題型.html ==========
-        function loadPage(page) {
-            const frame = document.getElementById('content-frame');
-            frame.src = page;   // 通常是「書面格式_問題型.html」
-            showFormPage();
-            setActive('nav-btn-form');
-            frame.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
+            const container = document.getElementById('dynamic-content');
+            container.innerHTML = `
+                <div class="flex items-center space-x-3 text-gray-600">
+                    <div class="loading-spinner"></div>
+                    <span>內容載入中，請稍候...</span>
+                </div>
+            `;
+
+            try {
+                const res = await fetch(pageUrl);
+                if (!res.ok) {
+                    throw new Error('HTTP status ' + res.status);
+                }
+                const htmlText = await res.text();
+
+                // 解析 HTML，取得 <body> 內容（因你的外部檔是完整 HTML A 類型）
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(htmlText, 'text/html');
+                const body = doc.body;
+
+                // 塞進容器（只拿 body 裡的東西）
+                container.innerHTML = body ? body.innerHTML : htmlText;
+
+                // 讓頁面捲到標題附近
+                document.getElementById('header').scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+
+                // 讓外部頁面的 <script> 能執行（如果有的話）
+                const scripts = container.querySelectorAll('script');
+                scripts.forEach(oldScript => {
+                    const newScript = document.createElement('script');
+                    if (oldScript.src) {
+                        newScript.src = oldScript.src;
+                    } else {
+                        newScript.textContent = oldScript.textContent;
+                    }
+                    // 避免重複執行舊 script
+                    oldScript.parentNode.replaceChild(newScript, oldScript);
+                });
+
+            } catch (e) {
+                console.error('載入外部頁面失敗：', e);
+                container.innerHTML = `
+                    <p class="text-red-600">
+                        抱歉，無法載入「${pageUrl}」。<br>
+                        請確認檔案是否存在於 GitHub Pages 正確路徑，或稍後再試。
+                    </p>
+                `;
+            }
         }
 
         // ========== AI 助理相關 ==========
         const API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent";
-        const apiKey = "";
+        const apiKey = ""; // 若未設定就不會真的呼叫 API
 
         async function fetchLLMResponse(contents, systemInstruction, maxRetries = 3) {
-            const payload = {
-                contents: contents,
-                systemInstruction: { parts: [{ text: systemInstruction }] },
-            };
-
-            for (let i = 0; i < maxRetries; i++) {
-                try {
-                    const response = await fetch(`${API_URL}?key=${apiKey}`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-
-                    if (!response.ok) {
-                        if (response.status === 429 && i < maxRetries - 1) {
-                            const delay = Math.pow(2, i) * 1000 + Math.random() * 1000;
-                            await new Promise(resolve => setTimeout(resolve, delay));
-                            continue;
-                        }
-                        throw new Error(`API request failed with status ${response.status}`);
-                    }
-
-                    const result = await response.json();
-                    const text = result.candidates?.[0]?.content?.parts?.[0]?.text || '抱歉，AI 在處理時發生了錯誤。';
-                    return text;
-
-                } catch (error) {
-                    console.error("LLM API Error:", error);
-                    if (i === maxRetries - 1) {
-                        return '抱歉，無法連接到 AI 服務。請稍後再試。';
-                    }
-                }
-            }
-        }
-
-        function initializeChat(containerId, sectionTitle) {
-            const container = document.getElementById(containerId);
-            if (!container) return;
-
-            let chatHistory = [];
-            let isThinking = false;
-
-            container.innerHTML = `
-                <div class="chat-display bg-gray-100 p-4 rounded-lg h-48 overflow-y-auto mb-4 border border-teal-200">
-                    <div class="message text-sm text-gray-600 mb-2">
-                        <span class="font-bold text-teal-600">AI 助理：</span> 您好！我是您的品管助理，請針對<strong class="text-teal-700">『${sectionTitle}』</strong>提出問題。
-                    </div>
-                </div>
-                <div class="chat-input flex space-x-2">
-                    <input type="text" placeholder="輸入您的問題..." class="chat-text-input flex-grow p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-sm">
-                    <button class="chat-send-button bg-teal-600 text-white p-2 rounded-lg hover:bg-teal-700 transition duration-150 ease-in-out font-medium text-sm disabled:opacity-50 flex items-center justify-center w-20">
-                        發問
-                    </button>
-                </div>
-            `;
-
-            const chatDisplay = container.querySelector('.chat-display');
-            const chatInput = container.querySelector('.chat-text-input');
-            const sendButton = container.querySelector('.chat-send-button');
-
-            const systemInstruction = `你是一位友善、具備教學熱忱的品管專家。請根據『${sectionTitle}』的主題，回答使用者的提問。你的回答必須簡潔、專業且富有啟發性。`;
-
-            const addMessage = (sender, text, isAi = false) => {
-                const messageDiv = document.createElement('div');
-                messageDiv.className = `flex ${isAi ? 'justify-start' : 'justify-end'} mb-2`;
-
-                const contentDiv = document.createElement('div');
-                contentDiv.className = `message text-sm p-2 rounded-lg max-w-[90%] ${isAi ? 'bg-teal-100' : 'bg-indigo-100'}`;
-                
-                const senderSpan = document.createElement('span');
-                senderSpan.className = `font-bold ${isAi ? 'text-teal-600' : 'text-indigo-600'}`;
-                senderSpan.textContent = isAi ? 'AI 助理：' : '您：';
-
-                const textContent = document.createElement('p');
-                textContent.className = 'ai-chat-response inline';
-                textContent.innerHTML = text.replace(/\n/g, '<br>');
-
-                contentDiv.appendChild(senderSpan);
-                contentDiv.appendChild(textContent);
-                messageDiv.appendChild(contentDiv);
-
-                chatDisplay.appendChild(messageDiv);
-                chatDisplay.scrollTop = chatDisplay.scrollHeight;
-            };
-
-            const handleSend = async () => {
-                if (isThinking) return;
-
-                const userText = chatInput.value.trim();
-                if (userText === '') return;
-
-                addMessage('user', userText, false);
-                chatInput.value = '';
-
-                isThinking = true;
-                sendButton.disabled = true;
-                sendButton.innerHTML = `<div class="loading-spinner"></div>`;
-
-                const historyForApi = chatHistory.slice(-10);
-                historyForApi.push({ role: "user", parts: [{ text: userText }] });
-
-                const aiResponse = await fetchLLMResponse(historyForApi, systemInstruction);
-
-                chatHistory.push({ role: "user", parts: [{ text: userText }] });
-                chatHistory.push({ role: "model", parts: [{ text: aiResponse }] });
-
-                addMessage('ai', aiResponse, true);
-
-                isThinking = false;
-                sendButton.disabled = false;
-                sendButton.innerHTML = `發問`;
-            };
-
-            sendButton.addEventListener('click', handleSend);
-            chatInput.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') {
-                    handleSend();
-                }
-            });
-        }
-
-        // ========== 回到頂端按鈕 ==========
-        function setupBackToTop() {
-            const backToTopBtn = document.getElementById('backToTopBtn');
-            const scrollThreshold = 300; 
-
-            window.addEventListener('scroll', function() {
-                const scrolled = document.documentElement.scrollTop || document.body.scrollTop;
-                if (scrolled > scrollThreshold) {
-                    backToTopBtn.classList.add('show');
-                } else {
-                    backToTopBtn.classList.remove('show');
-                }
-            });
-
-            backToTopBtn.addEventListener('click', function() {
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth' 
-                });
-            });
-        }
-
-        // ========== 初始化 ==========
-        window.onload = function() {
-            const chatConfigs = [
-                { id: 'chat-what-is-qcc', title: '什麼是品管圈（QCC）？' },
-                { id: 'chat-tool-selection', title: '運用合適的品管工具解決問題（五大改善類型）' },
-                { id: 'chat-qcc-format', title: '品管改善步驟與書面格式重點' },
-                { id: 'chat-qc-tools', title: '常用品管工具總覽' }
-            ];
-
-            chatConfigs.forEach(config => {
-                initializeChat(config.id, config.title);
-            });
-
-            setupBackToTop();
-            setActive('nav-btn-home');
-        };
-    </script>
-
-</body>
-</html>
+            if (!apiKey) {
+                return '（目前尚未設定 API Key，因此無法連線到外部
