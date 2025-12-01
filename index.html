@@ -45,14 +45,12 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* --- 新增：回到頂端按鈕樣式 --- */
+        /* --- 回到頂端按鈕樣式 --- */
         #backToTopBtn {
-            /* 固定位置，靠右下方 */
             position: fixed;
             bottom: 2rem;
             right: 2rem;
             z-index: 1000;
-            /* 隱藏但準備好淡入 */
             opacity: 0;
             visibility: hidden;
             transition: opacity 0.3s, visibility 0.3s;
@@ -60,7 +58,6 @@
             width: 3rem;
             height: 3rem;
         }
-        /* 按鈕顯示時的樣式 */
         #backToTopBtn.show {
             opacity: 1;
             visibility: visible;
@@ -81,32 +78,36 @@
         <!-- 導航按鈕 (Scroll Nav + iframe 切換) -->
         <nav class="sticky top-0 z-10 flex justify-center bg-white p-2 rounded-xl shadow-lg mb-8 space-x-4">
             <!-- 首頁按鈕：回到頁面頂部 -->
-            <button id="nav-btn-home" onclick="scrollToSection('header', 'nav-btn-home')" class="nav-button active text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">
-                🚀 首頁
+            <button id="nav-btn-home"
+                    onclick="scrollToSection('header', 'nav-btn-home')"
+                    class="nav-button active text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">
+                🚀 首頁 (活動總覽)
             </button>
 
-            <!-- 書面格式按鈕：在 iframe 中載入子頁 -->
+            <!-- 書面格式按鈕：在 iframe 中載入子頁，並隱藏首頁內容 -->
             <button id="nav-btn-form"
                     onclick="loadPage('書面格式_問題型.html')"
                     class="nav-button text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">
-                📝 書面格式
+                📝 書面格式 (QC Story)
             </button>
 
-            <!-- 參考資料按鈕：跳轉到 QC 工具區塊 -->
-            <button id="nav-btn-tools" onclick="scrollToSection('qc-tools', 'nav-btn-tools')" class="nav-button text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">
-                🛠️ 參考資料
+            <!-- 參考資料按鈕：回到首頁內容並捲到 QC 工具區塊 -->
+            <button id="nav-btn-tools"
+                    onclick="scrollToSection('qc-tools', 'nav-btn-tools')"
+                    class="nav-button text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">
+                🛠️ 參考資料 (品管工具)
             </button>
         </nav>
 
-        <!-- iframe 顯示區：載入其他頁面用 -->
+        <!-- iframe 顯示區：載入書面格式等子頁 -->
         <div class="w-full h-[85vh] border rounded-lg overflow-hidden shadow mb-10">
             <iframe id="content-frame" src="" class="w-full h-full" frameborder="0"></iframe>
         </div>
         
-        <!-- 內容區塊 (集中在首頁，透過滾動呈現) -->
+        <!-- 首頁內容區塊：按書面格式時會被隱藏 -->
         <main id="main-content" class="space-y-12">
 
-            <!-- 區塊 A: 什麼是品管圈（QCC）？ (作為首頁主要內容) -->
+            <!-- 區塊 A: 什麼是品管圈（QCC）？ -->
             <section id="what-is-qcc" class="bg-white p-6 sm:p-8 rounded-xl shadow-lg border-l-4 border-teal-500 hover:shadow-2xl transition duration-300">
                 <h2 class="section-title text-2xl font-bold text-gray-800 mb-4" data-section-title="什麼是品管圈（QCC）？">1. 什麼是品管圈（QCC）？</h2>
                 <div class="text-gray-600 leading-relaxed space-y-4">
@@ -119,9 +120,7 @@
                         <svg class="w-5 h-5 mr-2 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 13a2 2 0 012-2h10a2 2 0 012 2v1a2 2 0 01-2 2H7a2 2 0 01-2-2v-1z"></path></svg>
                         AI 輔助提問：想問點關於本節內容嗎？
                     </h4>
-                    <div id="chat-what-is-qcc">
-                        <!-- Chat UI will be initialized here -->
-                    </div>
+                    <div id="chat-what-is-qcc"></div>
                 </div>
             </section>
             
@@ -164,19 +163,17 @@
                         <p class="text-sm text-gray-600">對現有作業流程進行診斷，找出<strong class="font-semibold">流程中的浪費、瓶頸</strong>。</p>
                     </div>
                 </div>
-                <!-- AI 輔助提問區塊 -->
+                <!-- AI 蠔助提問區塊 -->
                 <div class="mt-8 pt-4 border-t border-gray-200">
                     <h4 class="font-semibold text-lg text-gray-700 mb-3 flex items-center">
                         <svg class="w-5 h-5 mr-2 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2m-3 10h.01M9 19v2m6-2v2M5 13a2 2 0 012-2h10a2 2 0 012 2v1a2 2 0 01-2 2H7a2 2 0 01-2-2v-1z"></path></svg>
                         AI 輔助提問：想問點關於本節內容嗎？
                     </h4>
-                    <div id="chat-tool-selection">
-                        <!-- Chat UI will be initialized here -->
-                    </div>
+                    <div id="chat-tool-selection"></div>
                 </div>
             </section>
             
-            <!-- 區塊 C: 書面格式 (Document Format) - 專注於步驟與文件撰寫 -->
+            <!-- 區塊 C: 書面格式 (Document Format) -->
             <section id="qcc-steps" class="bg-white p-6 sm:p-8 rounded-xl shadow-lg border-l-4 border-fuchsia-500 mt-12">
                 <h2 class="section-title text-2xl font-bold text-gray-800 mb-4" data-section-title="品管改善步驟與書面格式重點">📝 品管改善步驟與書面格式重點 (QC Story)</h2>
                 <p class="text-gray-600 mb-6">問題解決型品管圈通常遵循以下十個標準步驟，這也是您撰寫報告時的骨幹結構。</p>
@@ -186,10 +183,10 @@
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-fuchsia-50">
                             <tr>
-                                <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider w-1/12">No.</th>
-                                <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider w-3/12">步驟名稱</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider w-5/12">書面報告重點 (What to Write)</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider w-3/12">關鍵工具</th>
+                                <th class="px-3 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider w-1/12">No.</th>
+                                <th class="px-3 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider w-3/12">步驟名稱</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider w-5/12">書面報告重點 (What to Write)</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider w-3/12">關鍵工具</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200 text-sm text-gray-700">
@@ -218,8 +215,7 @@
                                 <td class="px-3 py-4 font-medium text-fuchsia-600">4</td>
                                 <td class="px-3 py-4 whitespace-nowrap">目標設定</td>
                                 <td class="px-6 py-4">
-                                    設定具體、可量化、可達成（
-                                    <strong>SMART</strong> 原則）的目標值。
+                                    設定具體、可量化、可達成（<strong>SMART</strong> 原則）的目標值。
                                 </td>
                                 <td class="px-6 py-4">圖表</td>
                             </tr>
@@ -282,26 +278,24 @@
                         <svg class="w-5 h-5 mr-2 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                         AI 輔助提問：想問點關於格式嗎？
                     </h4>
-                    <div id="chat-qcc-format">
-                        <!-- Chat UI will be initialized here -->
-                    </div>
+                    <div id="chat-qcc-format"></div>
                 </div>
             </section>
 
-            <!-- 區塊 D: 參考資料 (References/Tools) - 專注於工具介紹 -->
+            <!-- 區塊 D: 參考資料 -->
             <section id="qc-tools" class="bg-white p-6 sm:p-8 rounded-xl shadow-lg border-l-4 border-cyan-500 mt-12">
                 <h2 class="section-title text-2xl font-bold text-gray-800 mb-4" data-section-title="常用品管工具總覽">🛠️ 常用品管工具總覽（QC 七手法與新七手法）</h2>
                 <p class="text-gray-600 mb-6">品管工具是 QCC 活動中用來收集、整理、分析數據與資訊的輔助手段。正確使用它們能大大提高改善效率！</p>
 
-                <!-- 舊QC七手法表格 -->
+                <!-- 舊QC七手法 -->
                 <h3 class="font-bold text-xl text-teal-700 mb-3 border-b pb-1">舊QC七手法（QC 7 Tools）- 數據分析與統計</h3>
                 <div class="overflow-x-auto rounded-lg shadow-md mb-8 border-2 border-teal-100">
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-teal-50">
                             <tr>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">工具名稱</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">主要功能（用途）</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">適用步驟</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">工具名稱</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">主要功能（用途）</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">適用步驟</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200 text-sm text-gray-700">
@@ -316,15 +310,15 @@
                     </table>
                 </div>
 
-                <!-- 新QC七手法表格 -->
+                <!-- 新QC七手法 -->
                 <h3 class="font-bold text-xl text-blue-700 mb-3 border-b pb-1">新QC七手法（New QC 7 Tools）- 語言資料整理與創新</h3>
                 <div class="overflow-x-auto rounded-lg shadow-md border-2 border-blue-100">
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-blue-50">
                             <tr>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">工具名稱</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">主要功能（用途）</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">適用步驟</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">工具名稱</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">主要功能（用途）</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">適用步驟</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200 text-sm text-gray-700">
@@ -343,9 +337,7 @@
                         <svg class="w-5 h-5 mr-2 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                         AI 輔助提問：想問點關於工具嗎？
                     </h4>
-                    <div id="chat-qc-tools">
-                        <!-- Chat UI will be initialized here -->
-                    </div>
+                    <div id="chat-qc-tools"></div>
                 </div>
             </section>
 
@@ -369,7 +361,6 @@
                    focus:outline-none focus:ring-4 focus:ring-teal-300 active:bg-teal-800 
                    transform hover:scale-105 transition duration-200"
             aria-label="快速回到頂端">
-        <!-- SVG 向上箭頭圖標 -->
         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18" />
         </svg>
@@ -377,96 +368,48 @@
 
 
     <script>
-/* 隱藏首頁內容（main-content + header 下方內容） */
-function hideMain() {
-    document.getElementById("main-content").style.display = "none";
-}
+        // =========================
+        // 1. 顯示 / 隱藏首頁內容
+        // =========================
+        function hideMain() {
+            const main = document.getElementById("main-content");
+            if (main) main.style.display = "none";
+        }
 
-/* 顯示首頁內容 */
-function showMain() {
-    document.getElementById("main-content").style.display = "block";
-}
+        function showMain() {
+            const main = document.getElementById("main-content");
+            if (main) main.style.display = "block";
+        }
 
-/* 載入書面格式頁面（iframe） */
-function loadPage(page) {
-    const frame = document.getElementById('content-frame');
-
-    // 載入子頁面
-    frame.src = page;
-
-    // 切換 active 樣式
-    document.querySelectorAll('.nav-button').forEach(btn => {
-        btn.classList.remove('active');
-    });
-    document.getElementById('nav-btn-form').classList.add('active');
-
-    // 隱藏首頁內容
-    hideMain();
-
-    // 捲動到 iframe 的位置
-    frame.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
-/* 回到首頁（首頁、參考資料都需要顯示 main content） */
-function scrollToSection(targetId, buttonId) {
-    // 顯示首頁
-    showMain();
-
-    // 導航效果照舊
-    let targetElement;
-
-    if (targetId === 'header') {
-        targetElement = document.querySelector('header');
-    } else {
-        targetElement = document.getElementById(targetId);
-    }
-
-    document.querySelectorAll('.nav-button').forEach(button => {
-        button.classList.remove('active');
-    });
-
-    const currentButton = document.getElementById(buttonId);
-    if (currentButton) currentButton.classList.add('active');
-
-    if (targetElement) {
-        targetElement.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-        });
-    }
-}
-</script>
-
-        // -----------------------------------------------------
-        // 1. Navigation and Scroll Logic (互動性提升)
-        // -----------------------------------------------------
+        // =========================
+        // 2. Navigation & Scroll
+        // =========================
 
         /**
          * 平滑滾動至目標區塊並更新導航按鈕的狀態
-         * @param {string} targetId - 目標區塊的 ID（例如 'qcc-steps'），或 'header' 回到頂部。
-         * @param {string} buttonId - 被點擊按鈕的 ID。
+         * 被首頁 / 參考資料使用：會顯示首頁內容
          */
         function scrollToSection(targetId, buttonId) {
+            // 顯示首頁內容
+            showMain();
+
             let targetElement;
             if (targetId === 'header') {
-                // 滾動到頁面頂部
                 targetElement = document.querySelector('header');
             } else {
-                // 滾動到特定區塊
                 targetElement = document.getElementById(targetId);
             }
 
-            // 移除所有按鈕的 active 樣式
+            // 移除所有 nav active
             document.querySelectorAll('.nav-button').forEach(button => {
                 button.classList.remove('active');
             });
 
-            // 為被點擊的按鈕加上 active 樣式
+            // 設定當前按鈕 active
             const currentButton = document.getElementById(buttonId);
-            if (currentButton) {
-                currentButton.classList.add('active');
-            }
+            if (currentButton) currentButton.classList.add('active');
 
+            // 捲動到目標區塊
             if (targetElement) {
                 targetElement.scrollIntoView({
                     behavior: 'smooth',
@@ -475,21 +418,13 @@ function scrollToSection(targetId, buttonId) {
             }
         }
 
-        // -----------------------------------------------------
-        // 2. AI Assistant Logic (Gemini API Integration)
-        // -----------------------------------------------------
+        // =========================
+        // 3. AI Assistant (Gemini)
+        // =========================
 
-        // Global configuration
         const API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent";
-        const apiKey = ""; // API key is provided by the environment
+        const apiKey = ""; // API key 由環境提供
 
-        /**
-         * Fetches response from the Gemini API with exponential backoff.
-         * @param {Array} contents - The chat history/prompt.
-         * @param {string} systemInstruction - The persona and focus for the model.
-         * @param {number} maxRetries - Maximum number of retries.
-         * @returns {Promise<string>} - The generated text response.
-         */
         async function fetchLLMResponse(contents, systemInstruction, maxRetries = 3) {
             const payload = {
                 contents: contents,
@@ -506,10 +441,9 @@ function scrollToSection(targetId, buttonId) {
 
                     if (!response.ok) {
                         if (response.status === 429 && i < maxRetries - 1) {
-                            // Rate limit hit, apply exponential backoff
                             const delay = Math.pow(2, i) * 1000 + Math.random() * 1000;
                             await new Promise(resolve => setTimeout(resolve, delay));
-                            continue; // Retry
+                            continue;
                         }
                         throw new Error(`API request failed with status ${response.status}`);
                     }
@@ -527,20 +461,13 @@ function scrollToSection(targetId, buttonId) {
             }
         }
 
-        /**
-         * Creates and initializes the chat UI for a specific section.
-         * @param {string} containerId - The ID of the container element.
-         * @param {string} sectionTitle - The title of the section for context.
-         */
         function initializeChat(containerId, sectionTitle) {
             const container = document.getElementById(containerId);
             if (!container) return;
 
-            // Chat State and History (simple local storage)
             let chatHistory = [];
             let isThinking = false;
 
-            // UI Elements Setup
             container.innerHTML = `
                 <div class="chat-display bg-gray-100 p-4 rounded-lg h-48 overflow-y-auto mb-4 border border-teal-200">
                     <div class="message text-sm text-gray-600 mb-2">
@@ -559,13 +486,10 @@ function scrollToSection(targetId, buttonId) {
             const chatInput = container.querySelector('.chat-text-input');
             const sendButton = container.querySelector('.chat-send-button');
 
-            // System Instruction is crucial for context
             const systemInstruction = `你是一位友善、具備教學熱忱的品管專家。請根據『${sectionTitle}』的主題，回答使用者的提問。你的回答必須簡潔、專業且富有啟發性。`;
 
-            // Function to add a message to the display
             const addMessage = (sender, text, isAi = false) => {
                 const messageDiv = document.createElement('div');
-                // 使用 flex 和 justify-end/start 來控制左右對齊
                 messageDiv.className = `flex ${isAi ? 'justify-start' : 'justify-end'} mb-2`;
 
                 const contentDiv = document.createElement('div');
@@ -577,14 +501,14 @@ function scrollToSection(targetId, buttonId) {
 
                 const textContent = document.createElement('p');
                 textContent.className = 'ai-chat-response inline';
-                textContent.innerHTML = text.replace(/\n/g, '<br>'); // Use innerHTML to respect <br>
+                textContent.innerHTML = text.replace(/\n/g, '<br>');
 
                 contentDiv.appendChild(senderSpan);
                 contentDiv.appendChild(textContent);
                 messageDiv.appendChild(contentDiv);
 
                 chatDisplay.appendChild(messageDiv);
-                chatDisplay.scrollTop = chatDisplay.scrollHeight; // Scroll to bottom
+                chatDisplay.scrollTop = chatDisplay.scrollHeight;
             };
 
             const handleSend = async () => {
@@ -593,31 +517,23 @@ function scrollToSection(targetId, buttonId) {
                 const userText = chatInput.value.trim();
                 if (userText === '') return;
 
-                // 1. Display user message
                 addMessage('user', userText, false);
                 chatInput.value = '';
 
-                // 2. Set thinking state
                 isThinking = true;
                 sendButton.disabled = true;
                 sendButton.innerHTML = `<div class="loading-spinner"></div>`;
 
-                // 3. Prepare chat history for API
-                // Keep only the last 5 user/model turns to prevent token overflow
-                const historyForApi = chatHistory.slice(-10); 
+                const historyForApi = chatHistory.slice(-10);
                 historyForApi.push({ role: "user", parts: [{ text: userText }] });
 
-                // 4. Call AI
                 const aiResponse = await fetchLLMResponse(historyForApi, systemInstruction);
 
-                // 5. Update full chat history
                 chatHistory.push({ role: "user", parts: [{ text: userText }] });
                 chatHistory.push({ role: "model", parts: [{ text: aiResponse }] });
 
-                // 6. Display AI message
                 addMessage('ai', aiResponse, true);
 
-                // 7. Reset thinking state
                 isThinking = false;
                 sendButton.disabled = false;
                 sendButton.innerHTML = `發問`;
@@ -631,62 +547,54 @@ function scrollToSection(targetId, buttonId) {
             });
         }
 
-        // -----------------------------------------------------
-        // 3. Initialization on Load and Scroll Listener
-        // -----------------------------------------------------
-        
-        // Intersection Observer 用於偵測區塊進入視窗，自動更新導航按鈕狀態
+        // =========================
+        // 4. Scroll Observer
+        // =========================
         function setupScrollObserver() {
             const sections = [
                 { id: 'what-is-qcc', buttonId: 'nav-btn-home' },
-                { id: 'qcc-steps', buttonId: 'nav-btn-form' },  // ✅ 修正為 nav-btn-form
+                { id: 'qcc-steps', buttonId: 'nav-btn-form' },
                 { id: 'qc-tools', buttonId: 'nav-btn-tools' }
             ];
 
             const options = {
-                root: null, // viewport
-                rootMargin: '0px 0px -60% 0px', // 當區塊頂部進入視窗上方 40% 時觸發
-                threshold: 0 // 只需要 1px 進入即可
+                root: null,
+                rootMargin: '0px 0px -60% 0px',
+                threshold: 0
             };
 
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        // 找到對應的按鈕 ID
                         const currentSection = sections.find(s => s.id === entry.target.id);
                         if (currentSection) {
-                            // 移除所有按鈕的 active 樣式
                             document.querySelectorAll('.nav-button').forEach(btn => {
                                 btn.classList.remove('active');
                             });
-                            // 為當前區塊的按鈕加上 active 樣式
                             const btn = document.getElementById(currentSection.buttonId);
-                            if (btn) btn.classList.add('active');
+                            if (btn && document.getElementById("main-content").style.display !== "none") {
+                                btn.classList.add('active');
+                            }
                         }
                     }
                 });
             }, options);
 
-            // 觀察所有主要區塊
             sections.forEach(s => {
                 const element = document.getElementById(s.id);
-                if (element) {
-                    observer.observe(element);
-                }
+                if (element) observer.observe(element);
             });
         }
-        
-        // -----------------------------------------------------
-        // 4. Back To Top Logic
-        // -----------------------------------------------------
+
+        // =========================
+        // 5. Back To Top
+        // =========================
         function setupBackToTop() {
             const backToTopBtn = document.getElementById('backToTopBtn');
             const scrollThreshold = 300; 
 
-            // 監聽頁面捲動事件
             window.addEventListener('scroll', function() {
                 const scrolled = document.documentElement.scrollTop || document.body.scrollTop;
-                
                 if (scrolled > scrollThreshold) {
                     backToTopBtn.classList.add('show');
                 } else {
@@ -694,7 +602,6 @@ function scrollToSection(targetId, buttonId) {
                 }
             });
 
-            // 按鈕點擊事件：平滑捲動到頂部
             backToTopBtn.addEventListener('click', function() {
                 window.scrollTo({
                     top: 0,
@@ -703,31 +610,34 @@ function scrollToSection(targetId, buttonId) {
             });
         }
 
-        // -----------------------------------------------------
-        // 5. iframe 載入邏輯：按下「書面格式」按鈕時使用
-        // -----------------------------------------------------
+        // =========================
+        // 6. iframe 載入邏輯
+        // =========================
         function loadPage(page) {
             const frame = document.getElementById('content-frame');
-
-            // 1. 載入頁面
             frame.src = page;
 
-            // 2. 更新 nav active 樣式
+            // 切換 nav active
             document.querySelectorAll('.nav-button').forEach(btn => {
                 btn.classList.remove('active');
             });
             const btn = document.getElementById('nav-btn-form');
             if (btn) btn.classList.add('active');
 
-            // 3. 捲動到 iframe 區塊頂端
+            // 隱藏首頁內容
+            hideMain();
+
+            // 捲動到 iframe 區塊
             frame.scrollIntoView({
                 behavior: 'smooth',
                 block: 'start'
             });
         }
 
+        // =========================
+        // 7. 初始化
+        // =========================
         window.onload = function() {
-            // 初始化所有 AI Chat UI
             const chatConfigs = [
                 { id: 'chat-what-is-qcc', title: '什麼是品管圈（QCC）？' },
                 { id: 'chat-tool-selection', title: '運用合適的品管工具解決問題（五大改善類型）' },
@@ -739,13 +649,9 @@ function scrollToSection(targetId, buttonId) {
                 initializeChat(config.id, config.title);
             });
             
-            // 啟用滾動觀察者，實現自動更新導航狀態
             setupScrollObserver();
-
-            // 啟用回到頂端按鈕功能
             setupBackToTop();
-            
-            // 確保一開始「首頁」按鈕是 active 狀態
+
             document.getElementById('nav-btn-home').classList.add('active');
         };
     </script>
