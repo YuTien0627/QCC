@@ -82,19 +82,19 @@
         <nav class="sticky top-0 z-10 flex justify-center bg-white p-2 rounded-xl shadow-lg mb-8 space-x-4">
             <!-- 首頁按鈕：回到頁面頂部 -->
             <button id="nav-btn-home" onclick="scrollToSection('header', 'nav-btn-home')" class="nav-button active text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">
-                🚀 首頁 (活動總覽)
+                🚀 首頁
             </button>
 
             <!-- 書面格式按鈕：在 iframe 中載入子頁 -->
             <button id="nav-btn-form"
                     onclick="loadPage('書面格式_問題型.html')"
                     class="nav-button text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">
-                📝 書面格式 (QC Story)
+                📝 書面格式
             </button>
 
             <!-- 參考資料按鈕：跳轉到 QC 工具區塊 -->
             <button id="nav-btn-tools" onclick="scrollToSection('qc-tools', 'nav-btn-tools')" class="nav-button text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">
-                🛠️ 參考資料 (品管工具)
+                🛠️ 參考資料
             </button>
         </nav>
 
@@ -377,6 +377,66 @@
 
 
     <script>
+/* 隱藏首頁內容（main-content + header 下方內容） */
+function hideMain() {
+    document.getElementById("main-content").style.display = "none";
+}
+
+/* 顯示首頁內容 */
+function showMain() {
+    document.getElementById("main-content").style.display = "block";
+}
+
+/* 載入書面格式頁面（iframe） */
+function loadPage(page) {
+    const frame = document.getElementById('content-frame');
+
+    // 載入子頁面
+    frame.src = page;
+
+    // 切換 active 樣式
+    document.querySelectorAll('.nav-button').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    document.getElementById('nav-btn-form').classList.add('active');
+
+    // 隱藏首頁內容
+    hideMain();
+
+    // 捲動到 iframe 的位置
+    frame.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/* 回到首頁（首頁、參考資料都需要顯示 main content） */
+function scrollToSection(targetId, buttonId) {
+    // 顯示首頁
+    showMain();
+
+    // 導航效果照舊
+    let targetElement;
+
+    if (targetId === 'header') {
+        targetElement = document.querySelector('header');
+    } else {
+        targetElement = document.getElementById(targetId);
+    }
+
+    document.querySelectorAll('.nav-button').forEach(button => {
+        button.classList.remove('active');
+    });
+
+    const currentButton = document.getElementById(buttonId);
+    if (currentButton) currentButton.classList.add('active');
+
+    if (targetElement) {
+        targetElement.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        });
+    }
+}
+</script>
+
         // -----------------------------------------------------
         // 1. Navigation and Scroll Logic (互動性提升)
         // -----------------------------------------------------
