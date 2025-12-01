@@ -87,8 +87,8 @@
             <button id="nav-btn-home" onclick="scrollToSection('header', 'nav-btn-home')" class="nav-button active text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">
                 🚀 首頁 (活動總覽)
             </button>
-<button id="nav-btn-form" 
-        onclick="window.location.href='書面格式_問題型.html'" 
+<button id="nav-btn-form"
+        onclick="loadPage('書面格式_問題型.html')"
         class="nav-button text-lg px-6 py-2">
     📝 書面格式 (QC Story)
 </button>
@@ -98,6 +98,10 @@
             </button>
         </nav>
 
+        <div class="w-full h-[85vh] border rounded-lg overflow-hidden shadow">
+    <iframe id="content-frame" src="" class="w-full h-full" frameborder="0"></iframe>
+</div>
+        
         <!-- 內容區塊 (全部集中在首頁，透過滾動呈現) -->
         <main id="main-content" class="space-y-12">
 
@@ -596,5 +600,11 @@
             document.getElementById('nav-btn-home').classList.add('active');
         };
     </script>
+<script>
+function loadPage(page) {
+    document.getElementById('content-frame').src = page;
+}
+</script>
+
 </body>
 </html>
