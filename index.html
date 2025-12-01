@@ -434,4 +434,169 @@
 
         async function fetchLLMResponse(contents, systemInstruction, maxRetries = 3) {
             if (!apiKey) {
-                return '（目前尚未設定 API Key，因此無法連線到外部
+                return '（目前尚未設定 API Key，因此無法連線到外部 AI 服務。）';
+            }
+
+            const payload = {
+                contents: contents,
+                systemInstruction: { parts: [{ text: systemInstruction }] },
+            };
+
+            for (let i = 0; i < maxRetries; i++) {
+                try {
+                    const response = await fetch(`${API_URL}?key=${apiKey}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                        if (response.status === 429 && i < maxRetries - 1) {
+                            const delay = Math.pow(2, i) * 1000 + Math.random() * 1000;
+                            await new Promise(resolve => setTimeout(resolve, delay));
+                            continue;
+                        }
+                        throw new Error(`API request failed with status ${response.status}`);
+                    }
+
+                    const result = await response.json();
+                    const text = result.candidates?.[0]?.content?.parts?.[0]?.text || '抱歉，AI 在處理時發生了錯誤。';
+                    return text;
+
+                } catch (error) {
+                    console.error("LLM API Error:", error);
+                    if (i === maxRetries - 1) {
+                        return '抱歉，無法連接到 AI 服務。請稍後再試。';
+                    }
+                }
+            }
+        }
+
+        function initializeChat(containerId, sectionTitle) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            let chatHistory = [];
+            let isThinking = false;
+
+            container.innerHTML = `
+                <div class="chat-display bg-gray-100 p-4 rounded-lg h-48 overflow-y-auto mb-4 border border-teal-200">
+                    <div class="message text-sm text-gray-600 mb-2">
+                        <span class="font-bold text-teal-600">AI 助理：</span> 您好！我是您的品管助理，請針對<strong class="text-teal-700">『${sectionTitle}』</strong>提出問題。
+                    </div>
+                </div>
+                <div class="chat-input flex space-x-2">
+                    <input type="text" placeholder="輸入您的問題..." class="chat-text-input flex-grow p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-sm">
+                    <button class="chat-send-button bg-teal-600 text-white p-2 rounded-lg hover:bg-teal-700 transition duration-150 ease-in-out font-medium text-sm disabled:opacity-50 flex items-center justify-center w-20">
+                        發問
+                    </button>
+                </div>
+            `;
+
+            const chatDisplay = container.querySelector('.chat-display');
+            const chatInput = container.querySelector('.chat-text-input');
+            const sendButton = container.querySelector('.chat-send-button');
+
+            const systemInstruction = `你是一位友善、具備教學熱忱的品管專家。請根據『${sectionTitle}』的主題，回答使用者的提問。你的回答必須簡潔、專業且富有啟發性。`;
+
+            const addMessage = (sender, text, isAi = false) => {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `flex ${isAi ? 'justify-start' : 'justify-end'} mb-2`;
+
+                const contentDiv = document.createElement('div');
+                contentDiv.className = `message text-sm p-2 rounded-lg max-w-[90%] ${isAi ? 'bg-teal-100' : 'bg-indigo-100'}`;
+                
+                const senderSpan = document.createElement('span');
+                senderSpan.className = `font-bold ${isAi ? 'text-teal-600' : 'text-indigo-600'}`;
+                senderSpan.textContent = isAi ? 'AI 助理：' : '您：';
+
+                const textContent = document.createElement('p');
+                textContent.className = 'ai-chat-response inline';
+                textContent.innerHTML = text.replace(/\n/g, '<br>');
+
+                contentDiv.appendChild(senderSpan);
+                contentDiv.appendChild(textContent);
+                messageDiv.appendChild(contentDiv);
+
+                chatDisplay.appendChild(messageDiv);
+                chatDisplay.scrollTop = chatDisplay.scrollHeight;
+            };
+
+            const handleSend = async () => {
+                if (isThinking) return;
+
+                const userText = chatInput.value.trim();
+                if (userText === '') return;
+
+                addMessage('user', userText, false);
+                chatInput.value = '';
+
+                isThinking = true;
+                sendButton.disabled = true;
+                sendButton.innerHTML = `<div class="loading-spinner"></div>`;
+
+                const historyForApi = chatHistory.slice(-10);
+                historyForApi.push({ role: "user", parts: [{ text: userText }] });
+
+                const aiResponse = await fetchLLMResponse(historyForApi, systemInstruction);
+
+                chatHistory.push({ role: "user", parts: [{ text: userText }] });
+                chatHistory.push({ role: "model", parts: [{ text: aiResponse }] });
+
+                addMessage('ai', aiResponse, true);
+
+                isThinking = false;
+                sendButton.disabled = false;
+                sendButton.innerHTML = `發問`;
+            };
+
+            sendButton.addEventListener('click', handleSend);
+            chatInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    handleSend();
+                }
+            });
+        }
+
+        // ========== 回到頂端按鈕 ==========
+        function setupBackToTop() {
+            const backToTopBtn = document.getElementById('backToTopBtn');
+            const scrollThreshold = 300; 
+
+            window.addEventListener('scroll', function() {
+                const scrolled = document.documentElement.scrollTop || document.body.scrollTop;
+                if (scrolled > scrollThreshold) {
+                    backToTopBtn.classList.add('show');
+                } else {
+                    backToTopBtn.classList.remove('show');
+                }
+            });
+
+            backToTopBtn.addEventListener('click', function() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth' 
+                });
+            });
+        }
+
+        // ========== 初始化 ==========
+        window.onload = function() {
+            const chatConfigs = [
+                { id: 'chat-what-is-qcc', title: '什麼是品管圈（QCC）？' },
+                { id: 'chat-tool-selection', title: '運用合適的品管工具解決問題（五大改善類型）' },
+                { id: 'chat-qcc-format', title: '品管改善步驟與書面格式重點' },
+                { id: 'chat-qc-tools', title: '常用品管工具總覽' }
+            ];
+
+            chatConfigs.forEach(config => {
+                initializeChat(config.id, config.title);
+            });
+
+            setupBackToTop();
+            setActive('nav-btn-home');
+        };
+    </script>
+
+</body>
+</html>
