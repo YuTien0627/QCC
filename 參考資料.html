@@ -111,7 +111,7 @@
 
     </div>
 
-    <script>
+       <script>
         // 歷年影音課程資料 (新增了 handoutLink 欄位)
         const videoData = [
             {
@@ -180,115 +180,84 @@
             },
         ];
 
-        // 動態渲染影音課程列表
-        <script>
-    // 歷年影音課程資料 (新增了 handoutLink 欄位)
-    const videoData = [
-        {
-            title: "多元品管工具介紹",
-            consultant: "毛綺如顧問 (中衛發展中心)",
-            date: "2018年4月",
-            link: "http://training.chimei.org.tw/mod/ipsafety/1070418007/20180418.wmv",
-            type: "品管工具基礎",
-            handoutLink: "#handout-multi-tools",
-        },
-        {
-            title: "問題解決型步驟介紹",
-            consultant: "毛綺如顧問 (中衛發展中心)",
-            date: "2018年4月",
-            link: "http://training.chimei.org.tw/mod/ipsafety/1070418017/107041802.wmv",
-            type: "QCC 實作步驟",
-            handoutLink: "#handout-problem-solving",
-        },
-        {
-            title: "課題達成型步驟介紹",
-            consultant: "毛綺如顧問 (中衛發展中心)",
-            date: "2018年4月",
-            link: "http://training.chimei.org.tw/mod/ipsafety/1070418018/107041803.wmv",
-            type: "QCC 實作步驟",
-            handoutLink: "#handout-objective-achieving",
-        },
-        {
-            title: "流程分析、流程改造及精實介紹",
-            consultant: "張國昌顧問 (精捷顧問公司)",
-            date: "2019年5月",
-            link: "http://training.chimei.org.tw/mod/ipsafety/1070523010/107052301.wmv",
-            type: "流程管理",
-            handoutLink: "#handout-process-analysis",
-        },
-        {
-            title: "HFMEA及預防型介紹",
-            consultant: "張國昌顧問 (精捷顧問公司)",
-            date: "2019年5月",
-            link: "http://training.chimei.org.tw/mod/ipsafety/1080510007/20190510.wmv",
-            type: "風險管理",
-            handoutLink: "#handout-hfmea",
-        },
-        {
-            title: "流程改造步驟介紹",
-            consultant: "張國昌顧問 (精捷顧問公司)",
-            date: "2019年5月",
-            link: "http://training.chimei.org.tw/mod/ipsafety/1080510008/20190510.mp4",
-            type: "流程管理",
-            handoutLink: "#handout-process-reengineering",
-        },
-        {
-            title: "RCA根本原因分析理論與應用 (上集)",
-            consultant: "石崇良司長 (衛生福利部)",
-            date: "2019年7月",
-            link: "http://training.chimei.org.tw/mod/ipsafety/1080715002/2019071501.wmv",
-            type: "根本原因分析",
-            handoutLink: "#handout-rca-part1",
-        },
-        {
-            title: "RCA根本原因分析理論與應用 (下集)",
-            consultant: "石崇良司長 (衛生福利部)",
-            date: "2019年7月",
-            link: "http://training.chimei.org.tw/mod/ipsafety/1080715003/2019071502.wmv",
-            type: "根本原因分析",
-            handoutLink: "#handout-rca-part2",
-        },
-    ];
+        // ✅ 改成透過 video.html 中轉開啟 HTTP 影片
+        function renderVideos() {
+            const listContainer = document.getElementById('video-list');
+            listContainer.innerHTML = videoData.map((video, index) => {
+                const targetUrl = `video.html?url=${encodeURIComponent(video.link)}`;
 
-    // ✅ 改成透過 video.html 中轉開啟 HTTP 影片
-    function renderVideos() {
-        const listContainer = document.getElementById('video-list');
-        listContainer.innerHTML = videoData.map((video, index) => {
-            // 把影音網址編碼塞進 query string
-            const targetUrl = `video.html?url=${encodeURIComponent(video.link)}`;
+                return `
+                    <div class="flex flex-col sm:flex-row p-5 bg-white border border-gray-200 rounded-xl hover:shadow-lg transition duration-300 transform resource-card">
+                        <div class="sm:w-3/5">
+                            <span class="inline-flex items-center px-3 py-1 text-xs font-semibold leading-5 rounded-full bg-teal-100 text-teal-800 mb-1">
+                                ${video.type}
+                            </span>
+                            <h4 class="text-xl font-bold text-gray-800 mt-1">${index + 1}. ${video.title}</h4>
+                            <p class="mt-1 text-sm text-gray-600">${video.consultant} · ${video.date}</p>
+                        </div>
+                        
+                        <div class="sm:w-2/5 mt-4 sm:mt-0 sm:text-right flex flex-col sm:flex-row items-start sm:items-center sm:justify-end space-y-2 sm:space-y-0 sm:space-x-3 flex-shrink-0">
+                            <!-- 觀看影音：改連到 video.html 中轉頁 -->
+                            <a href="${targetUrl}" target="_blank"
+                               class="inline-flex items-center text-white bg-indigo-500 hover:bg-indigo-600 px-4 py-2 rounded-full font-semibold text-sm transition duration-150 ease-in-out shadow-md">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.26a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                觀看影音
+                            </a>
 
-            return `
-                <div class="flex flex-col sm:flex-row p-5 bg-white border border-gray-200 rounded-xl hover:shadow-lg transition duration-300 transform resource-card">
-                    <div class="sm:w-3/5">
-                        <span class="inline-flex items-center px-3 py-1 text-xs font-semibold leading-5 rounded-full bg-teal-100 text-teal-800 mb-1">
-                            ${video.type}
-                        </span>
-                        <h4 class="text-xl font-bold text-gray-800 mt-1">${index + 1}. ${video.title}</h4>
-                        <p class="mt-1 text-sm text-gray-600">${video.consultant} · ${video.date}</p>
+                            <!-- 講義連結：之後有實際 handout 再改 -->
+                            <a href="${video.handoutLink}" target="_blank"
+                               class="inline-flex items-center text-qcc-dark bg-qcc-light border-2 border-qcc-dark hover:bg-qcc-dark hover:text-white px-4 py-2 rounded-full font-semibold text-sm transition duration-150 ease-in-out shadow-md">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                                講義下載
+                            </a>
+                        </div>
                     </div>
-                    
-                    <div class="sm:w-2/5 mt-4 sm:mt-0 sm:text-right flex flex-col sm:flex-row items-start sm:items-center sm:justify-end space-y-2 sm:space-y-0 sm:space-x-3 flex-shrink-0">
-                        <!-- 觀看影音：改連到 video.html 中轉頁 -->
-                        <a href="${targetUrl}" target="_blank"
-                           class="inline-flex items-center text-white bg-indigo-500 hover:bg-indigo-600 px-4 py-2 rounded-full font-semibold text-sm transition duration-150 ease-in-out shadow-md">
-                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.26a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                            觀看影音
-                        </a>
+                `;
+            }).join('');
+        }
 
-                        <!-- 講義連結：維持原本寫法（之後你有實際 handout 再改） -->
-                        <a href="${video.handoutLink}" target="_blank"
-                           class="inline-flex items-center text-qcc-dark bg-qcc-light border-2 border-qcc-dark hover:bg-qcc-dark hover:text-white px-4 py-2 rounded-full font-semibold text-sm transition duration-150 ease-in-out shadow-md">
-                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                            講義下載
-                        </a>
-                    </div>
-                </div>
-            `;
-        }).join('');
-    }
+        // 分頁切換邏輯
+        function setupTabs() {
+            const tabsNav = document.getElementById('tabs-nav');
+            const tabButtons = tabsNav.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
 
-    // 下面的 setupTabs() / window.onload 保持原本寫法即可
-</script>
+            const activateTab = (activeTabId) => {
+                tabContents.forEach(content => content.classList.add('hidden'));
+                document.getElementById(activeTabId).classList.remove('hidden');
+
+                tabButtons.forEach(button => {
+                    button.classList.remove('border-qcc-primary', 'text-qcc-dark');
+                    button.classList.add('border-transparent', 'text-gray-500', 'hover:text-qcc-dark', 'hover:border-qcc-secondary');
+                });
+
+                const activeButton = document.querySelector(`.tab-button[data-tab="${activeTabId}"]`);
+                if (activeButton) {
+                    activeButton.classList.add('border-qcc-primary', 'text-qcc-dark');
+                    activeButton.classList.remove('border-transparent', 'text-gray-500', 'hover:text-qcc-dark', 'hover:border-qcc-secondary');
+                }
+            };
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const tabId = button.getAttribute('data-tab');
+                    activateTab(tabId);
+                });
+            });
+
+            // 初始啟動第一個 Tab
+            activateTab('videos');
+        }
+
+        // 初始化：給獨立開啟這頁用
+        window.addEventListener('load', () => {
+            renderVideos();
+            setupTabs();
+        });
+    </script>
+</body>
+</html>
+
 
 
         // 處理分頁切換邏輯 (已移除 Handouts Tab)
