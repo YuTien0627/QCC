@@ -57,57 +57,61 @@
             opacity: 1;
             visibility: visible;
         }
-
-        /* ====== 子頁樣式整合（書面格式 + 參考資料）====== */
-
-        /* 書面格式_問題型.html：步驟卡片互動 */
-        #page-dynamic .step-card {
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ecfdf5;
+        }
+        .section-title {
+            border-left: 6px solid #0d9488;
+            padding-left: 0.75rem;
             transition: all 0.3s ease-in-out;
+        }
+        .nav-button {
+            transition: all 0.3s ease-in-out;
+            border-bottom: 3px solid transparent;
+        }
+        .nav-button.active {
+            color: #0d9488;
+            border-color: #0d9488;
+            font-weight: 700;
+        }
+        .ai-chat-response {
+            white-space: pre-wrap;
+        }
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #0d9488;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        #backToTopBtn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
             cursor: pointer;
+            width: 3rem;
+            height: 3rem;
         }
-        #page-dynamic .step-card:hover {
-            box-shadow: 0 10px 25px -3px rgba(99, 102, 241, 0.3),
-                        0 4px 6px -2px rgba(99, 102, 241, 0.2);
-            transform: translateY(-2px);
-        }
-        #page-dynamic .step-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.7s ease-in-out, padding 0.5s ease;
-        }
-        #page-dynamic .step-card.active .step-content {
-            max-height: 2000px; /* 足夠大的值 */
-            padding-top: 1rem;
-            padding-bottom: 1rem;
+        #backToTopBtn.show {
+            opacity: 1;
+            visibility: visible;
         }
 
-        /* 書面格式 header 樣式改成跟首頁同一色系 */
-        #page-dynamic .header-bg {
-            background: linear-gradient(135deg, #0d9488 0%, #14b8a6 100%);
-            color: #ffffff;
-        }
-
-        /* 參考資料：resource-card hover 效果 */
-        #page-dynamic .resource-card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        #page-dynamic .resource-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
-                        0 4px 6px -2px rgba(0, 0, 0, 0.05);
-        }
-
-        /* 參考資料：QCC 顏色工具類別（仿 Tailwind 擴充） */
-        #page-dynamic .bg-qcc-primary { background-color: #0D9488; }
-        #page-dynamic .bg-qcc-secondary { background-color: #14B8A6; }
-        #page-dynamic .bg-qcc-light { background-color: #F0FDFA; }
-        #page-dynamic .text-qcc-dark { color: #0F766E; }
-        #page-dynamic .text-qcc-light { color: #ECFEFF; }
-        #page-dynamic .border-qcc-primary { border-color: #0D9488; }
-        #page-dynamic .border-qcc-secondary { border-color: #14B8A6; }
-
-        #page-dynamic .tab-button {
-            transition: all 0.15s ease-in-out;
+        /* ★ 新增：動態載入頁面標題顏色，避免 text-white 看不到 */
+        #page-dynamic h1,
+        #page-dynamic h2,
+        #page-dynamic h3 {
+            color: #111827 !important; /* Tailwind 的 text-gray-900 類似色 */
         }
     </style>
 </head>
@@ -118,9 +122,25 @@
 
         <!-- 標題區塊（固定框架的一部分） -->
         <header id="header" class="text-center py-10 bg-white shadow-xl rounded-xl mb-6 border-t-8 border-teal-600">
-            <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-900 mb-2">品管圈（QCC）新手入門互動指南</h1>
-            <p class="text-xl text-gray-500">從概念到實踐，品質改善的旅程由此開始！</p>
+            <div class="flex flex-col items-center">
+                <!-- 新增：左邊放 LOGO，右邊是標題文字 -->
+                <div class="flex items-center justify-center mb-2">
+                    <img
+                        src="https://raw.githubusercontent.com/YuTien0627/QCC/main/%E5%93%81%E7%AE%A1%E9%83%A8LOGO%20(%E5%8E%BB%E8%83%8C).png"
+                        alt="奇美醫院品質管理部 Logo"
+                        class="w-12 h-12 sm:w-14 sm:h-14 mr-3 object-contain"
+                    >
+                    <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-900">
+                        品管圈（QCC）新手入門互動指南
+                    </h1>
+                </div>
+
+                <p class="text-xl text-gray-500">
+                    從概念到實踐，品質改善的旅程由此開始！
+                </p>
+            </div>
         </header>
+
 
         <!-- 導航頁籤（固定框架的一部分） -->
         <nav class="sticky top-0 z-10 flex justify-center bg-white p-2 rounded-xl shadow-lg mb-8 space-x-4">
@@ -141,13 +161,19 @@
                     class="nav-button text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">
                 🛠️ 參考資料
             </button>
+
+            <!-- ★ 新增：小試身手 頁籤 -->
+            <button id="nav-btn-quiz"
+                    onclick="loadExternalPage('問題型小測驗.html', 'nav-btn-quiz')"
+                    class="nav-button text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">
+                🎯 小試身手
+            </button>
         </nav>
 
         <!-- 內文區：會隨頁籤切換的部分 -->
 
-        <!-- 首頁內容：完整首頁 -->
+        <!-- 首頁內容：完整首頁（QCC介紹、五大類型、書面格式重點、工具總覽） -->
         <main id="page-home" class="space-y-12 mb-10">
-
             <!-- 區塊 A: 什麼是品管圈（QCC）？ -->
             <section id="what-is-qcc" class="bg-white p-6 sm:p-8 rounded-xl shadow-lg border-l-4 border-teal-500 hover:shadow-2xl transition duration-300">
                 <h2 class="section-title text-2xl font-bold text-gray-800 mb-4" data-section-title="什麼是品管圈（QCC）？">1. 什麼是品管圈（QCC）？</h2>
@@ -361,10 +387,10 @@
 
         </main>
 
-        <!-- 動態載入外部 HTML 的容器（書面格式 / 參考資料） -->
+        <!-- 動態載入外部 HTML 的容器（書面格式 / 參考資料 / 小試身手） -->
         <main id="page-dynamic" class="hidden mb-10">
             <div id="dynamic-content" class="bg-white p-6 sm:p-8 rounded-xl shadow-lg min-h-[50vh]">
-                <!-- 這裡會用 fetch 塞入外部 HTML 的內容 -->
+                <!-- 這裡會用 fetch 塞入外部 HTML 的 <body> 內容 -->
             </div>
         </main>
 
@@ -422,75 +448,7 @@
             });
         }
 
-        // ====== 參考資料用的影片資料（改名 refVideoData，避免撞名） ======
-        const refVideoData = [
-            {
-                title: "多元品管工具介紹",
-                consultant: "毛綺如顧問 (中衛發展中心)",
-                date: "2018年4月",
-                link: "http://training.chimei.org.tw/mod/ipsafety/1070418007/20180418.wmv",
-                type: "品管工具基礎",
-                handoutLink: "#handout-multi-tools",
-            },
-            {
-                title: "問題解決型步驟介紹",
-                consultant: "毛綺如顧問 (中衛發展中心)",
-                date: "2018年4月",
-                link: "http://training.chimei.org.tw/mod/ipsafety/1070418017/107041802.wmv",
-                type: "QCC 實作步驟",
-                handoutLink: "#handout-problem-solving",
-            },
-            {
-                title: "課題達成型步驟介紹",
-                consultant: "毛綺如顧問 (中衛發展中心)",
-                date: "2018年4月",
-                link: "http://training.chimei.org.tw/mod/ipsafety/1070418018/107041803.wmv",
-                type: "QCC 實作步驟",
-                handoutLink: "#handout-objective-achieving",
-            },
-            {
-                title: "流程分析、流程改造及精實介紹",
-                consultant: "張國昌顧問 (精捷顧問公司)",
-                date: "2019年5月",
-                link: "http://training.chimei.org.tw/mod/ipsafety/1070523010/107052301.wmv",
-                type: "流程管理",
-                handoutLink: "#handout-process-analysis",
-            },
-            {
-                title: "HFMEA及預防型介紹",
-                consultant: "張國昌顧問 (精捷顧問公司)",
-                date: "2019年5月",
-                link: "http://training.chimei.org.tw/mod/ipsafety/1080510007/20190510.wmv",
-                type: "風險管理",
-                handoutLink: "#handout-hfmea",
-            },
-            {
-                title: "流程改造步驟介紹",
-                consultant: "張國昌顧問 (精捷顧問公司)",
-                date: "2019年5月",
-                link: "http://training.chimei.org.tw/mod/ipsafety/1080510008/20190510.mp4",
-                type: "流程管理",
-                handoutLink: "#handout-process-reengineering",
-            },
-            {
-                title: "RCA根本原因分析理論與應用 (上集)",
-                consultant: "石崇良司長 (衛生福利部)",
-                date: "2019年7月",
-                link: "http://training.chimei.org.tw/mod/ipsafety/1080715002/2019071501.wmv",
-                type: "根本原因分析",
-                handoutLink: "#handout-rca-part1",
-            },
-            {
-                title: "RCA根本原因分析理論與應用 (下集)",
-                consultant: "石崇良司長 (衛生福利部)",
-                date: "2019年7月",
-                link: "http://training.chimei.org.tw/mod/ipsafety/1080715003/2019071502.wmv",
-                type: "根本原因分析",
-                handoutLink: "#handout-rca-part2",
-            },
-        ];
-
-        // ====== 使用 fetch 載入外部 HTML，然後在這裡統一掛互動 ======
+        // ========== 使用 fetch 載入外部 HTML（含 head 的 CSS / JS）並插入 dynamic-content ==========
         async function loadExternalPage(pageUrl, buttonId) {
             setActive(buttonId);
             showDynamicPage();
@@ -510,17 +468,60 @@
                 }
                 const htmlText = await res.text();
 
+                // 解析整份 HTML
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(htmlText, 'text/html');
                 const body = doc.body;
+                const head = doc.head;
 
-                // 只取子頁 body 內容，放進 dynamic-content
+                // 1️⃣ 先把 body 的內容塞進 dynamic-content
                 container.innerHTML = body ? body.innerHTML : htmlText;
 
-                // 依照載入的檔案，初始化對應的互動
-                initializeDynamicPage(pageUrl);
+                // 2️⃣ 把子頁 <head> 裡的 style / css link 載進來（避免版型 & 隱藏邏輯失效）
+                if (head) {
+                    // 內嵌 CSS
+                    head.querySelectorAll('style').forEach(styleEl => {
+                        document.head.appendChild(styleEl.cloneNode(true));
+                    });
 
-                // 捲回到標題附近
+                    // 外部 CSS 檔（例如某些子頁自己載的樣式）
+                    head.querySelectorAll('link[rel="stylesheet"]').forEach(linkEl => {
+                        // 簡單避免完全相同 href 重複太多次
+                        if (linkEl.href && !document.querySelector('link[rel="stylesheet"][href="' + linkEl.href + '"]')) {
+                            document.head.appendChild(linkEl.cloneNode(true));
+                        }
+                    });
+                }
+
+                // 3️⃣ 把子頁的 <script> 全部重新執行（包含 head + body）
+                const scriptNodes = [];
+
+                if (head) {
+                    head.querySelectorAll('script').forEach(s => scriptNodes.push(s));
+                }
+                container.querySelectorAll('script').forEach(s => scriptNodes.push(s));
+
+                scriptNodes.forEach(oldScript => {
+                    const newScript = document.createElement('script');
+
+                    // 保留 type 等屬性
+                    if (oldScript.type) newScript.type = oldScript.type;
+                    if (oldScript.noModule) newScript.noModule = true;
+                    if (oldScript.defer) newScript.defer = true;
+                    if (oldScript.async) newScript.async = true;
+
+                    if (oldScript.src) {
+                        // ★ 即使 src 一樣，也重新載入一次，讓初始化邏輯重新跑
+                        newScript.src = oldScript.src;
+                    } else {
+                        newScript.textContent = oldScript.textContent;
+                    }
+
+                    // 掛在 body 底，確保 DOM 已經存在
+                    document.body.appendChild(newScript);
+                });
+
+                // 4️⃣ 捲回到標題附近，視覺上像是切換頁面
                 document.getElementById('header').scrollIntoView({
                     behavior: 'smooth',
                     block: 'start'
@@ -534,142 +535,6 @@
                         請確認檔案是否存在於 GitHub Pages 正確路徑，或稍後再試。
                     </p>
                 `;
-            }
-        }
-
-        // 根據載入的檔案，決定要掛哪些互動
-        function initializeDynamicPage(pageUrl) {
-            if (pageUrl.indexOf('書面格式') !== -1) {
-                setupQccStepCards();
-            } else if (pageUrl.indexOf('參考資料') !== -1) {
-                renderReferenceVideos();
-                setupReferenceTabs();
-            }
-        }
-
-        // ====== 書面格式_問題型：步驟卡片展開/收合 ======
-        function setupQccStepCards() {
-            const stepCards = document.querySelectorAll('#dynamic-content .step-card');
-            if (!stepCards.length) return;
-
-            stepCards.forEach(card => {
-                const header = card.querySelector('.step-header');
-                const content = card.querySelector('.step-content');
-                const arrow = card.querySelector('.arrow');
-                if (!header || !content) return;
-
-                // 初始狀態
-                content.style.maxHeight = '0';
-
-                header.addEventListener('click', () => {
-                    const isActive = card.classList.contains('active');
-
-                    // 先關掉其他卡片
-                    stepCards.forEach(other => {
-                        if (other !== card && other.classList.contains('active')) {
-                            other.classList.remove('active');
-                            const otherContent = other.querySelector('.step-content');
-                            const otherArrow = other.querySelector('.arrow');
-                            if (otherContent) otherContent.style.maxHeight = '0';
-                            if (otherArrow) otherArrow.classList.remove('rotate-180');
-                        }
-                    });
-
-                    // 切換目前這張
-                    if (isActive) {
-                        card.classList.remove('active');
-                        if (arrow) arrow.classList.remove('rotate-180');
-                        content.style.maxHeight = '0';
-                    } else {
-                        card.classList.add('active');
-                        if (arrow) arrow.classList.add('rotate-180');
-                        content.style.maxHeight = content.scrollHeight + 50 + 'px';
-                    }
-                });
-
-                // 視窗大小改變時，如果是展開狀態，調整高度
-                window.addEventListener('resize', () => {
-                    if (card.classList.contains('active')) {
-                        content.style.maxHeight = content.scrollHeight + 50 + 'px';
-                    }
-                });
-            });
-        }
-
-        // ====== 參考資料：渲染影片清單（含中轉頁下載） ======
-        function renderReferenceVideos() {
-            const listContainer = document.querySelector('#dynamic-content #video-list');
-            if (!listContainer) return;
-
-            listContainer.innerHTML = refVideoData.map((video, index) => {
-                const encodedUrl = encodeURIComponent(video.link);
-                const middlePage = `video.html?url=${encodedUrl}`;
-                return `
-                <div class="flex flex-col sm:flex-row p-5 bg-white border border-gray-200 rounded-xl hover:shadow-lg transition duration-300 transform resource-card">
-                    <div class="sm:w-3/5">
-                        <span class="inline-flex items-center px-3 py-1 text-xs font-semibold leading-5 rounded-full bg-teal-100 text-teal-800 mb-1">
-                            ${video.type}
-                        </span>
-                        <h4 class="text-xl font-bold text-gray-800 mt-1">${index + 1}. ${video.title}</h4>
-                        <p class="mt-1 text-sm text-gray-600">${video.consultant} · ${video.date}</p>
-                    </div>
-                    <div class="sm:w-2/5 mt-4 sm:mt-0 sm:text-right flex flex-col sm:flex-row items-start sm:items-center sm:justify-end space-y-2 sm:space-y-0 sm:space-x-3 flex-shrink-0">
-                        <!-- 觀看影音：改用中轉頁 -->
-                        <a href="${middlePage}" target="_blank"
-                           class="inline-flex items-center text-white bg-indigo-500 hover:bg-indigo-600 px-4 py-2 rounded-full font-semibold text-sm transition duration-150 ease-in-out shadow-md">
-                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.26a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                            觀看影音
-                        </a>
-                        <!-- 講義下載：依你選擇 B=1，先保留原假連結 -->
-                        <a href="${video.handoutLink}" target="_blank"
-                           class="inline-flex items-center text-qcc-dark bg-qcc-light border-2 border-qcc-dark hover:bg-qcc-dark hover:text-white px-4 py-2 rounded-full font-semibold text-sm transition duration-150 ease-in-out shadow-md">
-                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                            講義下載
-                        </a>
-                    </div>
-                </div>`;
-            }).join('');
-        }
-
-        // ====== 參考資料：Tabs 切換 ======
-        function setupReferenceTabs() {
-            const tabsNav = document.querySelector('#dynamic-content #tabs-nav');
-            if (!tabsNav) return;
-
-            const tabButtons = tabsNav.querySelectorAll('.tab-button');
-            const tabContents = document.querySelectorAll('#dynamic-content .tab-content');
-
-            const activateTab = (activeTabId) => {
-                tabContents.forEach(content => {
-                    content.classList.add('hidden');
-                });
-                const activeContent = document.querySelector(`#dynamic-content #${activeTabId}`);
-                if (activeContent) activeContent.classList.remove('hidden');
-
-                tabButtons.forEach(button => {
-                    button.classList.remove('border-qcc-primary', 'text-qcc-dark');
-                    button.classList.add('border-transparent', 'text-gray-500', 'hover:text-qcc-dark', 'hover:border-qcc-secondary');
-                });
-
-                const activeButton = tabsNav.querySelector(`.tab-button[data-tab="${activeTabId}"]`);
-                if (activeButton) {
-                    activeButton.classList.add('border-qcc-primary', 'text-qcc-dark');
-                    activeButton.classList.remove('border-transparent', 'text-gray-500', 'hover:text-qcc-dark', 'hover:border-qcc-secondary');
-                }
-            };
-
-            tabButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    const tabId = button.getAttribute('data-tab');
-                    activateTab(tabId);
-                });
-            });
-
-            // 預設啟動第一個 tab（videos）
-            const first = tabButtons[0];
-            if (first) {
-                const tabId = first.getAttribute('data-tab') || 'videos';
-                activateTab(tabId);
             }
         }
 
