@@ -539,8 +539,15 @@
             mainActionBtn.addEventListener('click', handleMainAction);
         }
 
-        // 頁面載入時執行初始化
-        window.onload = initializeQuiz;
+        // 頁面載入時執行初始化（支援獨立開啟與被 index 動態載入）
+if (document.readyState === 'loading') {
+    // 若整個文件還在載入，就等 DOMContentLoaded 再跑
+    document.addEventListener('DOMContentLoaded', initializeQuiz);
+} else {
+    // 若已經載入完成（包含被動態塞進去的情況），直接初始化
+    initializeQuiz();
+}
+
     </script>
 </body>
 </html>
