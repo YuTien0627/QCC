@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>影音載入中...</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-slate-50 flex items-center justify-center">
+    <div class="bg-white shadow-lg rounded-2xl p-6 max-w-md w-full text-center">
+        <h1 class="text-xl font-bold text-teal-700 mb-2">🔄 正在開啟影音...</h1>
+        <p class="text-gray-600 mb-4">
+            系統正在為您連線到影音伺服器。<br>
+            若 3 秒內沒有自動開啟，請點下方按鈕：
+        </p>
+        <a id="manual-link"
+           href="#"
+           class="inline-flex items-center justify-center px-4 py-2 rounded-full bg-teal-600 text-white text-sm font-medium hover:bg-teal-700 transition">
+            手動開啟影片
+        </a>
+    </div>
+
+    <script>
+        (function () {
+            const params = new URLSearchParams(window.location.search);
+            const url = params.get('url');
+
+            if (!url) {
+                document.querySelector('h1').textContent = '⚠️ 找不到影音網址';
+                document.querySelector('p').textContent = '網址參數中沒有提供影音連結，請從「參考資料」頁重新點選。';
+                const link = document.getElementById('manual-link');
+                link.classList.add('hidden');
+                return;
+            }
+
+            // 設定手動開啟的連結
+            const link = document.getElementById('manual-link');
+            link.href = url;
+
+            // 自動轉跳
+            setTimeout(() => {
+                window.location.href = url;
+            }, 1000); // 1 秒後自動跳轉
+        })();
+    </script>
+</body>
+</html>
