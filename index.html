@@ -110,9 +110,9 @@
                 🛠️ 參考資料
             </button>
 
-            <!-- 小試身手 頁籤（檔名改為 小測驗.html） -->
+            <!-- 小試身手 頁籤（依你 GitHub 的檔名調整，如有不同請改這裡） -->
             <button id="nav-btn-quiz"
-                    onclick="loadExternalPage('小測驗.html', 'nav-btn-quiz')"
+                    onclick="loadExternalPage('問題型小測驗.html', 'nav-btn-quiz')"
                     class="nav-button text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">
                 🎯 小試身手
             </button>
@@ -459,7 +459,7 @@
                     document.body.appendChild(newScript);
                 });
 
-                // 4. 參考資料.html 需要主動初始化
+                // 4. 如果是「參考資料.html」，手動呼叫它的初始化函式
                 if (pageUrl.indexOf('參考資料') !== -1) {
                     if (typeof renderVideos === 'function') {
                         renderVideos();
@@ -469,7 +469,15 @@
                     }
                 }
 
-                // 5. 捲回到標題
+                // 5. 手動 dispatch 一次 DOMContentLoaded（給小測驗這種用 DOMContentLoaded 初始化的頁面）
+                try {
+                    const evt = new Event('DOMContentLoaded');
+                    document.dispatchEvent(evt);
+                } catch (e) {
+                    // 某些舊瀏覽器不支援，可忽略
+                }
+
+                // 6. 捲回到標題
                 document.getElementById('header').scrollIntoView({
                     behavior: 'smooth',
                     block: 'start'
@@ -638,10 +646,16 @@
             });
         }
 
-        // ========== 自動設定中原標準時間（UTC+8） ==========
+        // ========== 最後更新時間：使用檔案最後修改時間 ==========
         function updateLastUpdated() {
-            // 直接用 Asia/Taipei，避免重複加 8 小時
-            const now = new Date();
+            const lastModifiedStr = document.lastModified;
+            const lastModifiedDate = new Date(lastModifiedStr);
+
+            if (isNaN(lastModifiedDate.getTime())) {
+                console.warn('無法解析 document.lastModified：', lastModifiedStr);
+                return;
+            }
+
             const formatter = new Intl.DateTimeFormat('zh-TW', {
                 timeZone: 'Asia/Taipei',
                 year: 'numeric',
@@ -651,7 +665,8 @@
                 minute: '2-digit',
                 hour12: false
             });
-            const parts = formatter.formatToParts(now);
+
+            const parts = formatter.formatToParts(lastModifiedDate);
             const get = type => parts.find(p => p.type === type)?.value || '';
 
             const year = get('year');
@@ -662,7 +677,7 @@
 
             const el = document.getElementById("last-updated");
             if (el) {
-                el.textContent = `最後更新時間: ${year}年${month}月${day}日 ${hour}:${minute}`;
+                el.textContent = `最後更新時間（中原標準時間）: ${year}年${month}月${day}日 ${hour}:${minute}`;
             }
         }
 
