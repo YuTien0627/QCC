@@ -57,12 +57,11 @@
             opacity: 1;
             visibility: visible;
         }
-
-        /* ★ 新增：動態載入頁面標題顏色，避免 text-white 看不到 */
+        /* 動態載入頁面標題顏色，避免 text-white 看不到 */
         #page-dynamic h1,
         #page-dynamic h2,
         #page-dynamic h3 {
-            color: #111827 !important; /* Tailwind 的 text-gray-900 類似色 */
+            color: #111827 !important;
         }
     </style>
 </head>
@@ -71,10 +70,9 @@
     <!-- 主要容器 -->
     <div class="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8">
 
-        <!-- 標題區塊（固定框架的一部分） -->
+        <!-- 標題區塊 -->
         <header id="header" class="text-center py-10 bg-white shadow-xl rounded-xl mb-6 border-t-8 border-teal-600">
             <div class="flex flex-col items-center">
-                <!-- 左邊放 LOGO，右邊是標題文字 -->
                 <div class="flex items-center justify-center mb-2">
                     <img
                         src="https://raw.githubusercontent.com/YuTien0627/QCC/main/%E5%93%81%E7%AE%A1%E9%83%A8LOGO%20(%E5%8E%BB%E8%83%8C).png"
@@ -92,8 +90,7 @@
             </div>
         </header>
 
-
-        <!-- 導航頁籤（固定框架的一部分） -->
+        <!-- 導航頁籤 -->
         <nav class="sticky top-0 z-10 flex justify-center bg-white p-2 rounded-xl shadow-lg mb-8 space-x-4">
             <button id="nav-btn-home"
                     onclick="goHome()"
@@ -113,7 +110,7 @@
                 🛠️ 參考資料
             </button>
 
-            <!-- 小試身手 頁籤 -->
+            <!-- 小試身手 頁籤（檔名改為 小測驗.html） -->
             <button id="nav-btn-quiz"
                     onclick="loadExternalPage('小測驗.html', 'nav-btn-quiz')"
                     class="nav-button text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">
@@ -121,9 +118,7 @@
             </button>
         </nav>
 
-        <!-- 內文區：會隨頁籤切換的部分 -->
-
-        <!-- 首頁內容：完整首頁 -->
+        <!-- 首頁內容 -->
         <main id="page-home" class="space-y-12 mb-10">
             <!-- 區塊 A: 什麼是品管圈（QCC）？ -->
             <section id="what-is-qcc" class="bg-white p-6 sm:p-8 rounded-xl shadow-lg border-l-4 border-teal-500 hover:shadow-2xl transition duration-300">
@@ -338,7 +333,7 @@
 
         </main>
 
-        <!-- 動態載入外部 HTML 的容器（書面格式 / 參考資料 / 小試身手） -->
+        <!-- 動態載入外部 HTML 的容器 -->
         <main id="page-dynamic" class="hidden mb-10">
             <div id="dynamic-content" class="bg-white p-6 sm:p-8 rounded-xl shadow-lg min-h-[50vh]">
                 <!-- 這裡會用 fetch 塞入外部 HTML 的 <body> 內容 -->
@@ -350,7 +345,7 @@
             <p class="text-gray-500">品質改善是一段持續的旅程。祝您的品管圈活動順利成功！</p>
             <div class="text-right text-gray-700 font-medium">
                 <p>奇美醫院 品質管理部 醫療品質科 製作</p>
-                <p class="text-xs text-gray-500" id="last-updated">最後更新日期: （讀取中...）</p>
+                <p class="text-xs text-gray-500" id="last-updated">最後更新時間: （讀取中...）</p>
             </div>
         </footer>
 
@@ -389,7 +384,7 @@
             document.getElementById('page-dynamic').classList.remove('hidden');
         }
 
-        // ========== 首頁按鈕：回到完整首頁內容 ==========
+        // ========== 首頁按鈕 ==========
         function goHome() {
             showHomePage();
             setActive('nav-btn-home');
@@ -399,7 +394,7 @@
             });
         }
 
-        // ========== 使用 fetch 載入外部 HTML 並插入 dynamic-content ==========
+        // ========== 使用 fetch 載入外部 HTML ==========
         async function loadExternalPage(pageUrl, buttonId) {
             setActive(buttonId);
             showDynamicPage();
@@ -419,16 +414,15 @@
                 }
                 const htmlText = await res.text();
 
-                // 解析整份 HTML
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(htmlText, 'text/html');
                 const body = doc.body;
                 const head = doc.head;
 
-                // 1️⃣ 把 body 的內容塞進 dynamic-content
+                // 1. 塞入 body 內容
                 container.innerHTML = body ? body.innerHTML : htmlText;
 
-                // 2️⃣ 把子頁 <head> 裡的 style / css link 載進來
+                // 2. 子頁 style / css
                 if (head) {
                     head.querySelectorAll('style').forEach(styleEl => {
                         document.head.appendChild(styleEl.cloneNode(true));
@@ -441,9 +435,8 @@
                     });
                 }
 
-                // 3️⃣ 把子頁的 <script> 全部重新執行（包含 head + body）
+                // 3. 執行子頁 script
                 const scriptNodes = [];
-
                 if (head) {
                     head.querySelectorAll('script').forEach(s => scriptNodes.push(s));
                 }
@@ -466,7 +459,7 @@
                     document.body.appendChild(newScript);
                 });
 
-                // 4️⃣ 如果是「參考資料.html」，手動呼叫它的初始化函式  ★ 新增
+                // 4. 參考資料.html 需要主動初始化
                 if (pageUrl.indexOf('參考資料') !== -1) {
                     if (typeof renderVideos === 'function') {
                         renderVideos();
@@ -476,7 +469,7 @@
                     }
                 }
 
-                // 5️⃣ 捲回到標題附近，視覺上像是切換頁面
+                // 5. 捲回到標題
                 document.getElementById('header').scrollIntoView({
                     behavior: 'smooth',
                     block: 'start'
@@ -495,7 +488,7 @@
 
         // ========== AI 助理相關 ==========
         const API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent";
-        const apiKey = ""; // 若未設定就不會真的呼叫 API
+        const apiKey = ""; // 未設定就不會真的呼叫 API
 
         async function fetchLLMResponse(contents, systemInstruction, maxRetries = 3) {
             if (!apiKey) {
@@ -644,32 +637,37 @@
                 });
             });
         }
-<script>
-// 自動設定中原標準時間（UTC+8）
-function updateLastUpdated() {
-    const now = new Date();
 
-    // 轉換成台灣時間（UTC+8）
-    const taiwanTime = new Date(now.getTime() + (8 * 60 * 60 * 1000));
+        // ========== 自動設定中原標準時間（UTC+8） ==========
+        function updateLastUpdated() {
+            // 直接用 Asia/Taipei，避免重複加 8 小時
+            const now = new Date();
+            const formatter = new Intl.DateTimeFormat('zh-TW', {
+                timeZone: 'Asia/Taipei',
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false
+            });
+            const parts = formatter.formatToParts(now);
+            const get = type => parts.find(p => p.type === type)?.value || '';
 
-    const year = taiwanTime.getUTCFullYear();
-    const month = String(taiwanTime.getUTCMonth() + 1).padStart(2, '0');
-    const day = String(taiwanTime.getUTCDate()).padStart(2, '0');
+            const year = get('year');
+            const month = get('month');
+            const day = get('day');
+            const hour = get('hour');
+            const minute = get('minute');
 
-    const hour = String(taiwanTime.getUTCHours()).padStart(2, '0');
-    const minute = String(taiwanTime.getUTCMinutes()).padStart(2, '0');
+            const el = document.getElementById("last-updated");
+            if (el) {
+                el.textContent = `最後更新時間: ${year}年${month}月${day}日 ${hour}:${minute}`;
+            }
+        }
 
-    document.getElementById("last-updated").textContent =
-        `最後更新時間: ${year}年${month}月${day}日 ${hour}:${minute}`;
-}
-
-// 頁面載入後執行
-document.addEventListener("DOMContentLoaded", updateLastUpdated);
-</script>
-
-        
         // ========== 初始化 ==========
-        window.onload = function() {
+        function initPage() {
             const chatConfigs = [
                 { id: 'chat-what-is-qcc', title: '什麼是品管圈（QCC）？' },
                 { id: 'chat-tool-selection', title: '運用合適的品管工具解決問題（五大改善類型）' },
@@ -683,7 +681,10 @@ document.addEventListener("DOMContentLoaded", updateLastUpdated);
 
             setupBackToTop();
             setActive('nav-btn-home');
-        };
+            updateLastUpdated();
+        }
+
+        window.addEventListener('load', initPage);
     </script>
 
 </body>
