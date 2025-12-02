@@ -115,7 +115,7 @@
 
             <!-- 小試身手 頁籤 -->
             <button id="nav-btn-quiz"
-                    onclick="loadExternalPage('問題型小測驗.html', 'nav-btn-quiz')"
+                    onclick="loadExternalPage('小測驗.html', 'nav-btn-quiz')"
                     class="nav-button text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">
                 🎯 小試身手
             </button>
@@ -350,7 +350,7 @@
             <p class="text-gray-500">品質改善是一段持續的旅程。祝您的品管圈活動順利成功！</p>
             <div class="text-right text-gray-700 font-medium">
                 <p>奇美醫院 品質管理部 醫療品質科 製作</p>
-                <p class="text-xs text-gray-500" id="last-updated">最後更新日期: 2025年12月01日</p>
+                <p class="text-xs text-gray-500" id="last-updated">最後更新日期: （讀取中...）</p>
             </div>
         </footer>
 
@@ -644,7 +644,30 @@
                 });
             });
         }
+<script>
+// 自動設定中原標準時間（UTC+8）
+function updateLastUpdated() {
+    const now = new Date();
 
+    // 轉換成台灣時間（UTC+8）
+    const taiwanTime = new Date(now.getTime() + (8 * 60 * 60 * 1000));
+
+    const year = taiwanTime.getUTCFullYear();
+    const month = String(taiwanTime.getUTCMonth() + 1).padStart(2, '0');
+    const day = String(taiwanTime.getUTCDate()).padStart(2, '0');
+
+    const hour = String(taiwanTime.getUTCHours()).padStart(2, '0');
+    const minute = String(taiwanTime.getUTCMinutes()).padStart(2, '0');
+
+    document.getElementById("last-updated").textContent =
+        `最後更新時間: ${year}年${month}月${day}日 ${hour}:${minute}`;
+}
+
+// 頁面載入後執行
+document.addEventListener("DOMContentLoaded", updateLastUpdated);
+</script>
+
+        
         // ========== 初始化 ==========
         window.onload = function() {
             const chatConfigs = [
