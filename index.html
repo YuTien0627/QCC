@@ -57,55 +57,6 @@
             opacity: 1;
             visibility: visible;
         }
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #ecfdf5;
-        }
-        .section-title {
-            border-left: 6px solid #0d9488;
-            padding-left: 0.75rem;
-            transition: all 0.3s ease-in-out;
-        }
-        .nav-button {
-            transition: all 0.3s ease-in-out;
-            border-bottom: 3px solid transparent;
-        }
-        .nav-button.active {
-            color: #0d9488;
-            border-color: #0d9488;
-            font-weight: 700;
-        }
-        .ai-chat-response {
-            white-space: pre-wrap;
-        }
-        .loading-spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #0d9488;
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        #backToTopBtn {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            z-index: 1000;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s, visibility 0.3s;
-            cursor: pointer;
-            width: 3rem;
-            height: 3rem;
-        }
-        #backToTopBtn.show {
-            opacity: 1;
-            visibility: visible;
-        }
 
         /* ★ 新增：動態載入頁面標題顏色，避免 text-white 看不到 */
         #page-dynamic h1,
@@ -123,7 +74,7 @@
         <!-- 標題區塊（固定框架的一部分） -->
         <header id="header" class="text-center py-10 bg-white shadow-xl rounded-xl mb-6 border-t-8 border-teal-600">
             <div class="flex flex-col items-center">
-                <!-- 新增：左邊放 LOGO，右邊是標題文字 -->
+                <!-- 左邊放 LOGO，右邊是標題文字 -->
                 <div class="flex items-center justify-center mb-2">
                     <img
                         src="https://raw.githubusercontent.com/YuTien0627/QCC/main/%E5%93%81%E7%AE%A1%E9%83%A8LOGO%20(%E5%8E%BB%E8%83%8C).png"
@@ -162,7 +113,7 @@
                 🛠️ 參考資料
             </button>
 
-            <!-- ★ 新增：小試身手 頁籤 -->
+            <!-- 小試身手 頁籤 -->
             <button id="nav-btn-quiz"
                     onclick="loadExternalPage('問題型小測驗.html', 'nav-btn-quiz')"
                     class="nav-button text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">
@@ -172,7 +123,7 @@
 
         <!-- 內文區：會隨頁籤切換的部分 -->
 
-        <!-- 首頁內容：完整首頁（QCC介紹、五大類型、書面格式重點、工具總覽） -->
+        <!-- 首頁內容：完整首頁 -->
         <main id="page-home" class="space-y-12 mb-10">
             <!-- 區塊 A: 什麼是品管圈（QCC）？ -->
             <section id="what-is-qcc" class="bg-white p-6 sm:p-8 rounded-xl shadow-lg border-l-4 border-teal-500 hover:shadow-2xl transition duration-300">
@@ -394,7 +345,7 @@
             </div>
         </main>
 
-        <!-- 頁尾（固定框架的一部分） -->
+        <!-- 頁尾 -->
         <footer class="text-center py-6 mt-10 text-sm border-t border-gray-300 flex justify-between items-center">
             <p class="text-gray-500">品質改善是一段持續的旅程。祝您的品管圈活動順利成功！</p>
             <div class="text-right text-gray-700 font-medium">
@@ -448,7 +399,7 @@
             });
         }
 
-        // ========== 使用 fetch 載入外部 HTML（含 head 的 CSS / JS）並插入 dynamic-content ==========
+        // ========== 使用 fetch 載入外部 HTML 並插入 dynamic-content ==========
         async function loadExternalPage(pageUrl, buttonId) {
             setActive(buttonId);
             showDynamicPage();
@@ -474,19 +425,16 @@
                 const body = doc.body;
                 const head = doc.head;
 
-                // 1️⃣ 先把 body 的內容塞進 dynamic-content
+                // 1️⃣ 把 body 的內容塞進 dynamic-content
                 container.innerHTML = body ? body.innerHTML : htmlText;
 
-                // 2️⃣ 把子頁 <head> 裡的 style / css link 載進來（避免版型 & 隱藏邏輯失效）
+                // 2️⃣ 把子頁 <head> 裡的 style / css link 載進來
                 if (head) {
-                    // 內嵌 CSS
                     head.querySelectorAll('style').forEach(styleEl => {
                         document.head.appendChild(styleEl.cloneNode(true));
                     });
 
-                    // 外部 CSS 檔（例如某些子頁自己載的樣式）
                     head.querySelectorAll('link[rel="stylesheet"]').forEach(linkEl => {
-                        // 簡單避免完全相同 href 重複太多次
                         if (linkEl.href && !document.querySelector('link[rel="stylesheet"][href="' + linkEl.href + '"]')) {
                             document.head.appendChild(linkEl.cloneNode(true));
                         }
@@ -504,24 +452,31 @@
                 scriptNodes.forEach(oldScript => {
                     const newScript = document.createElement('script');
 
-                    // 保留 type 等屬性
                     if (oldScript.type) newScript.type = oldScript.type;
                     if (oldScript.noModule) newScript.noModule = true;
                     if (oldScript.defer) newScript.defer = true;
                     if (oldScript.async) newScript.async = true;
 
                     if (oldScript.src) {
-                        // ★ 即使 src 一樣，也重新載入一次，讓初始化邏輯重新跑
                         newScript.src = oldScript.src;
                     } else {
                         newScript.textContent = oldScript.textContent;
                     }
 
-                    // 掛在 body 底，確保 DOM 已經存在
                     document.body.appendChild(newScript);
                 });
 
-                // 4️⃣ 捲回到標題附近，視覺上像是切換頁面
+                // 4️⃣ 如果是「參考資料.html」，手動呼叫它的初始化函式  ★ 新增
+                if (pageUrl.indexOf('參考資料') !== -1) {
+                    if (typeof renderVideos === 'function') {
+                        renderVideos();
+                    }
+                    if (typeof setupTabs === 'function') {
+                        setupTabs();
+                    }
+                }
+
+                // 5️⃣ 捲回到標題附近，視覺上像是切換頁面
                 document.getElementById('header').scrollIntoView({
                     behavior: 'smooth',
                     block: 'start'
