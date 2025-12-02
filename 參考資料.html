@@ -30,36 +30,24 @@
                         0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
     </style>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'qcc-primary': '#0D9488', /* 活潑的青色，跟首頁一致 */
-                        'qcc-secondary': '#14B8A6',
-                        'qcc-light': '#F0FDFA',
-                        'qcc-dark': '#0F766E',
-                    }
-                }
-            }
-        }
-    </script>
 </head>
 <body class="min-h-screen p-4 sm:p-8">
 
     <!-- 外框：跟首頁 header 類似，有粗粗的上框 -->
-    <div class="max-w-5xl mx-auto bg-white shadow-2xl rounded-2xl overflow-hidden transform transition duration-500 hover:shadow-3xl border-t-8 border-qcc-primary">
+    <div class="max-w-5xl mx-auto bg-white shadow-2xl rounded-2xl overflow-hidden transform transition duration-500 hover:shadow-3xl border-t-8 border-teal-600">
         
-        <!-- Header：漸層 + 深色字，避免白字落在白底 -->
-        <header class="bg-gradient-to-r from-qcc-primary to-qcc-secondary text-white p-6 sm:p-8 md:p-10 shadow-lg">
+        <!-- Header：漸層 + 確保文字都看得到 -->
+        <header class="bg-gradient-to-r from-teal-500 to-teal-400 text-white p-6 sm:p-8 md:p-10 shadow-lg">
             <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight mb-2">
                 🏆 QCC 新手起跑線：資源百寶箱
             </h1>
-            <p class="mt-1 text-sm sm:text-base md:text-lg font-medium text-qcc-light">
+            <p class="mt-1 text-sm sm:text-base md:text-lg font-medium text-teal-50">
                 歡迎加入品管圈！這裡有您需要的影音課程、講義及外部案例，陪您從新手變高手。
             </p>
-            <p class="mt-3 inline-flex items-center text-xs sm:text-sm bg-white/10 px-3 py-1 rounded-full backdrop-blur">
-                <span class="mr-1">✨</span> 建議搭配首頁「QCC 新手入門互動指南」一起使用
+            <!-- 🔧 改成白底深色字的 pill，避免白字＋白底 -->
+            <p class="mt-3 inline-flex items-center text-xs sm:text-sm bg-white px-3 py-1 rounded-full text-teal-800 shadow-sm">
+                <span class="mr-1">✨</span>
+                建議搭配首頁「QCC 新手入門互動指南」一起使用
             </p>
         </header>
 
@@ -68,13 +56,18 @@
             <nav class="flex flex-wrap gap-2 sm:space-x-6 p-4 sm:p-5 items-center" aria-label="Tabs" id="tabs-nav">
                 <button
                     data-tab="videos"
-                    class="tab-button inline-flex items-center px-4 py-2 border-b-4 font-semibold text-sm sm:text-base leading-5 focus:outline-none transition duration-150 ease-in-out border-qcc-primary text-qcc-dark whitespace-nowrap rounded-t-lg bg-qcc-light/60">
+                    class="tab-button inline-flex items-center px-4 py-2 border-b-4 font-semibold text-sm sm:text-base leading-5 focus:outline-none transition duration-150 ease-in-out border-teal-600 text-teal-800 whitespace-nowrap rounded-t-lg bg-teal-50">
                     <span class="mr-2">📺</span> 歷年課程與講義
                 </button>
                 <button
                     data-tab="external"
-                    class="tab-button inline-flex items-center px-4 py-2 border-b-4 font-semibold text-sm sm:text-base leading-5 focus:outline-none transition duration-150 ease-in-out border-transparent text-gray-500 hover:text-qcc-dark hover:border-qcc-secondary whitespace-nowrap rounded-t-lg">
+                    class="tab-button inline-flex items-center px-4 py-2 border-b-4 font-semibold text-sm sm:text-base leading-5 focus:outline-none transition duration-150 ease-in-out border-transparent text-gray-500 hover:text-teal-700 hover:border-teal-400 whitespace-nowrap rounded-t-lg">
                     <span class="mr-2">💡</span> 外部案例資源
+                </button>
+                <span class="hidden sm:inline-flex items-center text-xs text-gray-400 ml-auto">
+                    <span class="w-2 h-2 rounded-full bg-teal-500 mr-1"></span>
+                    QCC 新手加油站
+                </span>
             </nav>
         </div>
 
@@ -94,7 +87,11 @@
 
                 <p class="text-gray-700 mb-6 bg-yellow-50 p-3 border-l-4 border-yellow-400 rounded-lg shadow-sm text-sm sm:text-base leading-relaxed">
                     <span class="inline-flex items-center font-bold text-yellow-700 mr-1">
-                        新手小提示：建議先從<span class="font-semibold text-teal-700">「多元品管工具介紹」</span>開始，再依據您的改善專案類型（問題解決型或課題達成型）觀看對應的步驟教學！
+                        <span class="mr-1">🍼</span> 新手小提示：
+                    </span>
+                    若您剛接觸品管圈，推薦觀看順序為：
+                    <span class="font-semibold text-teal-700">「多元品管工具介紹」 → 「問題解決型步驟」 → 「課題達成型步驟」</span>，
+                    再依您圈別主題挑選其他進階課程。
                 </p>
                 
                 <div id="video-list" class="space-y-4">
@@ -118,11 +115,11 @@
 
                 <div class="space-y-6">
                     <!-- Resource 1: 醫策會國家醫療品質獎競賽平台 (NHQA) -->
-                    <div class="resource-card p-6 bg-qcc-light rounded-xl border border-qcc-secondary/70 hover:border-qcc-secondary shadow-md hover:shadow-xl transition duration-300">
+                    <div class="resource-card p-6 bg-teal-50 rounded-xl border border-teal-300 hover:border-teal-400 shadow-md hover:shadow-xl transition duration-300">
                         <div class="flex items-center mb-2">
                             <span class="text-3xl mr-3" role="img" aria-label="Trophy">🏆</span>
                             <div>
-                                <h3 class="text-xl font-extrabold text-qcc-dark">
+                                <h3 class="text-xl font-extrabold text-teal-900">
                                     醫策會國家醫療品質獎競賽平台（NHQA）
                                 </h3>
                                 <p class="text-xs text-gray-500 mt-0.5">
@@ -137,23 +134,24 @@
                             了解評審喜愛的主題類型、改善角度與呈現方式。
                         </p>
                         <div class="mt-4 flex flex-wrap gap-3 items-center">
+                            <!-- 🔧 確認：深色背景 + 白字 -->
                             <a href="https://nhqa.jct.org.tw/publicUI/A/A102.aspx" target="_blank"
-                               class="inline-flex items-center text-white bg-qcc-primary hover:bg-qcc-dark px-4 py-2 rounded-full font-medium text-sm transition duration-150 ease-in-out shadow-md">
+                               class="inline-flex items-center text-white bg-teal-600 hover:bg-teal-700 px-4 py-2 rounded-full font-medium text-sm transition duration-150 ease-in-out shadow-md">
                                 前往獲獎主題查詢
                                 <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                             </a>
                             <span class="text-xs text-gray-500">
-                                建議：可搜尋與自己科別或主題相近的案例
+                                建議：先看與自己科別或主題相近的案例
                             </span>
                         </div>
                     </div>
 
                     <!-- Resource 2: 中衛團結圈電子專輯 -->
-                    <div class="resource-card p-6 bg-white rounded-xl border border-qcc-secondary/50 hover:border-qcc-secondary shadow-md hover:shadow-xl transition duration-300">
+                    <div class="resource-card p-6 bg-white rounded-xl border border-teal-200 hover:border-teal-400 shadow-md hover:shadow-xl transition duration-300">
                         <div class="flex items-center mb-2">
                             <span class="text-3xl mr-3" role="img" aria-label="Book">📚</span>
                             <div>
-                                <h3 class="text-xl font-extrabold text-qcc-dark">
+                                <h3 class="text-xl font-extrabold text-teal-900">
                                     中衛團結圈電子專輯
                                 </h3>
                                 <p class="text-xs text-gray-500 mt-0.5">
@@ -167,8 +165,9 @@
                             可以觀摩版面設計、圖表使用與故事鋪陳方式。
                         </p>
                         <div class="mt-4 flex flex-wrap gap-3 items-center">
+                            <!-- 🔧 一樣用 Tailwind 內建深色背景 -->
                             <a href="https://tw.zinio.com/" target="_blank"
-                               class="inline-flex items-center text-white bg-qcc-primary hover:bg-qcc-dark px-4 py-2 rounded-full font-medium text-sm transition duration-150 ease-in-out shadow-md">
+                               class="inline-flex items-center text-white bg-teal-600 hover:bg-teal-700 px-4 py-2 rounded-full font-medium text-sm transition duration-150 ease-in-out shadow-md">
                                 前往 Zinio 平台（需登入）
                                 <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                             </a>
@@ -252,7 +251,7 @@
             },
         ];
 
-        // ✅ 透過 video.html 中轉開啟 HTTP 影片（避免被 Chrome 擋住）
+        // 透過 video.html 中轉開啟 HTTP 影片
         function renderVideos() {
             const listContainer = document.getElementById('video-list');
             listContainer.innerHTML = videoData.map((video, index) => {
@@ -269,7 +268,7 @@
                         </div>
                         
                         <div class="sm:w-2/5 mt-4 sm:mt-0 sm:text-right flex flex-col sm:flex-row items-start sm:items-center sm:justify-end space-y-2 sm:space-y-0 sm:space-x-3 flex-shrink-0">
-                            <!-- 觀看影音：改連到 video.html 中轉頁 -->
+                            <!-- 觀看影音：video.html 中轉頁 -->
                             <a href="${targetUrl}" target="_blank"
                                class="inline-flex items-center text-white bg-indigo-500 hover:bg-indigo-600 px-4 py-2 rounded-full font-semibold text-sm transition duration-150 ease-in-out shadow-md">
                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.26a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
@@ -278,7 +277,7 @@
 
                             <!-- 講義連結：之後有實際 handout 再改 -->
                             <a href="${video.handoutLink}" target="_blank"
-                               class="inline-flex items-center text-qcc-dark bg-qcc-light border-2 border-qcc-dark hover:bg-qcc-dark hover:text-white px-4 py-2 rounded-full font-semibold text-sm transition duration-150 ease-in-out shadow-md">
+                               class="inline-flex items-center text-teal-800 bg-teal-50 border-2 border-teal-700 hover:bg-teal-700 hover:text-white px-4 py-2 rounded-full font-semibold text-sm transition duration-150 ease-in-out shadow-md">
                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                                 講義下載
                             </a>
@@ -307,14 +306,14 @@
 
                 // 重設所有按鈕樣式
                 tabButtons.forEach(button => {
-                    button.classList.remove('border-qcc-primary', 'text-qcc-dark', 'bg-qcc-light/60');
-                    button.classList.add('border-transparent', 'text-gray-500', 'hover:text-qcc-dark', 'hover:border-qcc-secondary');
+                    button.classList.remove('border-teal-600', 'text-teal-800', 'bg-teal-50');
+                    button.classList.add('border-transparent', 'text-gray-500', 'hover:text-teal-700', 'hover:border-teal-400');
                 });
                 // 激活選定的按鈕
                 const activeButton = document.querySelector(`.tab-button[data-tab="${activeTabId}"]`);
                 if (activeButton) {
-                    activeButton.classList.add('border-qcc-primary', 'text-qcc-dark', 'bg-qcc-light/60');
-                    activeButton.classList.remove('border-transparent', 'text-gray-500', 'hover:text-qcc-dark', 'hover:border-qcc-secondary');
+                    activeButton.classList.add('border-teal-600', 'text-teal-800', 'bg-teal-50');
+                    activeButton.classList.remove('border-transparent', 'text-gray-500', 'hover:text-teal-700', 'hover:border-teal-400');
                 }
             };
 
@@ -329,8 +328,7 @@
             activateTab('videos');
         }
 
-        // 初始化（獨立開啟這頁時會執行；
-        // 從 index.html 動態載入時，index 也可以另外呼叫 renderVideos/setupTabs）
+        // 初始化
         window.addEventListener('load', () => {
             renderVideos();
             setupTabs();
