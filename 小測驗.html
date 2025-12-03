@@ -105,7 +105,7 @@
 </head>
 <body class="min-h-screen flex items-center justify-center p-4">
 
-    <div id="app" class="w-full max-w-4xl p-6 md:p-10 quiz-card">
+    <div id="app" class="w-full max-w-4xl p-6 md:p-10 quiz-card mx-auto">
         
         <h1 id="mainTitle" class="text-4xl md:text-5xl font-extrabold text-purple-700 text-center mb-6">
             🛠️ QCC 知識點點名 🎯
@@ -188,7 +188,7 @@
         // 測驗數據結構：包含兩種 QCC 模式的 9 大步驟
         const PROBLEM_STEPS_DATA = [
             // ✅ 問題解決型步驟 (問題解決型)
-            { id: 1, name: "選定主題", quiz: [{ question: "QCC 選擇『問題解決型』主題時，首要考慮的因素是？", options: ["是否與自身業務相關且能產生實質效益。", "是否為管理層指定的課題。", "是否容易在兩週內完成。", "是否為成員最有興趣的休閒話題。"], correctAnswerIndex: 0, step: "選定主題", feedback_correct: "🎯 完美命中！主題要跟工作效益連結，是問題解決的根本。", feedback_incorrect: "🤔 答錯囉！問題解決型的核心是找出能為組織帶來效益的實際問題！" }] },
+            { id: 1, name: "主題選定", quiz: [{ question: "關於問題解決型的主題選定，下列何者為錯誤的敘述？", options: ["主題必須能清楚定義量化指標作為後續目標設定依據。", "主題一覽表應該明確定義出評分依據。", "應描述主題的重要性、迫切性。", "主題選定不需要過多說明候選主題的由來，只需撰寫評分後的結果。"], correctAnswerIndex: 3, step: "選定主題", feedback_correct: "🎯 完美命中！看來實力非凡! ", feedback_incorrect: "🤔 答錯囉！應該要說明候選主題的由來以及評分後的結果喔！" }] },
             { id: 2, name: "現狀把握", quiz: [{ question: "『現狀把握』最主要的目標是透過數據來完成什麼？", options: ["設定明確的目標值。", "找出所有可能的原因。", "將問題分層、量化，並找出影響其分佈的要因。", "提出解決方案並進行預算評估。"], correctAnswerIndex: 2, step: "現狀把握", feedback_correct: "✅ 正確！數據化、分層化是現狀把握，為後續分析打基礎。", feedback_incorrect: "🔍 接近了！現狀把握是專注在『收集數據』和『分層』，還不到『找原因』階段。" }] },
             { id: 3, name: "目標設定", quiz: [{ question: "問題解決型 QCC 設定改善目標時，通常會以哪種形式表達？", options: ["一個模糊的願景敘述。", "目標應具備 S.M.A.R.T. 特性，且具挑戰性。", "目標必須是百分之百達成，否則視為失敗。", "目標應設定為目前能力的 50% 以內。"], correctAnswerIndex: 1, step: "目標設定", feedback_correct: "🌟 就是這個！S.M.A.R.T. 原則確保目標具體可衡量。", feedback_incorrect: "❌ S.M.A.R.T. 原則才是重點，目標要有挑戰性，但也要能衡量喔！" }] },
             { id: 4, name: "原因分析", quiz: [{ question: "在『原因分析』階段，最常用來從現象追溯到根本原因的工具是？", options: ["柏拉圖 (Pareto Chart)。", "甘特圖 (Gantt Chart)。", "魚骨圖 (特性要因圖) 與 5 Why 分析法。", "控制圖 (Control Chart)。"], correctAnswerIndex: 2, step: "原因分析", feedback_correct: "💡 聰明！魚骨圖找所有可能原因，5 Why 往下深挖根本原因。", feedback_incorrect: "😵‍ 喔喔！原因分析就是要找到『根本原因』，魚骨圖和 5 Why 組合是王道！" }] },
@@ -201,7 +201,7 @@
 
         const SOLUTION_STEPS_DATA = [
             // ✅ 課達型步驟 (課題達成型)
-            { id: 1, name: "選定課題", quiz: [{ question: "QCC 選擇『課題達成型』課題時，依據的主要方向是什麼？", options: ["從現場問題中挑選影響較大的項目。", "根據公司方針或部門中長期目標來選擇。", "由最高管理層直接指定。", "成員個人感興趣且容易執行的項目。"], correctAnswerIndex: 1, step: "選定課題", feedback_correct: "🎯 完美命中！課題達成型更注重與組織策略目標的連結。", feedback_incorrect: "🤔 答錯囉！課題達成型通常是自上而下的，以目標為導向，而非解決現有問題。" }] },
+            { id: 1, name: "主題選定", quiz: [{ question: "QCC 選擇『課題達成型』課題時，依據的主要方向是什麼？", options: ["從現場問題中挑選影響較大的項目。", "根據公司方針或部門中長期目標來選擇。", "由最高管理層直接指定。", "成員個人感興趣且容易執行的項目。"], correctAnswerIndex: 1, step: "選定課題", feedback_correct: "🎯 完美命中！課題達成型更注重與組織策略目標的連結。", feedback_incorrect: "🤔 答錯囉！課題達成型通常是自上而下的，以目標為導向，而非解決現有問題。" }] },
             { id: 2, name: "現狀分析", quiz: [{ question: "『現狀分析』的關鍵是找出什麼？", options: ["找出所有可能的對策。", "掌握現況與公司目標之間的『差距』。", "使用魚骨圖找出根本原因。", "制定詳細的實施計畫。"], correctAnswerIndex: 1, step: "現狀分析", feedback_correct: "✅ 正確！課題達成型分析現狀是為了量化『目標與現況之間的落差』。", feedback_incorrect: "🔍 接近了！課題達成型分析現況的重點是找出與目標之間的差距，以便擬定策略。" }] },
             { id: 3, name: "目標設定", quiz: [{ question: "設定課題達成型目標時，除了數值外，還需具備哪項重要資訊？", options: ["對策的詳細實施步驟。", "達成目標所需的資源投入。", "明確的『達成時間點』或期限。", "所有成員的個人期望。"], correctAnswerIndex: 2, step: "目標設定", feedback_correct: "🌟 就是這個！課題達成型目標必須具備時間性，否則難以追蹤達成率。", feedback_incorrect: "❌ 目標需要具備時間性，才能納入計畫管理中，確保進度！" }] },
             { id: 4, name: "要因分析", quiz: [{ question: "在『要因分析』中，主要目的是找出哪些因素？", options: ["過去造成品質問題的根本原因。", "影響『目標達成』的主要障礙或變動因素。", "競爭對手的產品優勢。", "所有可能的對策與方案。"], correctAnswerIndex: 1, step: "要因分析", feedback_correct: "💡 聰明！課題達成型關注的是『目標達成』的障礙，而不是現有問題的原因。", feedback_incorrect: "😵‍ 喔喔！要因分析的重點是找出達成目標路徑上的『阻力』！" }] },
