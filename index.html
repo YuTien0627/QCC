@@ -75,7 +75,7 @@
         activateNav('nav-btn-format');
         document.getElementById('format-tabs').classList.remove('hidden');
         document.getElementById('tool-tabs').classList.add('hidden');
-        loadFormatPage('首頁.html', document.querySelectorAll('.format-tab')[0]);
+        loadFormatPage('書面格式_問題型.html', document.querySelectorAll('.format-tab')[0]);
     }
 
     function loadFormatPage(page, btn){
@@ -94,15 +94,17 @@
 
     function loadExternalPage(page, btn){
         // 高亮子 tab
-        const parentTabs = btn.parentElement.querySelectorAll('button');
-        parentTabs.forEach(b=>b.classList.remove('bg-teal-300','text-white','font-bold'));
-        btn.classList.add('bg-teal-300','text-white','font-bold');
+        if(btn){
+            const parentTabs = btn.parentElement.querySelectorAll('button');
+            parentTabs.forEach(b=>b.classList.remove('bg-teal-300','text-white','font-bold'));
+            btn.classList.add('bg-teal-300','text-white','font-bold');
+        }
 
         // 顯示正確第二層
-        if(btn.closest('#tool-tabs')){
+        if(btn?.closest('#tool-tabs')){
             document.getElementById('tool-tabs').classList.remove('hidden');
             document.getElementById('format-tabs').classList.add('hidden');
-        } else if(btn.closest('#format-tabs')){
+        } else if(btn?.closest('#format-tabs')){
             document.getElementById('format-tabs').classList.remove('hidden');
             document.getElementById('tool-tabs').classList.add('hidden');
         } else {
