@@ -6,58 +6,19 @@
     <title>品管圈（QCC）新手入門互動指南</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #ecfdf5;
-        }
-        .section-title {
-            border-left: 6px solid #0d9488;
-            padding-left: 0.75rem;
-            transition: all 0.3s ease-in-out;
-        }
-        .nav-button {
-            transition: all 0.3s ease-in-out;
-            border-bottom: 3px solid transparent;
-        }
-        .nav-button.active {
-            color: #0d9488;
-            border-color: #0d9488;
-            font-weight: 700;
-        }
-        .format-tab {
-            transition: all 0.3s ease-in-out;
-        }
+        body { font-family: 'Inter', sans-serif; background-color: #ecfdf5; }
+        .section-title { border-left: 6px solid #0d9488; padding-left: 0.75rem; transition: all 0.3s ease-in-out; }
+        .nav-button { transition: all 0.3s ease-in-out; border-bottom: 3px solid transparent; }
+        .nav-button.active { color: #0d9488; border-color: #0d9488; font-weight: 700; }
+        .format-tab, .sub-tab { transition: all 0.3s ease-in-out; }
         .ai-chat-response { white-space: pre-wrap; }
-        .loading-spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #0d9488;
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            animation: spin 1s linear infinite;
-        }
+        .loading-spinner { border: 4px solid #f3f3f3; border-top: 4px solid #0d9488; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        #backToTopBtn {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            z-index: 1000;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s, visibility 0.3s;
-            cursor: pointer;
-            width: 3rem;
-            height: 3rem;
-        }
-        #backToTopBtn.show { opacity: 1; visibility: visible; }
-        #page-dynamic h1, #page-dynamic h2, #page-dynamic h3 { color: #111827 !important; }
     </style>
 </head>
 <body class="antialiased">
 
-    <!-- 主要容器 -->
     <div class="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8">
-
         <!-- 標題 -->
         <header class="text-center py-10 bg-white shadow-xl rounded-xl mb-6 border-t-8 border-teal-600">
             <div class="flex flex-col items-center">
@@ -65,18 +26,16 @@
                     <img src="https://raw.githubusercontent.com/YuTien0627/QCC/main/%E5%93%81%E7%AE%A1%E9%83%A8LOGO%20(%E5%8E%BB%E8%83%8C).png"
                          alt="奇美醫院品質管理部 Logo"
                          class="w-12 h-12 sm:w-14 sm:h-14 mr-3 object-contain">
-                    <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-900">
-                        品管圈（QCC）新手入門互動指南
-                    </h1>
+                    <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-900">品管圈（QCC）新手入門互動指南</h1>
                 </div>
                 <p class="text-xl text-gray-500">從概念到實踐，品質改善的旅程由此開始！</p>
             </div>
         </header>
 
         <!-- 外層導航列 -->
-        <nav class="sticky top-0 z-10 flex justify-center bg-white p-2 rounded-xl shadow-lg mb-8 space-x-4">
+        <nav class="sticky top-0 z-10 flex justify-center bg-white p-2 rounded-xl shadow-lg mb-4 space-x-4">
             <button id="nav-btn-home" onclick="goHome()" class="nav-button active text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">🚀 首頁</button>
-            <button id="nav-btn-selection" onclick="loadExternalPage('選擇工具.html','nav-btn-selection')" class="nav-button text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">🎁 工具大禮包</button>
+            <button id="nav-btn-selection" onclick="showToolTabs()" class="nav-button text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">🎁 工具大禮包</button>
             <button id="nav-btn-format" onclick="showFormatTabs()" class="nav-button text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">📝 書面格式</button>
             <button id="nav-btn-tools" onclick="loadExternalPage('參考資料.html','nav-btn-tools')" class="nav-button text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">🛠️ 參考資料</button>
             <button id="nav-btn-quiz" onclick="loadExternalPage('小測驗.html','nav-btn-quiz')" class="nav-button text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">🎯 小試身手</button>
@@ -90,9 +49,14 @@
             <button class="format-tab px-4 py-2 rounded-lg bg-gray-200" onclick="loadFormatPage('書面格式_HFMEA.html', this)">⚠️ HFMEA</button>
         </div>
 
+        <!-- 第二層工具大禮包 tabs -->
+        <div id="tool-tabs" class="hidden flex justify-center mt-4 space-x-3">
+            <button class="sub-tab px-4 py-2 rounded-lg bg-gray-200" onclick="loadExternalPage('選擇工具.html', this)">🛠️ 品管工具</button>
+            <button class="sub-tab px-4 py-2 rounded-lg bg-gray-200" onclick="loadExternalPage('品管手法.html', this)">📚 品管手法</button>
+        </div>
+
         <!-- 內容區 -->
         <div id="content-area" class="px-4">
-            <!-- 預設首頁內容 -->
             <h2 class="text-2xl font-bold text-center mt-10">歡迎來到 QCC 主頁 🎉</h2>
         </div>
 
@@ -105,14 +69,14 @@
             document.getElementById(id)?.classList.add('active');
         }
 
-        // 顯示書面格式第二層 Tabs
+        // 外層書面格式
         function showFormatTabs(){
             activateNav('nav-btn-format');
             document.getElementById('format-tabs').classList.remove('hidden');
+            document.getElementById('tool-tabs').classList.add('hidden');
             loadFormatPage('書面格式_問題型.html', document.querySelectorAll('.format-tab')[0]);
         }
 
-        // 動態載入書面格式子頁
         function loadFormatPage(page, btn){
             document.querySelectorAll('.format-tab').forEach(b=>b.classList.remove('bg-teal-300','text-white','font-bold'));
             btn.classList.add('bg-teal-300','text-white','font-bold');
@@ -121,10 +85,22 @@
             });
         }
 
-        // 載入外層其他頁面
-        function loadExternalPage(page, btnId){
-            activateNav(btnId);
+        // 工具大禮包
+        function showToolTabs(){
+            activateNav('nav-btn-selection');
+            document.getElementById('tool-tabs').classList.remove('hidden');
             document.getElementById('format-tabs').classList.add('hidden');
+            // 預設載入品管工具
+            loadExternalPage('選擇工具.html', document.querySelectorAll('#tool-tabs .sub-tab')[0]);
+        }
+
+        // 外層其他頁面載入
+        function loadExternalPage(page, btn){
+            // 高亮子 tab
+            const parentTabs = btn.parentElement.querySelectorAll('button');
+            parentTabs.forEach(b=>b.classList.remove('bg-teal-300','text-white','font-bold'));
+            btn.classList.add('bg-teal-300','text-white','font-bold');
+
             fetch(page).then(res=>res.text()).then(html=>{
                 document.getElementById('content-area').innerHTML = html;
             });
@@ -134,6 +110,7 @@
         function goHome(){
             activateNav('nav-btn-home');
             document.getElementById('format-tabs').classList.add('hidden');
+            document.getElementById('tool-tabs').classList.add('hidden');
             document.getElementById('content-area').innerHTML = "<h2 class='text-2xl font-bold text-center mt-10'>歡迎來到 QCC 主頁 🎉</h2>";
         }
     </script>
