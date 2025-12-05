@@ -6,13 +6,13 @@
     <title>品管圈（QCC）新手入門互動指南</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #ecfdf5; margin:0; }
+        body { font-family: 'Inter', sans-serif; background-color: #ecfdf5; }
         .nav-button { transition: all 0.3s ease-in-out; border-bottom: 3px solid transparent; }
         .nav-button.active { color: #0d9488; border-color: #0d9488; font-weight: 700; }
-        .format-tab, .sub-tab { transition: all 0.3s ease-in-out; min-height: 50px; }
-        #content-area { width: 100%; min-height: 500px; }
+        .format-tab, .sub-tab { transition: all 0.3s ease-in-out; min-height: 40px; }
+        #content-area { min-height: 500px; }
         #content-frame { width: 100%; height: 100%; border: none; min-height: 500px; }
-        #last-updated { text-align: right; margin-top: 0.5rem; color: #555; font-size: 0.9rem; }
+        #last-updated { text-align: right; margin-top: 1rem; color: #555; font-size: 0.9rem; }
     </style>
 </head>
 <body class="antialiased">
@@ -32,7 +32,7 @@
         </div>
     </header>
 
-    <!-- 第一層導航列 -->
+    <!-- 外層導航列 -->
     <nav class="sticky top-0 z-10 flex justify-center bg-white p-2 rounded-xl shadow-lg mb-4 space-x-4">
         <button id="nav-btn-home" onclick="goHome()" class="nav-button active text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">🚀 首頁</button>
         <button id="nav-btn-selection" onclick="showToolTabs()" class="nav-button text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">🎁 工具大禮包</button>
@@ -44,7 +44,7 @@
     <!-- 第二層書面格式 tabs -->
     <div id="format-tabs" class="flex justify-center mt-4 space-x-3 min-h-[50px] hidden">
         <button class="format-tab px-4 py-2 rounded-lg bg-gray-200" onclick="loadFormatPage('書面格式_問題型.html', this)">🧩 問題型</button>
-        <button class="format-tab px-4 py-2 rounded-lg bg-gray-200" onclick="loadFormatPage('書面格式_課達型.html', this)">💡 課達型</button>
+        <button class="format-tab px-4 py-2 rounded-lg bg-gray-200" onclick="loadFormatPage('書面格式_課達型.html', this)">💡 課題達成型</button>
         <button class="format-tab px-4 py-2 rounded-lg bg-gray-200" onclick="loadFormatPage('書面格式_RCA.html', this)">🔍 RCA</button>
         <button class="format-tab px-4 py-2 rounded-lg bg-gray-200" onclick="loadFormatPage('書面格式_HFMEA.html', this)">⚠️ HFMEA</button>
     </div>
@@ -55,7 +55,7 @@
         <button class="sub-tab px-4 py-2 rounded-lg bg-gray-200" onclick="loadExternalPage('品管手法.html', this)">📚 品管手法</button>
     </div>
 
-    <!-- 內容區 (iframe) -->
+    <!-- 內容區 (使用 iframe) -->
     <div id="content-area" class="px-4">
         <iframe id="content-frame" src=""></iframe>
     </div>
@@ -66,29 +66,25 @@
 </div>
 
 <script>
-    // 外層導航高亮
     function activateNav(id){
         document.querySelectorAll('.nav-button').forEach(btn=>btn.classList.remove('active'));
         document.getElementById(id)?.classList.add('active');
     }
 
-    // 書面格式 tabs
     function showFormatTabs(){
         activateNav('nav-btn-format');
         document.getElementById('format-tabs').classList.remove('hidden');
         document.getElementById('tool-tabs').classList.add('hidden');
-        loadFormatPage('書面格式_問題型.html', document.querySelectorAll('.format-tab')[0]);
+        loadFormatPage('首頁.html', document.querySelectorAll('.format-tab')[0]);
     }
 
     function loadFormatPage(page, btn){
         document.querySelectorAll('.format-tab').forEach(b=>b.classList.remove('bg-teal-300','text-white','font-bold'));
         btn.classList.add('bg-teal-300','text-white','font-bold');
-        const iframe = document.getElementById('content-frame');
-        iframe.src = page;
+        document.getElementById('content-frame').src = page;
         updateLastUpdated();
     }
 
-    // 工具大禮包 tabs
     function showToolTabs(){
         activateNav('nav-btn-selection');
         document.getElementById('tool-tabs').classList.remove('hidden');
@@ -96,14 +92,13 @@
         loadExternalPage('選擇工具.html', document.querySelectorAll('#tool-tabs .sub-tab')[0]);
     }
 
-    // 其他頁面載入 (iframe)
     function loadExternalPage(page, btn){
         // 高亮子 tab
         const parentTabs = btn.parentElement.querySelectorAll('button');
         parentTabs.forEach(b=>b.classList.remove('bg-teal-300','text-white','font-bold'));
         btn.classList.add('bg-teal-300','text-white','font-bold');
 
-        // 顯示第二層 tabs 空間
+        // 顯示正確第二層
         if(btn.closest('#tool-tabs')){
             document.getElementById('tool-tabs').classList.remove('hidden');
             document.getElementById('format-tabs').classList.add('hidden');
@@ -119,7 +114,6 @@
         updateLastUpdated();
     }
 
-    // 回首頁
     function goHome(){
         activateNav('nav-btn-home');
         document.getElementById('format-tabs').classList.add('hidden');
@@ -128,27 +122,19 @@
         updateLastUpdated();
     }
 
-    // 最後更新時間
     function updateLastUpdated() {
         const lastModifiedStr = document.lastModified;
         const lastModifiedDate = new Date(lastModifiedStr);
         if (isNaN(lastModifiedDate.getTime())) return;
-
         const formatter = new Intl.DateTimeFormat('zh-TW', {
             timeZone: 'Asia/Taipei',
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
-            hour12: false
+            year: 'numeric', month: '2-digit', day: '2-digit',
+            hour: '2-digit', minute: '2-digit', hour12: false
         });
-
         const parts = formatter.formatToParts(lastModifiedDate);
         const get = type => parts.find(p => p.type === type)?.value || '';
         const year = get('year'), month = get('month'), day = get('day'), hour = get('hour'), minute = get('minute');
-        const el = document.getElementById("last-updated");
-        if (el) el.textContent = `最後更新時間（中原標準時間）: ${year}年${month}月${day}日 ${hour}:${minute}`;
+        document.getElementById("last-updated").textContent = `最後更新時間（中原標準時間）: ${year}年${month}月${day}日 ${hour}:${minute}`;
     }
 
     // 初始化
