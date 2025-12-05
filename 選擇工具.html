@@ -9,7 +9,6 @@
     
     <!-- ----------------------------------------------------- -->
     <!-- 格式區塊 (FORMAT BLOCK) -->
-    <!-- 所有外觀、字體大小、顏色、動畫的定義都在這裡 -->
     <!-- ----------------------------------------------------- -->
     <script>
         // Tailwind 配置 (顏色定義)
@@ -117,7 +116,7 @@
                 🛠️ 品管工具選哪招？跟我走！ 💡
             </h1>
             <p class="text-xl text-gray-500 font-medium">
-                單卡模式，專注當前問題！
+                你還不確定用什麼工具嗎！跟著步驟走幫你找到適合的工具
             </p>
         </header>
 
@@ -147,28 +146,28 @@
             Q1: { 
                 title: "🐾 關卡一：挑戰類型", 
                 question: "您想處理的是「【已經發生】的麻煩事/壞結果」 (問題型)？還是【未來想達成】的新成就/好水準 (課題型)？", 
-                icon: "🤔", 
+                icon: "", 
                 options: [
-                    { text: "😭 現有缺失或異常 (問題解決型)", next: "Q2", style: "btn-pink" },
-                    { text: "🤩 未來目標或任務 (課題達成型)", next: "R_GOAL", style: "btn-purple" }
+                    { text: " 現有缺失或異常 (問題解決型)", next: "Q2", style: "btn-pink" },
+                    { text: " 未來目標或任務 (課題達成型)", next: "R_GOAL", style: "btn-purple" }
                 ]
             },
             Q2: { 
                 title: "🚨 關卡二：預防或解決", 
                 question: "您的目標是「【預先】阻止流程中【潛在】的風險發生」嗎？ (像打預防針一樣)", 
-                icon: "🛡️", 
+                icon: "", 
                 options: [
-                    { text: "🎯 是，預先評估與控制風險 (預防針)", next: "R_HFMEA", style: "btn-purple" },
-                    { text: "🤕 否，分析已經發生的問題 (解毒劑)", next: "Q3", style: "btn-pink" }
+                    { text: " 是，預先評估與控制風險 (預防針)", next: "R_HFMEA", style: "btn-purple" },
+                    { text: " 否，分析已經發生的問題 (解毒劑)", next: "Q3", style: "btn-pink" }
                 ]
             },
             Q3: { 
                 title: "💥 關卡三：事件嚴重性", 
                 question: "這個問題是「【超級嚴重】的重大/不良事件」，您需要找出【系統性的最終原因】並【保證不再發生】嗎？", 
-                icon: "🔍", 
+                icon: "", 
                 options: [
-                    { text: "🚀 是，追查根本原因 (重大不良事件)", next: "R_RCA", style: "btn-purple" },
-                    { text: "🧹 否，一般性缺失改善 (日常品質提升)", next: "R_QCC", style: "btn-pink" }
+                    { text: " 是，追查根本原因 (重大不良事件)", next: "R_RCA", style: "btn-purple" },
+                    { text: " 否，一般性缺失改善 (日常品質提升)", next: "R_QCC", style: "btn-pink" }
                 ]
             },
             
@@ -176,7 +175,48 @@
             R_GOAL: { title: "🎉 恭喜！您找到了成功鑰匙！", methodology: "💡 課題達成型 (Goal-Achievement)", purpose: "這方法專門幫助您從「現在」走到「目標」。重點是【發揮創意找方法】，達成您的 KPI 或挑戰！", icon: "🏆", bgColor: "bg-goal-green/15", textColor: "text-goal-green", borderColor: "border-goal-green" },
             R_HFMEA: { title: "💖 風險防護罩已啟動！", methodology: "🛡️ HFMEA (醫療失效模式與效應分析)", purpose: "這就像是流程的【預警雷達】。它能幫助您在風險發生前，找到流程中所有可能的「地雷」並提前控制，讓流程更安全！", icon: "🚨", bgColor: "bg-secondary-purple/15", textColor: "text-secondary-purple", borderColor: "border-secondary-purple" },
             R_RCA: { title: "🕵️‍♂️ 系統偵探出動！", methodology: "🔎 RCA (根本原因分析)", purpose: "當發生【重大不良事件】時，您需要這套工具深入挖掘問題的Root Cause (根源)。它會找出系統性的漏洞，確保這類事件不會再在同樣的地方跌倒！", icon: "🤯", bgColor: "bg-issue-red/15", textColor: "text-issue-red", borderColor: "border-issue-red" },
-            R_QCC: { title: "🛠️ 日常優化專家就是您！", methodology: "✨ QCC (問題解決型/品質改善)", purpose: "這是您提升日常流程品質的【萬用工具箱】！當有缺失、抱怨或數據不佳時，它能引導您系統化地「找原因 → 解決原因」，讓現況變得更好！", icon: "🌈", bgColor: "bg-primary-pink/15", textColor: "text-primary-pink", borderColor: "border-primary-pink" }
+            R_QCC: { title: "🛠️ 日常優化專家就是您！", methodology: "✨ QCC (問題解決型/品質改善)", purpose: "這是您提升日常流程品質的【萬用工具箱】！當有缺失、抱怨或數據不佳時，它能引導您系統化地「找原因 → 解決原因」，讓現況變得更好！", icon: "🌈", bgColor: "bg-primary-pink/15", textColor: "text-primary-pink", borderColor: "border-primary-pink" },
+            
+            // --- 新增：詳細實施步驟頁面 (Details) ---
+            D_GOAL: {
+                title: "🎯 課題達成型：實施步驟 (PDCA)", icon: "🏆", color: "text-goal-green",
+                steps: [
+                    { num: 1, title: "PLAN (計畫)：確立目標、擬定計畫", detail: "清楚定義想要達成的目標和衡量指標 (KPI)。根據目標，設計具體的實施步驟和時程。", icon: "📝" },
+                    { num: 2, title: "DO (執行)：實施計畫", detail: "按照規劃好的步驟進行操作。在這個階段，需要持續監控進度並記錄過程中的數據。", icon: "🏃" },
+                    { num: 3, title: "CHECK (查核)：評估結果、比較差異", detail: "根據紀錄的數據，將實際結果與原先設定的目標進行比較，分析達成度與差異原因。", icon: "📊" },
+                    { num: 4, title: "ACT (處置)：標準化、持續改進", detail: "如果目標達成，則將成功的經驗標準化。如果未達成，則調整計畫，開始新一輪的 PDCA 循環。", icon: "🔄" },
+                ]
+            },
+            D_HFMEA: {
+                title: "🛡️ HFMEA：實施步驟 (風險預警)", icon: "🚨", color: "text-secondary-purple",
+                steps: [
+                    { num: 1, title: "確立流程/服務主題", detail: "選擇一個需要評估風險的流程，如藥物給予流程、設備交接流程等。", icon: "📌" },
+                    { num: 2, title: "組成跨職能團隊", detail: "召集熟悉該流程的各部門專家，共同參與分析。", icon: "🤝" },
+                    { num: 3, title: "繪製詳細流程圖", detail: "將流程拆解到最細部的步驟，識別每個步驟的『潛在失效點』。", icon: "🗺️" },
+                    { num: 4, title: "分析失效模式與後果", detail: "對於每個失效點，討論可能出錯的方式 (Mode) 和造成的後果 (Effect)。計算 RPN 值。", icon: "💥" },
+                    { num: 5, title: "實施與評估控制措施", detail: "針對高 RPN 的失效模式，設計預防性的控制措施，並確認措施實施後的風險是否降低。", icon: "✅" },
+                ]
+            },
+            D_RCA: {
+                title: "🔎 RCA：實施步驟 (系統偵錯)", icon: "🤯", color: "text-issue-red",
+                steps: [
+                    { num: 1, title: "界定與描述問題", detail: "清晰地定義『什麼發生了？誰/在哪裡？何時？嚴重性？』，並設定調查範圍。", icon: "📋" },
+                    { num: 2, title: "收集資料與證據", detail: "收集所有相關文件、紀錄、訪談資料，重建事件的發生經過。", icon: "📂" },
+                    { num: 3, title: "找出根本原因", detail: "使用 5 Whys、魚骨圖等工具，持續向下追問，從直接原因找到潛在的系統性原因。", icon: "❓" },
+                    { num: 4, title: "制定與實施糾正措施", detail: "措施應針對『根本原因』而非症狀。設計多重防護機制 (Barrier) 來防止再發。", icon: "🔧" },
+                    { num: 5, title: "評估結果與標準化", detail: "確認措施實施後的成效。將有效的新流程或規定納入標準作業，確保持續性。", icon: "📜" },
+                ]
+            },
+            D_QCC: {
+                title: "✨ QCC：實施步驟 (日常優化)", icon: "🌈", color: "text-primary-pink",
+                steps: [
+                    { num: 1, title: "選定主題", detail: "從日常數據或抱怨中，選擇一個具體、可改善的品質問題作為主題。", icon: "🎯" },
+                    { num: 2, title: "現狀把握與目標設定", detail: "收集數據，確認問題的嚴重程度與範圍。設定明確的改善目標。", icon: "📈" },
+                    { num: 3, title: "分析原因", detail: "使用層別法、柏拉圖、魚骨圖等工具，從眾多原因中找出『主要原因』。", icon: "🧠" },
+                    { num: 4, title: "制定對策與實施", detail: "針對主要原因，提出多種解決方案，選擇最佳對策並執行。", icon: "💡" },
+                    { num: 5, title: "效果確認與標準化", detail: "再次收集數據，確認對策是否有效達成目標。將成功的做法寫入標準作業。", icon: "💯" },
+                ]
+            }
         };
         // --- 決策樹資料結構 (Decision Tree Content) 結束 ---
 
@@ -185,8 +225,53 @@
         let currentStepKey = "Q1";
         // Tracks the path taken: [{key: "Q1", selection: "Q2", text: "現有缺失或異常 (問題解決型)"}, ...]
         let history = []; 
-        const historyTrailDiv = document.getElementById('history-trail'); // 新的歷史紀錄容器
-        const questionCardContainer = document.getElementById('question-card-container'); // 新的當前問題容器
+        const historyTrailDiv = document.getElementById('history-trail'); // 歷史紀錄容器
+        const questionCardContainer = document.getElementById('question-card-container'); // 當前問題容器
+
+        // -----------------------------------------------------------------
+        // ★★★ 新增：外部頁面載入函數 (Mimics External Page Load) ★★★
+        // -----------------------------------------------------------------
+
+        /**
+         * 顯示自定義訊息框（取代 alert()）
+         * @param {string} message - 要顯示的訊息
+         */
+        function showMessage(message) {
+            let messageBox = document.getElementById('message-box');
+            if (!messageBox) {
+                messageBox = document.createElement('div');
+                messageBox.id = 'message-box';
+                // 使用 Tailwind 樣式，使其看起來像一個成功的 Toast
+                messageBox.className = 'fixed top-4 right-4 z-50 p-4 rounded-lg shadow-xl text-white bg-indigo-500 transition-opacity duration-300 opacity-0 transform translate-x-10';
+                document.body.appendChild(messageBox);
+            }
+            
+            messageBox.textContent = message;
+            messageBox.classList.remove('opacity-0', 'translate-x-10');
+            messageBox.classList.add('opacity-100', 'translate-x-0');
+            
+            // 3 秒後隱藏
+            setTimeout(() => {
+                messageBox.classList.remove('opacity-100', 'translate-x-0');
+                messageBox.classList.add('opacity-0', 'translate-x-10');
+            }, 3000);
+        }
+
+        /**
+         * 模擬外部頁面載入，實則導航到詳細步驟 (根據您的要求新增)
+         * @param {string} targetFile - 模擬的目標文件名稱 (e.g., '書面格式_問題型.html')
+         * @param {string} resultKey - 當前的結果步驟鍵 (e.g., 'R_RCA', 'R_GOAL')
+         */
+        function loadExternalPage(targetFile, resultKey) {
+            // 根據結果鍵 R_XXX 導航到內部 D_XXX 詳細步驟
+            const detailKey = 'D_' + resultKey.split('_')[1];
+            
+            // 執行內部導航
+            navigate(detailKey);
+            
+            // 顯示訊息，模擬頁面跳轉
+            showMessage(`模擬跳轉到外部文件：【${targetFile}】`);
+        }
 
         // --- 渲染工具函數 (Rendering Helpers) ---
         
@@ -195,21 +280,32 @@
             if (key === 'Q1') return "挑戰類型";
             if (key === 'Q2') return "預防或解決";
             if (key === 'Q3') return "事件嚴重性";
-            return "最終結果";
+            if (key.startsWith('R_')) return "建議工具";
+            if (key.startsWith('D_')) return "詳細步驟";
+            return "開始";
         }
 
         /** 渲染一個已完成的步驟節點 (水平麵包包屑樣式) */
         function renderCompletedNode(item, index) {
             const stepTitle = getStepTitle(item.key);
             const stepNumber = index + 1; // 從 1 開始編號
+            
+            // 如果是結果頁面，則不顯示選擇內容，只顯示工具名稱
+            const isResult = item.key.startsWith('R_');
+            const resultData = isResult ? decisionTree[item.key] : null;
+            const selectionText = isResult 
+                ? resultData.methodology.split('(')[0] // 只取工具名稱
+                : item.text.split(' ')[0]; // 取第一個詞
+            
+            const nodeClasses = isResult ? 'breadcrumb-node-result' : 'breadcrumb-node';
 
             const nodeHtml = `
                 <div class="flex items-center">
                     <!-- 節點標題和選擇 -->
-                    <button class="breadcrumb-node group" onclick="rewindToStep('${item.key}')" title="點擊回到此步驟">
+                    <button class="${nodeClasses} group" onclick="rewindToStep('${item.key}')" title="點擊回到此步驟">
                         <span class="mr-2 opacity-80 group-hover:opacity-100">${stepNumber}. ${stepTitle}</span>
                         <!-- 簡短的選擇內容 -->
-                        <span class="font-normal text-xs opacity-70 group-hover:opacity:90">(${item.text.split(' ')[0]})</span>
+                        <span class="font-normal text-xs opacity-70 group-hover:opacity:90">(${selectionText})</span>
                     </button>
                     <!-- 分隔符號 -->
                     <span class="text-secondary-purple mx-1.5 md:mx-2 text-2xl font-bold">»</span>
@@ -261,7 +357,29 @@
         }
 
         /** 渲染最終結果卡片 */
-        function renderFinalResult(result) {
+        function renderFinalResult(result, currentKey) {
+            // --- 確定外部文件名稱與樣式 (符合使用者需求) ---
+            let fileName = '詳細步驟.html';
+            let targetIcon = '▶️';
+            let buttonStyle = 'bg-primary-pink text-white border-b-4 border-pink-700 hover:bg-pink-600';
+            
+            if (currentKey === 'R_RCA' || currentKey === 'R_QCC') {
+                fileName = '書面格式_問題型.html'; // 問題解決型
+                targetIcon = '📝';
+                buttonStyle = 'bg-issue-red text-white border-b-4 border-red-700 hover:bg-red-600';
+            } else if (currentKey === 'R_GOAL') {
+                fileName = '書面格式_課題型.html'; // 課題達成型
+                targetIcon = '📝';
+                buttonStyle = 'bg-goal-green text-white border-b-4 border-green-700 hover:bg-green-600';
+            } else if (currentKey === 'R_HFMEA') {
+                fileName = '書面格式_預防型.html'; // 風險預防型
+                targetIcon = '📝';
+                buttonStyle = 'bg-secondary-purple text-white border-b-4 border-violet-700 hover:bg-violet-600';
+            }
+            
+            // The detail key remains D_XXX for internal navigation
+            // const detailKey = 'D_' + currentKey.split('_')[1]; // 註釋掉，改用 loadExternalPage 處理導航
+
             return `
                 <div class="${result.bgColor} p-6 md:p-12 rounded-3xl shadow-2xl border-t-8 ${result.borderColor} w-full decision-card animate-popIn">
 
@@ -285,14 +403,15 @@
                     </div>
 
                     <p class="text-base text-center text-gray-500 mb-4 font-semibold">
-                        恭喜您完成評估！
+                        恭喜您完成評估！點擊下方按鈕查看詳細的實施流程。
                     </p>
                     
-                    <!-- 前往步驟按鈕 (使用新的按鈕樣式但較小) -->
+                    <!-- 前往步驟按鈕 (已修改為使用 loadExternalPage 函數和 ID) -->
                     <div class="text-center space-y-4">
-                        <button class="bg-primary-pink text-white border-b-4 border-pink-700 hover:bg-pink-600 active:translate-y-1 active:shadow-sm text-lg font-bold px-8 py-3 rounded-full shadow-md transition duration-300 w-full md:w-auto"
-                            onclick="console.log('--- 模擬連結到實施步驟 ---');">
-                            ▶️ 前往【${result.methodology}】詳細實施步驟
+                        <button id="nav-btn-form"
+                            onclick="loadExternalPage('${fileName}', '${currentKey}')"
+                            class="${buttonStyle} active:translate-y-1 active:shadow-sm text-lg font-bold px-8 py-3 rounded-full shadow-md transition duration-300 w-full md:w-auto">
+                            ${targetIcon} 前往【${result.methodology.split('(')[0]}】${fileName}
                         </button>
                     </div>
                     <!-- --------------------- -->
@@ -300,27 +419,89 @@
             `;
         }
 
+        /** 渲染詳細實施步驟卡片 (新增) */
+        function renderDetailedSteps(data, detailKey) {
+            // D_GOAL -> R_GOAL
+            const resultKey = 'R_' + detailKey.split('_')[1];
+            const resultData = decisionTree[resultKey];
+
+            return `
+                <div class="bg-white p-6 md:p-10 rounded-3xl shadow-2xl border-4 border-secondary-purple/50 w-full decision-card animate-popIn">
+                    
+                    <div class="text-center mb-8">
+                        <span class="text-6xl mb-4 block ${data.color}">${data.icon}</span>
+                        <h2 class="text-3xl md:text-4xl font-extrabold text-gray-800 mb-3">${data.title}</h2>
+                        <p class="text-xl text-gray-600 font-medium">— ${resultData.methodology} —</p>
+                    </div>
+
+                    <!-- 步驟列表 -->
+                    <div class="space-y-6">
+                        ${data.steps.map(step => `
+                            <div class="flex items-start bg-bg-paper p-4 md:p-6 rounded-xl border-l-8 border-secondary-purple shadow-md">
+                                <div class="mr-4 text-3xl flex-shrink-0">
+                                    ${step.icon}
+                                </div>
+                                <div>
+                                    <h3 class="text-lg md:text-xl font-bold text-gray-800 mb-1">${step.num}. ${step.title}</h3>
+                                    <p class="text-sm md:text-base text-gray-600 leading-relaxed">${step.detail}</p>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <!-- 返回按鈕 -->
+                    <div class="mt-10 text-center">
+                        <button class="bg-secondary-purple text-white border-b-4 border-violet-700 hover:bg-violet-600 active:translate-y-1 active:shadow-sm text-lg font-bold px-8 py-3 rounded-full shadow-md transition duration-300 w-full md:w-auto"
+                            onclick="navigate('${resultKey}')">
+                            ↩️ 返回【${resultData.methodology}】結果摘要
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+
         // --- 主渲染函數 (Main Render Function) ---
         function renderLadder() {
             // 1. 渲染歷史紀錄 (麵包屑)
-            const historyHtml = history.map(renderCompletedNode).join('');
+            const questionHistory = history.filter(item => item.key.startsWith('Q'));
+            const resultHistory = history.find(item => item.key.startsWith('R_')) || (currentStepKey.startsWith('R_') ? { key: currentStepKey } : null);
             
-            // 加入當前步驟的標記 (已根據是否為結果進行修正)
+            let historyHtml = questionHistory.map(renderCompletedNode).join('');
+            
+            // 如果已經有結果，則將結果作為已完成步驟加入歷史 trail
+            if (resultHistory && !currentStepKey.startsWith('R_') && !currentStepKey.startsWith('D_')) {
+                historyHtml += renderCompletedNode(resultHistory, questionHistory.length);
+            }
+            
+            // 處理當前步驟的標記
+            const isQuestion = currentStepKey.startsWith('Q');
             const isResult = currentStepKey.startsWith('R_');
+            const isDetail = currentStepKey.startsWith('D_');
+            
             let currentStepText;
-            let currentStepClasses; // 新增變量來控制顏色
+            let currentStepClasses; 
 
-            if (isResult) {
-                // 如果是結果，顯示最終推薦的工具名稱
+            if (isDetail) {
+                 // 詳細步驟頁：顯示工具名稱 + (詳細步驟)
+                const detailData = decisionTree[currentStepKey];
+                const resultKey = 'R_' + currentStepKey.split('_')[1];
+                const methodology = decisionTree[resultKey].methodology.split('(')[0];
+                currentStepText = `${methodology} (詳細步驟)`;
+                currentStepClasses = 'breadcrumb-node-active bg-primary-pink/90'; // 特別醒目
+            } else if (isResult) {
+                // 結果頁：顯示最終推薦的工具名稱 (淺色)
                 const resultData = decisionTree[currentStepKey];
-                currentStepText = `最終推薦：${resultData.methodology}`;
-                // 應用新的樣式：淺粉色背景 + 深灰文字
+                currentStepText = `最終推薦：${resultData.methodology.split('(')[0]}`;
                 currentStepClasses = 'breadcrumb-node-result'; 
-            } else {
-                // 如果是問題，顯示關卡名稱和進行中
+            } else if (isQuestion) {
+                // 問答頁：顯示關卡名稱 (深粉色)
                 const currentStepTitle = getStepTitle(currentStepKey);
-                currentStepText = `${history.length + 1}. ${currentStepTitle} (進行中)`;
-                // 應用原本的活動樣式：深粉色背景 + 白色文字
+                currentStepText = `${questionHistory.length + 1}. ${currentStepTitle} (進行中)`;
+                currentStepClasses = 'breadcrumb-node-active';
+            } else {
+                 // 初始或其他
+                currentStepText = "開始";
                 currentStepClasses = 'breadcrumb-node-active';
             }
             
@@ -340,9 +521,11 @@
             const stepData = decisionTree[currentStepKey];
             let cardHtml = '';
 
-            if (currentStepKey.startsWith('R_')) {
-                cardHtml = renderFinalResult(stepData);
-            } else if (stepData) {
+            if (isDetail) {
+                cardHtml = renderDetailedSteps(stepData, currentStepKey);
+            } else if (isResult) {
+                cardHtml = renderFinalResult(stepData, currentStepKey);
+            } else if (isQuestion) {
                 cardHtml = renderCurrentQuestion(stepData, currentStepKey);
             } else {
                 cardHtml = `<div class="text-red-500 text-center p-10">錯誤：找不到步驟 ${currentStepKey}</div>`;
@@ -355,32 +538,61 @@
         }
 
         // --- 導航函數 (Navigation Function) ---
+        // 只有 Q1, Q2, Q3 的選擇才會被記錄到 history 裡
         function navigate(nextState, questionKey, selectedText) {
-            // 如果有前一個步驟資訊，則記錄在歷史中
-            if (questionKey && decisionTree[questionKey]) {
+            // 只有問答步驟 (Q1, Q2, Q3) 才需要記錄在歷史路徑中
+            if (questionKey && questionKey.startsWith('Q') && decisionTree[questionKey]) {
+                // 檢查是否回到過去步驟，如果是，則先截斷歷史 (避免重複記錄)
+                const targetIndex = history.findIndex(item => item.key === questionKey);
+                if (targetIndex !== -1) {
+                     history = history.slice(0, targetIndex);
+                }
+                
+                // 記錄當前步驟和選擇的結果
                 history.push({ key: questionKey, selection: nextState, text: selectedText });
+
+                // 如果下一個狀態是 R_XXX，也要將 R_XXX 記錄在 history 中，以便在麵包屑中顯示
+                if (nextState.startsWith('R_')) {
+                    history.push({ key: nextState, selection: '', text: decisionTree[nextState].methodology });
+                }
+
             } else if (nextState === 'Q1') {
                 // 這是重置邏輯
                 history = [];
             }
+            // 如果是從結果頁導航到詳細頁，或是從詳細頁導航回結果頁，不影響 history 堆疊，只改變 currentStepKey
+            
             currentStepKey = nextState;
             renderLadder();
         }
 
         // --- 回溯函數 (Rewind Function) ---
         function rewindToStep(targetKey) {
-            // 找到目標步驟在歷史中的索引
-            const targetIndex = history.findIndex(item => item.key === targetKey);
+            // 回溯時，只保留到目標步驟之前的 Q 步驟
+            let targetIndex = history.findIndex(item => item.key === targetKey);
+            
             if (targetIndex !== -1) {
+                // 如果目標是 R_XXX，確保回溯到產生 R_XXX 的 Q 步驟
+                if (targetKey.startsWith('R_')) {
+                    const originatingQ = history.slice(0, targetIndex).reverse().find(item => item.key.startsWith('Q'));
+                    if (originatingQ) {
+                        targetIndex = history.findIndex(item => item.key === originatingQ.key);
+                    }
+                }
+                
                 // 截斷歷史，只保留到目標步驟之前的部分
                 history = history.slice(0, targetIndex);
                 // 導航到目標步驟
-                navigate(targetKey);
+                currentStepKey = targetKey.startsWith('R_') ? targetKey : history[targetIndex - 1]?.selection || targetKey;
+                
+                // 強制導航到目標步驟
+                currentStepKey = targetKey;
+
+                renderLadder();
             }
         }
 
         // 應用程式啟動時，導航到第一個問題
-        // 使用 IIFE (立即執行函數) 確保在頁面結構載入後立即啟動渲染，而不是等待 window.onload
         (function init() {
              // 定義讓結果圖示彈跳一次的 CSS 動畫
             const style = document.createElement('style');
@@ -398,6 +610,10 @@
             `;
             document.head.appendChild(style);
             
+            // 讓 rewindToStep, loadExternalPage 可以在全域環境中使用
+            window.rewindToStep = rewindToStep; 
+            window.loadExternalPage = loadExternalPage; // 確保新函數可被全域調用
+
             navigate('Q1'); // 立即渲染第一個步驟
         })();
     </script>
