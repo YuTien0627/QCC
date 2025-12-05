@@ -7,11 +7,7 @@
     <!-- 載入 Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- ----------------------------------------------------- -->
-    <!-- 格式區塊 (FORMAT BLOCK) -->
-    <!-- ----------------------------------------------------- -->
     <script>
-        // Tailwind 配置 (顏色定義)
         tailwind.config = {
             theme: {
                 extend: {
@@ -19,564 +15,269 @@
                         sans: ['Inter', 'Noto Sans TC', 'sans-serif'],
                     },
                     colors: {
-                        // 可愛風格的配色
-                        'primary-pink': '#F472B6', // 主色調：可愛粉
-                        'secondary-purple': '#A78BFA', // 次要色調：夢幻紫
-                        'goal-green': '#34D399', // 達成目標：清新綠
-                        'issue-red': '#F87171', // 問題警示：活力紅
-                        'bg-paper': '#FFFBEB', // 背景紙張色：奶油黃
+                        'primary-pink': '#F472B6',
+                        'secondary-purple': '#A78BFA',
+                        'goal-green': '#34D399',
+                        'issue-red': '#F87171',
+                        'bg-paper': '#FFFBEB',
                     }
                 }
             }
         }
     </script>
+
     <style>
-        /* 確保字體在中文環境下正確顯示 */
         body {
             font-family: 'Inter', 'Noto Sans TC', sans-serif;
-            background: linear-gradient(135deg, #FDFCFB 0%, #E2E8F0 100%); /* 柔和背景漸變 */
+            background: linear-gradient(135deg, #FDFCFB 0%, #E2E8F0 100%);
         }
-
-        /* ----------------------------------------------------- */
-        /* ★★★ 決策按鈕格式控制中心 (BUTTON FORMAT CONTROL) ★★★ */
-        /* ----------------------------------------------------- */
         .btn {
-            /* 調整：使用最大標準填充 (px-12 py-8)，並將字體放大到 text-7xl (手機) / text-8xl (桌面) */
             @apply px-12 py-8 rounded-full font-extrabold text-7xl md:text-8xl transition duration-300 shadow-lg border-b-4 border-opacity-70;
-            /* 讓按鈕在小螢幕時自動換行 */
             white-space: normal;
         }
-        
-        /* 按鈕顏色樣式 */
-        .btn-pink {
-            @apply bg-primary-pink text-white border-primary-pink/80 hover:bg-pink-500 hover:border-pink-600 active:translate-y-1 active:shadow-sm;
-        }
-        .btn-purple {
-            @apply bg-secondary-purple text-white border-secondary-purple/80 hover:bg-violet-500 hover:border-violet-600 active:translate-y-1 active:shadow-sm;
-        }
-        .btn-reset {
-            /* 重置按鈕使用較小的字體，避免過度突出 */
-            @apply bg-gray-400 text-white border-gray-500 hover:bg-gray-500 hover:border-gray-600 active:translate-y-1 active:shadow-sm text-base;
-        }
-        /* ----------------------------------------------------- */
-        /* ★★★ 決策按鈕格式控制中心 結束 ★★★ */
-        /* ----------------------------------------------------- */
+        .btn-pink { @apply bg-primary-pink text-white border-primary-pink/80 hover:bg-pink-500 hover:border-pink-600 active:translate-y-1 active:shadow-sm; }
+        .btn-purple { @apply bg-secondary-purple text-white border-secondary-purple/80 hover:bg-violet-500 hover:border-violet-600 active:translate-y-1 active:shadow-sm; }
+        .btn-reset { @apply bg-gray-400 text-white border-gray-500 hover:bg-gray-500 hover:border-gray-600 active:translate-y-1 active:shadow-sm text-base; }
 
+        .decision-card { transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease; }
+        @keyframes popIn { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        .animate-popIn { animation: popIn 0.5s ease-out; }
 
-        /* 定義決策卡片的可愛動畫效果 */
-        .decision-card {
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease; /* Bouncy transform */
-        }
-        
-        /* 自定義動畫 */
-        @keyframes popIn {
-            0% { transform: scale(0.8); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-        .animate-popIn {
-            animation: popIn 0.5s ease-out;
-        }
-        
-        /* 趣味卡片樣式：讓決策卡片更立體有趣 */
-        .fun-question-card {
-            box-shadow: 10px 10px 0 0 #F472B6, 15px 15px 0 0 #A78BFA; 
-            transition: all 0.2s ease-out;
-        }
-        .fun-question-card:hover {
-            transform: translate(-2px, -2px);
-            box-shadow: 12px 12px 0 0 #F472B6, 17px 17px 0 0 #A78BFA;
-        }
+        .fun-question-card { box-shadow: 10px 10px 0 0 #F472B6, 15px 15px 0 0 #A78BFA; transition: all 0.2s ease-out; }
+        .fun-question-card:hover { transform: translate(-2px, -2px); box-shadow: 12px 12px 0 0 #F472B6, 17px 17px 0 0 #A78BFA; }
 
-        /* ----------------------------------------------------- */
-        /* 新增：麵包屑/歷史節點樣式 */
-        .breadcrumb-node {
-            @apply flex items-center bg-secondary-purple text-white text-sm font-semibold px-3 py-1 rounded-full shadow-md;
-        }
-        .breadcrumb-node-active {
-            /* 作用於非結果頁面的當前步驟 (Q1, Q2, Q3) */
-            @apply bg-primary-pink text-white;
-        }
-        .breadcrumb-node-result {
-            /* 作用於結果頁面 (R_...) */
-            /* 使用淺粉色背景，深色文字，使其在歷史路徑中更突出且易讀 */
-            @apply bg-primary-pink/20 text-gray-800;
-        }
-        /* ----------------------------------------------------- */
+        .breadcrumb-node { @apply flex items-center bg-secondary-purple text-white text-sm font-semibold px-3 py-1 rounded-full shadow-md; }
+        .breadcrumb-node-active { @apply bg-primary-pink text-white; }
+        .breadcrumb-node-result { @apply bg-primary-pink/20 text-gray-800; }
     </style>
 </head>
-<!-- 調整 body class：移除 items-center，讓內容從頂部開始流動 -->
+
 <body class="min-h-screen flex justify-center p-4">
 
-    <!-- 主內容區塊 -->
-    <!-- 調整：新增 my-auto 來實現垂直置中，並確保內容過長時可以正常捲動 -->
-    <div id="app" class="w-full max-w-4xl bg-bg-paper shadow-2xl rounded-3xl p-6 md:p-12 border-4 border-primary-pink/30 animate-popIn my-auto">
-        <!-- 應用程式標頭 -->
-        <header class="text-center mb-8 md:mb-10">
-            <h1 class="text-4xl md:text-5xl font-extrabold text-gray-800 mb-3 leading-tight">
-                🛠️ 品管工具選哪招？跟我走！ 💡
-            </h1>
-            <p class="text-xl text-gray-500 font-medium">
-                你還不確定用什麼工具嗎！跟著步驟走幫你找到適合的工具
-            </p>
-        </header>
+<div id="app" class="w-full max-w-4xl bg-bg-paper shadow-2xl rounded-3xl p-6 md:p-12 border-4 border-primary-pink/30 animate-popIn my-auto">
+    <header class="text-center mb-8 md:mb-10">
+        <h1 class="text-4xl md:text-5xl font-extrabold text-gray-800 mb-3 leading-tight">
+            🛠️ 品管工具選哪招？跟我走！ 💡
+        </h1>
+        <p class="text-xl text-gray-500 font-medium">
+            單卡模式，專注當前問題！
+        </p>
+    </header>
 
-        <!-- 歷史紀錄/麵包屑 (新的展示形式) -->
-        <div id="history-trail" class="flex flex-wrap gap-2 mb-8 items-center justify-center min-h-[40px] border-b pb-4 border-gray-200">
-            <!-- 歷史節點將會被渲染在這裡 -->
-        </div>
-        
-        <!-- 當前問題卡片容器 -->
-        <div id="question-card-container" class="w-full">
-            <!-- Loading message or initial content -->
-        </div>
+    <div id="history-trail" class="flex flex-wrap gap-2 mb-8 items-center justify-center min-h-[40px] border-b pb-4 border-gray-200"></div>
+    <div id="question-card-container" class="w-full"></div>
 
-        <div id="reset-button-container" class="mt-8 pt-4 border-t border-gray-200 text-center">
-            <button class="btn btn-reset px-6 py-3" onclick="navigate('Q1')">
-                🔄 重置挑戰
-            </button>
-        </div>
+    <div id="reset-button-container" class="mt-8 pt-4 border-t border-gray-200 text-center">
+        <button class="btn btn-reset px-6 py-3" onclick="navigate('Q1')">
+            🔄 重置挑戰
+        </button>
     </div>
+</div>
 
-    <!-- ----------------------------------------------------- -->
-    <!-- 內容區塊 (CONTENT BLOCK) -->
-    <!-- ----------------------------------------------------- -->
-    <script>
-        // --- 決策樹資料結構 (Decision Tree Content) ---
-        const decisionTree = {
-            Q1: { 
-                title: "🐾 關卡一：挑戰類型", 
-                question: "您想處理的是「【已經發生】的麻煩事/壞結果」 (問題型)？還是【未來想達成】的新成就/好水準 (課題型)？", 
-                icon: "", 
-                options: [
-                    { text: " 現有缺失或異常 (問題解決型)", next: "Q2", style: "btn-pink" },
-                    { text: " 未來目標或任務 (課題達成型)", next: "R_GOAL", style: "btn-purple" }
-                ]
-            },
-            Q2: { 
-                title: "🚨 關卡二：預防或解決", 
-                question: "您的目標是「【預先】阻止流程中【潛在】的風險發生」嗎？ (像打預防針一樣)", 
-                icon: "", 
-                options: [
-                    { text: " 是，預先評估與控制風險 (預防針)", next: "R_HFMEA", style: "btn-purple" },
-                    { text: " 否，分析已經發生的問題 (解毒劑)", next: "Q3", style: "btn-pink" }
-                ]
-            },
-            Q3: { 
-                title: "💥 關卡三：事件嚴重性", 
-                question: "這個問題是「【超級嚴重】的重大/不良事件」，您需要找出【系統性的最終原因】並【保證不再發生】嗎？", 
-                icon: "", 
-                options: [
-                    { text: " 是，追查根本原因 (重大不良事件)", next: "R_RCA", style: "btn-purple" },
-                    { text: " 否，一般性缺失改善 (日常品質提升)", next: "R_QCC", style: "btn-pink" }
-                ]
-            },
-            
-            // --- 結果頁面 (Results) ---
-            R_GOAL: { title: "🎉 恭喜！您找到了成功鑰匙！", methodology: "💡 課題達成型 (Goal-Achievement)", purpose: "這方法專門幫助您從「現在」走到「目標」。重點是【發揮創意找方法】，達成您的 KPI 或挑戰！", icon: "🏆", bgColor: "bg-goal-green/15", textColor: "text-goal-green", borderColor: "border-goal-green" },
-            R_HFMEA: { title: "💖 風險防護罩已啟動！", methodology: "🛡️ HFMEA (醫療失效模式與效應分析)", purpose: "這就像是流程的【預警雷達】。它能幫助您在風險發生前，找到流程中所有可能的「地雷」並提前控制，讓流程更安全！", icon: "🚨", bgColor: "bg-secondary-purple/15", textColor: "text-secondary-purple", borderColor: "border-secondary-purple" },
-            R_RCA: { title: "🕵️‍♂️ 系統偵探出動！", methodology: "🔎 RCA (根本原因分析)", purpose: "當發生【重大不良事件】時，您需要這套工具深入挖掘問題的Root Cause (根源)。它會找出系統性的漏洞，確保這類事件不會再在同樣的地方跌倒！", icon: "🤯", bgColor: "bg-issue-red/15", textColor: "text-issue-red", borderColor: "border-issue-red" },
-            R_QCC: { title: "🛠️ 日常優化專家就是您！", methodology: "✨ QCC (問題解決型/品質改善)", purpose: "這是您提升日常流程品質的【萬用工具箱】！當有缺失、抱怨或數據不佳時，它能引導您系統化地「找原因 → 解決原因」，讓現況變得更好！", icon: "🌈", bgColor: "bg-primary-pink/15", textColor: "text-primary-pink", borderColor: "border-primary-pink" },
-            
-;
-        // --- 決策樹資料結構 (Decision Tree Content) 結束 ---
+<script>
+const decisionTree = {
+    Q1: { 
+        title: "🐾 關卡一：挑戰類型", 
+        question: "您想處理的是「【已經發生】的麻煩事/壞結果」 (問題型)？還是【未來想達成】的新成就/好水準 (課題型)？", 
+        icon: "🤔", 
+        options: [
+            { text: "😭 現有缺失或異常 (問題解決型)", next: "Q2", style: "btn-pink" },
+            { text: "🤩 未來目標或任務 (課題達成型)", next: "R_GOAL", style: "btn-purple" }
+        ]
+    },
+    Q2: { 
+        title: "🚨 關卡二：預防或解決", 
+        question: "您的目標是「【預先】阻止流程中【潛在】的風險發生」嗎？ (像打預防針一樣)", 
+        icon: "🛡️", 
+        options: [
+            { text: "🎯 是，預先評估與控制風險 (預防針)", next: "R_HFMEA", style: "btn-purple" },
+            { text: "🤕 否，分析已經發生的問題 (解毒劑)", next: "Q3", style: "btn-pink" }
+        ]
+    },
+    Q3: { 
+        title: "💥 關卡三：事件嚴重性", 
+        question: "這個問題是「【超級嚴重】的重大/不良事件」，您需要找出【系統性的最終原因】並【保證不再發生】嗎？", 
+        icon: "🔍", 
+        options: [
+            { text: "🚀 是，追查根本原因 (重大不良事件)", next: "R_RCA", style: "btn-purple" },
+            { text: "🧹 否，一般性缺失改善 (日常品質提升)", next: "R_QCC", style: "btn-pink" }
+        ]
+    },
+    R_GOAL: { title: "🎉 恭喜！您找到了成功鑰匙！", methodology: "💡 課題達成型 (Goal-Achievement)", purpose: "這方法專門幫助您從「現在」走到「目標」。重點是【發揮創意找方法】，達成您的 KPI 或挑戰！", icon: "🏆", bgColor: "bg-goal-green/15", textColor: "text-goal-green", borderColor: "border-goal-green" },
+    R_HFMEA: { title: "💖 風險防護罩已啟動！", methodology: "🛡️ HFMEA (醫療失效模式與效應分析)", purpose: "這就像是流程的【預警雷達】。它能幫助您在風險發生前，找到流程中所有可能的「地雷」並提前控制，讓流程更安全！", icon: "🚨", bgColor: "bg-secondary-purple/15", textColor: "text-secondary-purple", borderColor: "border-secondary-purple" },
+    R_RCA: { title: "🕵️‍♂️ 系統偵探出動！", methodology: "🔎 RCA (根本原因分析)", purpose: "當發生【重大不良事件】時，您需要這套工具深入挖掘問題的Root Cause (根源)。它會找出系統性的漏洞，確保這類事件不會再在同樣的地方跌倒！", icon: "🤯", bgColor: "bg-issue-red/15", textColor: "text-issue-red", borderColor: "border-issue-red" },
+    R_QCC: { title: "🛠️ 日常優化專家就是您！", methodology: "✨ QCC (問題解決型/品質改善)", purpose: "這是您提升日常流程品質的【萬用工具箱】！當有缺失、抱怨或數據不佳時，它能引導您系統化地「找原因 → 解決原因」，讓現況變得更好！", icon: "🌈", bgColor: "bg-primary-pink/15", textColor: "text-primary-pink", borderColor: "border-primary-pink" }
+};
 
+let currentStepKey = "Q1";
+let history = []; 
+const historyTrailDiv = document.getElementById('history-trail'); 
+const questionCardContainer = document.getElementById('question-card-container');
 
-        // --- 應用程式狀態管理 (Logic for running the app) ---
-        let currentStepKey = "Q1";
-        // Tracks the path taken: [{key: "Q1", selection: "Q2", text: "現有缺失或異常 (問題解決型)"}, ...]
-        let history = []; 
-        const historyTrailDiv = document.getElementById('history-trail'); // 歷史紀錄容器
-        const questionCardContainer = document.getElementById('question-card-container'); // 當前問題容器
+function getStepTitle(key) {
+    if (key === 'Q1') return "挑戰類型";
+    if (key === 'Q2') return "預防或解決";
+    if (key === 'Q3') return "事件嚴重性";
+    return "最終結果";
+}
 
-        // -----------------------------------------------------------------
-        // ★★★ 新增：外部頁面載入函數 (Mimics External Page Load) ★★★
-        // -----------------------------------------------------------------
+function renderCompletedNode(item, index) {
+    const stepTitle = getStepTitle(item.key);
+    const stepNumber = index + 1;
+    return `
+        <div class="flex items-center">
+            <button class="breadcrumb-node group" onclick="rewindToStep('${item.key}')" title="點擊回到此步驟">
+                <span class="mr-2 opacity-80 group-hover:opacity-100">${stepNumber}. ${stepTitle}</span>
+                <span class="font-normal text-xs opacity-70 group-hover:opacity:90">(${item.text.split(' ')[0]})</span>
+            </button>
+            <span class="text-secondary-purple mx-1.5 md:mx-2 text-2xl font-bold">»</span>
+        </div>
+    `;
+}
 
-        /**
-         * 顯示自定義訊息框（取代 alert()）
-         * @param {string} message - 要顯示的訊息
-         */
-        function showMessage(message) {
-            let messageBox = document.getElementById('message-box');
-            if (!messageBox) {
-                messageBox = document.createElement('div');
-                messageBox.id = 'message-box';
-                // 使用 Tailwind 樣式，使其看起來像一個成功的 Toast
-                messageBox.className = 'fixed top-4 right-4 z-50 p-4 rounded-lg shadow-xl text-white bg-indigo-500 transition-opacity duration-300 opacity-0 transform translate-x-10';
-                document.body.appendChild(messageBox);
-            }
-            
-            messageBox.textContent = message;
-            messageBox.classList.remove('opacity-0', 'translate-x-10');
-            messageBox.classList.add('opacity-100', 'translate-x-0');
-            
-            // 3 秒後隱藏
-            setTimeout(() => {
-                messageBox.classList.remove('opacity-100', 'translate-x-0');
-                messageBox.classList.add('opacity-0', 'translate-x-10');
-            }, 3000);
-        }
-
-        /**
-         * 模擬外部頁面載入，實則導航到詳細步驟 (根據您的要求新增)
-         * @param {string} targetFile - 模擬的目標文件名稱 (e.g., '書面格式_問題型.html')
-         * @param {string} resultKey - 當前的結果步驟鍵 (e.g., 'R_RCA', 'R_GOAL')
-         */
-        function loadExternalPage(targetFile, resultKey) {
-            // 根據結果鍵 R_XXX 導航到內部 D_XXX 詳細步驟
-            const detailKey = 'D_' + resultKey.split('_')[1];
-            
-            // 執行內部導航
-            navigate(detailKey);
-            
-            // 顯示訊息，模擬頁面跳轉
-            showMessage(`模擬跳轉到外部文件：【${targetFile}】`);
-        }
-
-        // --- 渲染工具函數 (Rendering Helpers) ---
-        
-        /** 取得步驟的簡短標題 */
-        function getStepTitle(key) {
-            if (key === 'Q1') return "挑戰類型";
-            if (key === 'Q2') return "預防或解決";
-            if (key === 'Q3') return "事件嚴重性";
-            if (key.startsWith('R_')) return "建議工具";
-            if (key.startsWith('D_')) return "詳細步驟";
-            return "開始";
-        }
-
-        /** 渲染一個已完成的步驟節點 (水平麵包包屑樣式) */
-        function renderCompletedNode(item, index) {
-            const stepTitle = getStepTitle(item.key);
-            const stepNumber = index + 1; // 從 1 開始編號
-            
-            // 如果是結果頁面，則不顯示選擇內容，只顯示工具名稱
-            const isResult = item.key.startsWith('R_');
-            const resultData = isResult ? decisionTree[item.key] : null;
-            const selectionText = isResult 
-                ? resultData.methodology.split('(')[0] // 只取工具名稱
-                : item.text.split(' ')[0]; // 取第一個詞
-            
-            const nodeClasses = isResult ? 'breadcrumb-node-result' : 'breadcrumb-node';
-
-            const nodeHtml = `
-                <div class="flex items-center">
-                    <!-- 節點標題和選擇 -->
-                    <button class="${nodeClasses} group" onclick="rewindToStep('${item.key}')" title="點擊回到此步驟">
-                        <span class="mr-2 opacity-80 group-hover:opacity-100">${stepNumber}. ${stepTitle}</span>
-                        <!-- 簡短的選擇內容 -->
-                        <span class="font-normal text-xs opacity-70 group-hover:opacity:90">(${selectionText})</span>
-                    </button>
-                    <!-- 分隔符號 -->
-                    <span class="text-secondary-purple mx-1.5 md:mx-2 text-2xl font-bold">»</span>
-                </div>
-            `;
-            return nodeHtml;
-        }
-
-        /** 渲染目前正在互動的問答卡片 */
-        function renderCurrentQuestion(step, stepKey) {
-            const stepNumber = stepKey.replace('Q', '');
-            
-            // 定義每個按鈕樣式對應的底色和邊框
-            const bgColors = {
-                'btn-pink': 'bg-primary-pink/10 border-primary-pink/30', // 粉色按鈕配淺粉色底
-                'btn-purple': 'bg-secondary-purple/10 border-secondary-purple/30', // 紫色按鈕配淺紫色底
-            };
-            
-            return `
-                <div class="bg-white p-8 md:p-12 rounded-3xl shadow-2xl border-4 border-primary-pink/50 w-full decision-card animate-popIn fun-question-card">
-                    
-                    <div class="text-center mb-8">
-                        <span class="text-6xl mb-4 block">${step.icon}</span>
-                        <!-- 確保標題字體大小足夠 -->
-                        <h2 class="text-2xl md:text-4xl font-extrabold text-gray-800">${stepNumber}. ${step.title}</h2>
+function renderCurrentQuestion(step, stepKey) {
+    const stepNumber = stepKey.replace('Q', '');
+    const bgColors = {
+        'btn-pink': 'bg-primary-pink/10 border-primary-pink/30',
+        'btn-purple': 'bg-secondary-purple/10 border-secondary-purple/30',
+    };
+    
+    return `
+        <div class="bg-white p-8 md:p-12 rounded-3xl shadow-2xl border-4 border-primary-pink/50 w-full decision-card animate-popIn fun-question-card">
+            <div class="text-center mb-8">
+                <span class="text-6xl mb-4 block">${step.icon}</span>
+                <h2 class="text-2xl md:text-4xl font-extrabold text-gray-800">${stepNumber}. ${step.title}</h2>
+            </div>
+            <div class="text-2xl text-gray-700 mb-10 p-6 md:p-8 bg-pink-50 border-4 border-primary-pink rounded-2xl shadow-inner font-medium leading-relaxed text-center">
+                ${step.question}
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+                ${step.options.map(option => `
+                    <div class="p-5 rounded-2xl shadow-xl border-4 ${bgColors[option.style] || 'bg-gray-100 border-gray-300'} hover:shadow-2xl transition duration-300 transform hover:-translate-y-0.5">
+                        <button 
+                            class="btn w-full ${option.style}" 
+                            onclick="navigate('${option.next}', '${stepKey}', '${option.text}')"
+                        >
+                            ${option.text}
+                        </button>
                     </div>
+                `).join('')}
+            </div>
+        </div>
+    `;
+}
 
-                    <!-- 問題描述文字 (調整為 text-2xl) -->
-                    <div class="text-2xl text-gray-700 mb-10 p-6 md:p-8 bg-pink-50 border-4 border-primary-pink rounded-2xl shadow-inner font-medium leading-relaxed text-center">
-                        ${step.question}
-                    </div>
-                    
-                    <!-- 選項按鈕容器 (每個選項作為一個獨立的卡片) -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-                        ${step.options.map(option => `
-                            <!-- 單個選項卡片包裝 (獨立底色) -->
-                            <div class="p-5 rounded-2xl shadow-xl border-4 ${bgColors[option.style] || 'bg-gray-100 border-gray-300'} hover:shadow-2xl transition duration-300 transform hover:-translate-y-0.5">
-                                <button 
-                                    class="btn w-full ${option.style}" 
-                                    onclick="navigate('${option.next}', '${stepKey}', '${option.text}')"
-                                >
-                                    ${option.text}
-                                </button>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-            `;
-        }
+function renderFinalResult(result) {
+    let targetUrl = '#';
+    switch(currentStepKey) {
+        case 'R_QCC': targetUrl = '書面格式_問題型.html'; break;
+        case 'R_RCA': targetUrl = '書面格式_RCA.html'; break;
+        case 'R_HFMEA': targetUrl = '書面格式_HFMEA.html'; break;
+        case 'R_GOAL': targetUrl = '書面格式_課達型.html'; break;
+    }
 
-        /** 渲染最終結果卡片 */
-        function renderFinalResult(result, currentKey) {
-            // --- 確定外部文件名稱與樣式 (符合使用者需求) ---
-            let fileName = '詳細步驟.html';
-            let targetIcon = '▶️';
-            let buttonStyle = 'bg-primary-pink text-white border-b-4 border-pink-700 hover:bg-pink-600';
-            
-            if (currentKey === 'R_RCA' || currentKey === 'R_QCC') {
-                fileName = '書面格式_問題型.html'; // 問題解決型
-                targetIcon = '📝';
-                buttonStyle = 'bg-issue-red text-white border-b-4 border-red-700 hover:bg-red-600';
-            } else if (currentKey === 'R_GOAL') {
-                fileName = '書面格式_課題型.html'; // 課題達成型
-                targetIcon = '📝';
-                buttonStyle = 'bg-goal-green text-white border-b-4 border-green-700 hover:bg-green-600';
-            } else if (currentKey === 'R_HFMEA') {
-                fileName = '書面格式_預防型.html'; // 風險預防型
-                targetIcon = '📝';
-                buttonStyle = 'bg-secondary-purple text-white border-b-4 border-violet-700 hover:bg-violet-600';
-            }
-            
-            // The detail key remains D_XXX for internal navigation
-            // const detailKey = 'D_' + currentKey.split('_')[1]; // 註釋掉，改用 loadExternalPage 處理導航
-
-            return `
-                <div class="${result.bgColor} p-6 md:p-12 rounded-3xl shadow-2xl border-t-8 ${result.borderColor} w-full decision-card animate-popIn">
-
-                    <div class="text-center mb-6">
-                        <span class="text-8xl mb-4 block animate-bounce-once">${result.icon}</span>
-                        <!-- 加大結果標題字體 -->
-                        <h2 class="text-4xl md:text-5xl font-extrabold ${result.textColor} mb-4">${result.title}</h2>
-                        
-                        <!-- 強調最終建議的工具 -->
-                        <div class="inline-block bg-white/70 p-4 rounded-xl border-4 border-dashed ${result.borderColor} shadow-lg">
-                           <p class="text-2xl md:text-4xl font-extrabold text-gray-800">
-                                ✅ 建議您採用：${result.methodology}
-                            </p>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-white p-6 rounded-xl border-2 ${result.borderColor}/50 shadow-inner mb-8">
-                        <h3 class="text-xl font-bold text-gray-800 mb-3 border-b-2 pb-2">🎯 目的與重點摘要</h3>
-                        <!-- 加大目的描述字體 -->
-                        <p class="text-xl text-gray-600 leading-relaxed">${result.purpose}</p>
-                    </div>
-
-                    <p class="text-base text-center text-gray-500 mb-4 font-semibold">
-                        恭喜您完成評估！點擊下方按鈕查看詳細的實施流程。
+    return `
+        <div class="${result.bgColor} p-6 md:p-12 rounded-3xl shadow-2xl border-t-8 ${result.borderColor} w-full decision-card animate-popIn">
+            <div class="text-center mb-6">
+                <span class="text-8xl mb-4 block animate-bounce-once">${result.icon}</span>
+                <h2 class="text-4xl md:text-5xl font-extrabold ${result.textColor} mb-4">${result.title}</h2>
+                <div class="inline-block bg-white/70 p-4 rounded-xl border-4 border-dashed ${result.borderColor} shadow-lg">
+                   <p class="text-2xl md:text-4xl font-extrabold text-gray-800">
+                        ✅ 建議您採用：${result.methodology}
                     </p>
-                    
-                    <!-- 前往步驟按鈕 (已修改為使用 loadExternalPage 函數和 ID) -->
-                    <div class="text-center space-y-4">
-                        <button id="nav-btn-form"
-                            onclick="loadExternalPage('${fileName}', '${currentKey}')"
-                            class="${buttonStyle} active:translate-y-1 active:shadow-sm text-lg font-bold px-8 py-3 rounded-full shadow-md transition duration-300 w-full md:w-auto">
-                            ${targetIcon} 前往【${result.methodology.split('(')[0]}】${fileName}
-                        </button>
-                    </div>
-                    <!-- --------------------- -->
                 </div>
-            `;
+            </div>
+            <div class="bg-white p-6 rounded-xl border-2 ${result.borderColor}/50 shadow-inner mb-8">
+                <h3 class="text-xl font-bold text-gray-800 mb-3 border-b-2 pb-2">🎯 目的與重點摘要</h3>
+                <p class="text-xl text-gray-600 leading-relaxed">${result.purpose}</p>
+            </div>
+            <p class="text-base text-center text-gray-500 mb-4 font-semibold">恭喜您完成評估！</p>
+            <div class="text-center space-y-4">
+                <button class="bg-primary-pink text-white border-b-4 border-pink-700 hover:bg-pink-600 active:translate-y-1 active:shadow-sm text-lg font-bold px-8 py-3 rounded-full shadow-md transition duration-300 w-full md:w-auto"
+                    onclick="window.location.href='${targetUrl}';">
+                    ▶️ 前往【${result.methodology}】詳細實施步驟
+                </button>
+            </div>
+        </div>
+    `;
+}
+
+function renderLadder() {
+    const historyHtml = history.map(renderCompletedNode).join('');
+    const isResult = currentStepKey.startsWith('R_');
+    let currentStepText;
+    let currentStepClasses;
+
+    if (isResult) {
+        const resultData = decisionTree[currentStepKey];
+        currentStepText = `最終推薦：${resultData.methodology}`;
+        currentStepClasses = 'breadcrumb-node-result'; 
+    } else {
+        const currentStepTitle = getStepTitle(currentStepKey);
+        currentStepText = `${history.length + 1}. ${currentStepTitle} (進行中)`;
+        currentStepClasses = 'breadcrumb-node-active';
+    }
+
+    const currentStepHtml = `
+        <div class="flex items-center">
+            <span class="breadcrumb-node ${currentStepClasses}">
+                ${currentStepText}
+            </span>
+        </div>
+    `;
+
+    historyTrailDiv.innerHTML = historyHtml + currentStepHtml;
+
+    questionCardContainer.innerHTML = '';
+    const stepData = decisionTree[currentStepKey];
+    let cardHtml = '';
+
+    if (currentStepKey.startsWith('R_')) {
+        cardHtml = renderFinalResult(stepData);
+    } else if (stepData) {
+        cardHtml = renderCurrentQuestion(stepData, currentStepKey);
+    } else {
+        cardHtml = `<div class="text-red-500 text-center p-10">錯誤：找不到步驟 ${currentStepKey}</div>`;
+    }
+
+    questionCardContainer.innerHTML = cardHtml;
+    document.getElementById('app').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function navigate(nextState, questionKey, selectedText) {
+    if (questionKey && decisionTree[questionKey]) {
+        history.push({ key: questionKey, selection: nextState, text: selectedText });
+    } else if (nextState === 'Q1') {
+        history = [];
+    }
+    currentStepKey = nextState;
+    renderLadder();
+}
+
+function rewindToStep(targetKey) {
+    const targetIndex = history.findIndex(item => item.key === targetKey);
+    if (targetIndex !== -1) {
+        history = history.slice(0, targetIndex);
+        navigate(targetKey);
+    }
+}
+
+(function init() {
+    const style = document.createElement('style');
+    style.innerHTML += `
+        .animate-bounce-once { animation: bounce 0.8s ease-in-out 1; }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            20% { transform: translateY(-15px); }
+            40% { transform: translateY(0); }
+            60% { transform: translateY(-7px); }
+            80% { transform: translateY(0); }
         }
-
-        /** 渲染詳細實施步驟卡片 (新增) */
-        function renderDetailedSteps(data, detailKey) {
-            // D_GOAL -> R_GOAL
-            const resultKey = 'R_' + detailKey.split('_')[1];
-            const resultData = decisionTree[resultKey];
-
-            return `
-                <div class="bg-white p-6 md:p-10 rounded-3xl shadow-2xl border-4 border-secondary-purple/50 w-full decision-card animate-popIn">
-                    
-                    <div class="text-center mb-8">
-                        <span class="text-6xl mb-4 block ${data.color}">${data.icon}</span>
-                        <h2 class="text-3xl md:text-4xl font-extrabold text-gray-800 mb-3">${data.title}</h2>
-                        <p class="text-xl text-gray-600 font-medium">— ${resultData.methodology} —</p>
-                    </div>
-
-                    <!-- 步驟列表 -->
-                    <div class="space-y-6">
-                        ${data.steps.map(step => `
-                            <div class="flex items-start bg-bg-paper p-4 md:p-6 rounded-xl border-l-8 border-secondary-purple shadow-md">
-                                <div class="mr-4 text-3xl flex-shrink-0">
-                                    ${step.icon}
-                                </div>
-                                <div>
-                                    <h3 class="text-lg md:text-xl font-bold text-gray-800 mb-1">${step.num}. ${step.title}</h3>
-                                    <p class="text-sm md:text-base text-gray-600 leading-relaxed">${step.detail}</p>
-                                </div>
-                            </div>
-                        `).join('')}
-                    </div>
-
-                    <!-- 返回按鈕 -->
-                    <div class="mt-10 text-center">
-                        <button class="bg-secondary-purple text-white border-b-4 border-violet-700 hover:bg-violet-600 active:translate-y-1 active:shadow-sm text-lg font-bold px-8 py-3 rounded-full shadow-md transition duration-300 w-full md:w-auto"
-                            onclick="navigate('${resultKey}')">
-                            ↩️ 返回【${resultData.methodology}】結果摘要
-                        </button>
-                    </div>
-                </div>
-            `;
-        }
-
-
-        // --- 主渲染函數 (Main Render Function) ---
-        function renderLadder() {
-            // 1. 渲染歷史紀錄 (麵包屑)
-            const questionHistory = history.filter(item => item.key.startsWith('Q'));
-            const resultHistory = history.find(item => item.key.startsWith('R_')) || (currentStepKey.startsWith('R_') ? { key: currentStepKey } : null);
-            
-            let historyHtml = questionHistory.map(renderCompletedNode).join('');
-            
-            // 如果已經有結果，則將結果作為已完成步驟加入歷史 trail
-            if (resultHistory && !currentStepKey.startsWith('R_') && !currentStepKey.startsWith('D_')) {
-                historyHtml += renderCompletedNode(resultHistory, questionHistory.length);
-            }
-            
-            // 處理當前步驟的標記
-            const isQuestion = currentStepKey.startsWith('Q');
-            const isResult = currentStepKey.startsWith('R_');
-            const isDetail = currentStepKey.startsWith('D_');
-            
-            let currentStepText;
-            let currentStepClasses; 
-
-            if (isDetail) {
-                 // 詳細步驟頁：顯示工具名稱 + (詳細步驟)
-                const detailData = decisionTree[currentStepKey];
-                const resultKey = 'R_' + currentStepKey.split('_')[1];
-                const methodology = decisionTree[resultKey].methodology.split('(')[0];
-                currentStepText = `${methodology} (詳細步驟)`;
-                currentStepClasses = 'breadcrumb-node-active bg-primary-pink/90'; // 特別醒目
-            } else if (isResult) {
-                // 結果頁：顯示最終推薦的工具名稱 (淺色)
-                const resultData = decisionTree[currentStepKey];
-                currentStepText = `最終推薦：${resultData.methodology.split('(')[0]}`;
-                currentStepClasses = 'breadcrumb-node-result'; 
-            } else if (isQuestion) {
-                // 問答頁：顯示關卡名稱 (深粉色)
-                const currentStepTitle = getStepTitle(currentStepKey);
-                currentStepText = `${questionHistory.length + 1}. ${currentStepTitle} (進行中)`;
-                currentStepClasses = 'breadcrumb-node-active';
-            } else {
-                 // 初始或其他
-                currentStepText = "開始";
-                currentStepClasses = 'breadcrumb-node-active';
-            }
-            
-            const currentStepHtml = `
-                <div class="flex items-center">
-                    <span class="breadcrumb-node ${currentStepClasses}">
-                        ${currentStepText}
-                    </span>
-                </div>
-            `;
-            
-            historyTrailDiv.innerHTML = historyHtml + currentStepHtml;
-
-
-            // 2. 渲染當前問題或結果卡片
-            questionCardContainer.innerHTML = '';
-            const stepData = decisionTree[currentStepKey];
-            let cardHtml = '';
-
-            if (isDetail) {
-                cardHtml = renderDetailedSteps(stepData, currentStepKey);
-            } else if (isResult) {
-                cardHtml = renderFinalResult(stepData, currentStepKey);
-            } else if (isQuestion) {
-                cardHtml = renderCurrentQuestion(stepData, currentStepKey);
-            } else {
-                cardHtml = `<div class="text-red-500 text-center p-10">錯誤：找不到步驟 ${currentStepKey}</div>`;
-            }
-            
-            questionCardContainer.innerHTML = cardHtml;
-
-            // 確保頁面滾動到最上方
-            document.getElementById('app').scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-
-        // --- 導航函數 (Navigation Function) ---
-        // 只有 Q1, Q2, Q3 的選擇才會被記錄到 history 裡
-        function navigate(nextState, questionKey, selectedText) {
-            // 只有問答步驟 (Q1, Q2, Q3) 才需要記錄在歷史路徑中
-            if (questionKey && questionKey.startsWith('Q') && decisionTree[questionKey]) {
-                // 檢查是否回到過去步驟，如果是，則先截斷歷史 (避免重複記錄)
-                const targetIndex = history.findIndex(item => item.key === questionKey);
-                if (targetIndex !== -1) {
-                     history = history.slice(0, targetIndex);
-                }
-                
-                // 記錄當前步驟和選擇的結果
-                history.push({ key: questionKey, selection: nextState, text: selectedText });
-
-                // 如果下一個狀態是 R_XXX，也要將 R_XXX 記錄在 history 中，以便在麵包屑中顯示
-                if (nextState.startsWith('R_')) {
-                    history.push({ key: nextState, selection: '', text: decisionTree[nextState].methodology });
-                }
-
-            } else if (nextState === 'Q1') {
-                // 這是重置邏輯
-                history = [];
-            }
-            // 如果是從結果頁導航到詳細頁，或是從詳細頁導航回結果頁，不影響 history 堆疊，只改變 currentStepKey
-            
-            currentStepKey = nextState;
-            renderLadder();
-        }
-
-        // --- 回溯函數 (Rewind Function) ---
-        function rewindToStep(targetKey) {
-            // 回溯時，只保留到目標步驟之前的 Q 步驟
-            let targetIndex = history.findIndex(item => item.key === targetKey);
-            
-            if (targetIndex !== -1) {
-                // 如果目標是 R_XXX，確保回溯到產生 R_XXX 的 Q 步驟
-                if (targetKey.startsWith('R_')) {
-                    const originatingQ = history.slice(0, targetIndex).reverse().find(item => item.key.startsWith('Q'));
-                    if (originatingQ) {
-                        targetIndex = history.findIndex(item => item.key === originatingQ.key);
-                    }
-                }
-                
-                // 截斷歷史，只保留到目標步驟之前的部分
-                history = history.slice(0, targetIndex);
-                // 導航到目標步驟
-                currentStepKey = targetKey.startsWith('R_') ? targetKey : history[targetIndex - 1]?.selection || targetKey;
-                
-                // 強制導航到目標步驟
-                currentStepKey = targetKey;
-
-                renderLadder();
-            }
-        }
-
-        // 應用程式啟動時，導航到第一個問題
-        (function init() {
-             // 定義讓結果圖示彈跳一次的 CSS 動畫
-            const style = document.createElement('style');
-            style.innerHTML += `
-                .animate-bounce-once {
-                    animation: bounce 0.8s ease-in-out 1;
-                }
-                @keyframes bounce {
-                    0%, 100% { transform: translateY(0); }
-                    20% { transform: translateY(-15px); }
-                    40% { transform: translateY(0); }
-                    60% { transform: translateY(-7px); }
-                    80% { transform: translateY(0); }
-                }
-            `;
-            document.head.appendChild(style);
-            
-            // 讓 rewindToStep, loadExternalPage 可以在全域環境中使用
-            window.rewindToStep = rewindToStep; 
-            window.loadExternalPage = loadExternalPage; // 確保新函數可被全域調用
-
-            navigate('Q1'); // 立即渲染第一個步驟
-        })();
-    </script>
+    `;
+    document.head.appendChild(style);
+    navigate('Q1');
+})();
+</script>
 
 </body>
 </html>
