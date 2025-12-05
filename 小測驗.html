@@ -6,7 +6,7 @@
     <title>QCC 知識挑戰：趣味版</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- 使用 Noto Sans TC 確保中文顯示美觀且親切 -->
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght=500;700;900&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Noto Sans TC', sans-serif;
@@ -383,7 +383,11 @@
                 optionElement.className = `answer-option bg-white p-5 md:p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 border-purple-200 text-lg md:text-xl font-medium text-gray-700`;
                 optionElement.innerHTML = `
             
-                    <span class="inline-block w-6 h-6 text-center bg-purple-100 text-purple-600 rounded-full mr-3 border-2 border-purple-300 font-bold">${String.fromCharCode(65 + index)}</span>
+                    <!-- START: 根據用戶需求修改的圈圈樣式 -->
+                    <!-- 使用 inline-flex 和 items-center/justify-center 實現完美置中 -->
+                    <!-- 使用 w-8 h-8 增大圈圈尺寸 -->
+                    <span class="inline-flex items-center justify-center w-8 h-8 bg-purple-100 text-purple-700 rounded-full mr-3 border-2 border-purple-400 font-extrabold text-lg">${String.fromCharCode(65 + index)}</span>
+                    <!-- END: 根據用戶需求修改的圈圈樣式 -->
                     ${option}
                 `;
                 optionElement.dataset.index = index;
@@ -557,11 +561,12 @@
 
             analysisHTML += `</ul>`;
             domRefs.resultContainer.innerHTML = `
-                <!-- 更改: 增大結果標題字體至 md:text-6xl -->
-                <h2 class="text-4xl md:text-6xl font-extrabold text-center mb-4 ${resultClass}">${resultTitle}</h2>
+                <!-- 更改: 增大結果標題字體至 md:text-4xl -->
+                <h2 class="text-4xl md:text-4xl font-extrabold text-center mb-4 ${resultClass}">${resultTitle}</h2>
                 <!-- 更改: 增大總得分字體至 md:text-2xl -->
                 <p class="text-center text-xl md:text-2xl text-gray-600 mb-6">總得分：${userScore} / ${totalQuestions} 題</p>
-                <div class="p-4 rounded-xl ${resultClass} text-center font-semibold">
+                <!-- 🎯 這裡修改了字體大小：將 md:text-2xl 改為 md:text-xl -->
+                <div class="p-4 rounded-xl ${resultClass} text-center font-semibold text-xl md:text-xl">
                     ${resultText}
             
                 </div>
