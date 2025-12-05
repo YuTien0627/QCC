@@ -14,11 +14,11 @@
                         sans: ['Inter', 'Noto Sans TC', 'sans-serif'],
                     },
                     colors: {
-                        'primary-pink': '#F472B6',      // 主色調：可愛粉
-                        'secondary-purple': '#A78BFA',  // 次要色調：夢幻紫
-                        'goal-green': '#34D399',        // 達成目標：清新綠
-                        'issue-red': '#F87171',         // 問題警示：活力紅
-                        'card-yellow': '#FFFBEB',       // 卡片背景色：奶油黃
+                        'primary-pink': '#F472B6',
+                        'secondary-purple': '#A78BFA',
+                        'goal-green': '#34D399',
+                        'issue-red': '#F87171',
+                        'card-yellow': '#FFFBEB',
                     }
                 }
             }
@@ -28,7 +28,7 @@
     <style>
         body {
             font-family: 'Inter', 'Noto Sans TC', sans-serif;
-            background: transparent; /* 最外層背景透明 */
+            background: transparent; /* 外層透明 */
         }
 
         .btn {
@@ -54,7 +54,7 @@
 
 <body class="flex justify-center p-4">
 
-<div id="app" class="w-full max-w-4xl bg-transparent shadow-2xl rounded-3xl p-6 md:p-12 border-4 border-primary-pink/30 animate-popIn mx-auto mt-10 mb-10">
+<div id="app" class="w-full max-w-4xl bg-white shadow-2xl rounded-3xl p-6 md:p-12 border-4 border-primary-pink/30 animate-popIn mx-auto mt-10 mb-10">
     <header class="text-center mb-8 md:mb-10">
         <h1 class="text-4xl md:text-5xl font-extrabold text-gray-800 mb-3 leading-tight">
             🛠️ 品管工具選哪招？跟我走！ 💡
@@ -139,7 +139,7 @@ function renderCurrentQuestion(step, stepKey) {
     const stepNumber = stepKey.replace('Q', '');
     
     return `
-        <div class="bg-card-yellow p-8 md:p-12 rounded-3xl shadow-2xl border-4 border-primary-pink/50 w-full decision-card animate-popIn fun-question-card">
+        <div class="bg-white p-8 md:p-12 rounded-3xl shadow-2xl border-4 border-primary-pink/50 w-full decision-card animate-popIn fun-question-card">
             <div class="text-center mb-8">
                 <span class="text-6xl mb-4 block">${step.icon}</span>
                 <h2 class="text-2xl md:text-4xl font-extrabold text-gray-800">${stepNumber}. ${step.title}</h2>
@@ -173,7 +173,7 @@ function renderFinalResult(result) {
     }
 
     return `
-        <div class="bg-card-yellow p-6 md:p-12 rounded-3xl shadow-2xl border-t-8 border-primary-pink w-full decision-card animate-popIn">
+        <div class="bg-white p-6 md:p-12 rounded-3xl shadow-2xl border-t-8 border-primary-pink w-full decision-card animate-popIn">
             <div class="text-center mb-6">
                 <span class="text-8xl mb-4 block animate-bounce-once">${result.icon}</span>
                 <h2 class="text-4xl md:text-5xl font-extrabold text-primary-pink mb-4">${result.title}</h2>
@@ -237,7 +237,11 @@ function renderLadder() {
     }
 
     questionCardContainer.innerHTML = cardHtml;
-    document.getElementById('app').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    // 滾動到最上方
+    setTimeout(() => {
+        document.getElementById('app').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 50);
 }
 
 function navigate(nextState, questionKey, selectedText) {
