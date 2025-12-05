@@ -92,21 +92,22 @@ function showToolTabs(){
 }
 
 function loadExternalPage(page, btn){
-    if(btn){
-        const parentTabs = btn.parentElement.querySelectorAll('button');
-        parentTabs.forEach(b=>b.classList.remove('bg-teal-300','text-white','font-bold'));
-        btn.classList.add('bg-teal-300','text-white','font-bold');
-    }
-    if(btn?.closest('#tool-tabs')){
-        document.getElementById('tool-tabs').classList.remove('hidden');
-        document.getElementById('format-tabs').classList.add('hidden');
-    } else if(btn?.closest('#format-tabs')){
-        document.getElementById('format-tabs').classList.remove('hidden');
-        document.getElementById('tool-tabs').classList.add('hidden');
-    } else {
-        document.getElementById('format-tabs').classList.add('hidden');
-        document.getElementById('tool-tabs').classList.add('hidden');
-    }
+// 如果是工具子頁 → 顯示工具 tabs
+if (btn && btn.closest('#tool-tabs')) {
+    document.getElementById('tool-tabs').classList.remove('hidden');
+    document.getElementById('format-tabs').classList.add('hidden');
+
+// 如果是書面格式子頁 → 顯示書面格式第二級 tabs
+} else if (btn && btn.closest('#format-tabs')) {
+    document.getElementById('format-tabs').classList.remove('hidden');
+    document.getElementById('tool-tabs').classList.add('hidden');
+
+// 否則 → 隱藏所有子 tabs
+} else {
+    document.getElementById('format-tabs').classList.add('hidden');
+    document.getElementById('tool-tabs').classList.add('hidden');
+}
+
     loadIframe(page);
 }
 
@@ -147,7 +148,7 @@ function updateLastUpdated() {
     const parts = formatter.formatToParts(lastModifiedDate);
     const get = type => parts.find(p => p.type === type)?.value || '';
     const year = get('year'), month = get('month'), day = get('day'), hour = get('hour'), minute = get('minute');
-    document.getElementById("last-updated").textContent = `最後更新時間: ${year}年${month}月${day}日 ${hour}:${minute}`;
+    document.getElementById("last-updated").textContent = `最後更新時間：${year}年${month}月${day}日 ${hour}:${minute}`;
 }
 
 // 初始化
