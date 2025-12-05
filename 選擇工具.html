@@ -105,10 +105,12 @@
         /* ----------------------------------------------------- */
     </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-4">
+<!-- 調整 body class：移除 items-center，讓內容從頂部開始流動 -->
+<body class="min-h-screen flex justify-center p-4">
 
     <!-- 主內容區塊 -->
-    <div id="app" class="w-full max-w-4xl bg-bg-paper shadow-2xl rounded-3xl p-6 md:p-12 border-4 border-primary-pink/30 animate-popIn">
+    <!-- 調整：新增 my-auto 來實現垂直置中，並確保內容過長時可以正常捲動 -->
+    <div id="app" class="w-full max-w-4xl bg-bg-paper shadow-2xl rounded-3xl p-6 md:p-12 border-4 border-primary-pink/30 animate-popIn my-auto">
         <!-- 應用程式標頭 -->
         <header class="text-center mb-8 md:mb-10">
             <h1 class="text-4xl md:text-5xl font-extrabold text-gray-800 mb-3 leading-tight">
@@ -196,7 +198,7 @@
             return "最終結果";
         }
 
-        /** 渲染一個已完成的步驟節點 (水平麵包屑樣式) */
+        /** 渲染一個已完成的步驟節點 (水平麵包包屑樣式) */
         function renderCompletedNode(item, index) {
             const stepTitle = getStepTitle(item.key);
             const stepNumber = index + 1; // 從 1 開始編號
@@ -207,7 +209,7 @@
                     <button class="breadcrumb-node group" onclick="rewindToStep('${item.key}')" title="點擊回到此步驟">
                         <span class="mr-2 opacity-80 group-hover:opacity-100">${stepNumber}. ${stepTitle}</span>
                         <!-- 簡短的選擇內容 -->
-                        <span class="font-normal text-xs opacity-70 group-hover:opacity-90">(${item.text.split(' ')[0]})</span>
+                        <span class="font-normal text-xs opacity-70 group-hover:opacity:90">(${item.text.split(' ')[0]})</span>
                     </button>
                     <!-- 分隔符號 -->
                     <span class="text-secondary-purple mx-1.5 md:mx-2 text-2xl font-bold">»</span>
