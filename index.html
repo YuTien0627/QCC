@@ -5,14 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>品管圈（QCC）新手入門互動指南</title>
 <script src="https://cdn.tailwindcss.com"></script>
+
 <style>
     body { font-family: 'Inter', sans-serif; background-color: #ecfdf5; }
-    .nav-button { transition: all 0.3s ease-in-out; border-bottom: 3px solid transparent; }
+    .nav-button { transition: 0.3s; border-bottom: 3px solid transparent; }
     .nav-button.active { color: #0d9488; border-color: #0d9488; font-weight: 700; }
-    .format-tab, .sub-tab { transition: all 0.3s ease-in-out; min-height: 40px; }
-    #content-area { width: 100%; }
+
+    .format-tab, .sub-tab { transition: 0.3s; min-height: 40px; }
+    .active-tab { background-color: #0d9488 !important; color: white !important; font-weight: 700 !important; }
+
     #content-frame { width: 100%; border: none; min-height: 500px; }
-    #last-updated { text-align: right; margin-top: 1rem; color: #555; font-size: 0.9rem; }
+    #last-updated { margin-top: 1rem; text-align: right; color: #555; font-size: 0.9rem; }
 </style>
 </head>
 <body class="antialiased">
@@ -24,7 +27,6 @@
         <div class="flex flex-col items-center">
             <div class="flex items-center justify-center mb-2">
                 <img src="https://raw.githubusercontent.com/YuTien0627/QCC/main/%E5%93%81%E7%AE%A1%E9%83%A8LOGO%20(%E5%8E%BB%E8%83%8C).png"
-                     alt="奇美醫院品質管理部 Logo"
                      class="w-12 h-12 sm:w-14 sm:h-14 mr-3 object-contain">
                 <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-900">品管圈（QCC）新手入門互動指南</h1>
             </div>
@@ -32,126 +34,128 @@
         </div>
     </header>
 
-    <!-- 外層導航列 -->
+    <!-- 第一層導航 -->
     <nav class="sticky top-0 z-10 flex justify-center bg-white p-2 rounded-xl shadow-lg mb-4 space-x-4">
-        <button id="nav-btn-home" onclick="goHome()" class="nav-button active text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">🚀 首頁</button>
-        <button id="nav-btn-selection" onclick="showToolTabs()" class="nav-button text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">🎁 工具大禮包</button>
-        <button id="nav-btn-format" onclick="showFormatTabs()" class="nav-button text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">📝 書面格式</button>
-        <button id="nav-btn-tools" onclick="loadExternalPage('參考資料.html','nav-btn-tools')" class="nav-button text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">🛠️ 參考資料</button>
-        <button id="nav-btn-quiz" onclick="loadExternalPage('小測驗.html','nav-btn-quiz')" class="nav-button text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">🎯 小試身手</button>
+        <button id="nav-btn-home" onclick="goHome()" class="nav-button active text-lg px-6 py-2">🚀 首頁</button>
+
+        <button id="nav-btn-selection" onclick="showToolTabs()" class="nav-button text-lg px-6 py-2">🎁 工具大禮包</button>
+
+        <button id="nav-btn-format" onclick="showFormatTabs()" class="nav-button text-lg px-6 py-2">📝 書面格式</button>
+
+        <button id="nav-btn-tools" onclick="loadExternalPage('參考資料.html', 'nav-btn-tools')" class="nav-button text-lg px-6 py-2">🛠️ 參考資料</button>
+
+        <button id="nav-btn-quiz" onclick="loadExternalPage('小測驗.html', 'nav-btn-quiz')" class="nav-button text-lg px-6 py-2">🎯 小試身手</button>
     </nav>
 
-    <!-- 第二層書面格式 tabs -->
-    <div id="format-tabs" class="flex justify-center mt-4 space-x-3 min-h-[50px] hidden">
-        <button class="format-tab px-4 py-2 rounded-lg bg-gray-200" onclick="loadFormatPage('書面格式_問題型.html', this)">🧩 問題解決型</button>
-        <button class="format-tab px-4 py-2 rounded-lg bg-gray-200" onclick="loadFormatPage('書面格式_課達型.html', this)">💡 課題達成型</button>
-        <button class="format-tab px-4 py-2 rounded-lg bg-gray-200" onclick="loadFormatPage('書面格式_RCA.html', this)">🔍 RCA</button>
-        <button class="format-tab px-4 py-2 rounded-lg bg-gray-200" onclick="loadFormatPage('書面格式_HFMEA.html', this)">⚠️ HFMEA</button>
+    <!-- 書面格式 tabs -->
+    <div id="format-tabs" class="flex justify-center mt-4 space-x-3 hidden">
+        <button class="format-tab px-4 py-2 bg-gray-200 rounded-lg" onclick="loadFormatPage('書面格式_問題型.html', this)">🧩 問題解決型</button>
+        <button class="format-tab px-4 py-2 bg-gray-200 rounded-lg" onclick="loadFormatPage('書面格式_課達型.html', this)">💡 課題達成型</button>
+        <button class="format-tab px-4 py-2 bg-gray-200 rounded-lg" onclick="loadFormatPage('書面格式_RCA.html', this)">🔍 RCA</button>
+        <button class="format-tab px-4 py-2 bg-gray-200 rounded-lg" onclick="loadFormatPage('書面格式_HFMEA.html', this)">⚠️ HFMEA</button>
     </div>
 
-    <!-- 第二層工具大禮包 tabs -->
-    <div id="tool-tabs" class="flex justify-center mt-4 space-x-3 min-h-[50px] hidden">
-        <button class="sub-tab px-4 py-2 rounded-lg bg-gray-200" onclick="loadExternalPage('選擇工具.html', this)">🛠️ 品管工具</button>
-        <button class="sub-tab px-4 py-2 rounded-lg bg-gray-200" onclick="loadExternalPage('品管手法.html', this)">📚 品管手法</button>
+    <!-- 工具 tabs -->
+    <div id="tool-tabs" class="flex justify-center mt-4 space-x-3 hidden">
+        <button class="sub-tab px-4 py-2 bg-gray-200 rounded-lg" onclick="loadToolPage('選擇工具.html', this)">🛠️ 品管工具</button>
+        <button class="sub-tab px-4 py-2 bg-gray-200 rounded-lg" onclick="loadToolPage('品管手法.html', this)">📚 品管手法</button>
     </div>
 
-    <!-- 內容區 -->
-    <div id="content-area" class="px-4">
-        <iframe id="content-frame" src=""></iframe>
+    <!-- 內容 -->
+    <div class="px-4">
+        <iframe id="content-frame"></iframe>
     </div>
 
-    <!-- 最後更新時間 -->
+    <!-- 更新時間 -->
     <div id="last-updated"></div>
-
 </div>
 
 <script>
+/* ------------------- 共用功能 ------------------- */
 function activateNav(id){
-    document.querySelectorAll('.nav-button').forEach(btn=>btn.classList.remove('active'));
+    document.querySelectorAll('.nav-button').forEach(btn => btn.classList.remove('active'));
     document.getElementById(id)?.classList.add('active');
 }
 
+function clearTabs() {
+    document.getElementById('format-tabs').classList.add('hidden');
+    document.getElementById('tool-tabs').classList.add('hidden');
+    document.querySelectorAll('.format-tab, .sub-tab')
+        .forEach(el => el.classList.remove('active-tab'));
+}
+
+/* ------------------- 書面格式 ------------------- */
 function showFormatTabs(){
     activateNav('nav-btn-format');
+    clearTabs();
     document.getElementById('format-tabs').classList.remove('hidden');
-    document.getElementById('tool-tabs').classList.add('hidden');
-    loadFormatPage('書面格式_問題型.html', document.querySelectorAll('.format-tab')[0]);
+    loadFormatPage('書面格式_問題型.html', document.querySelector('.format-tab'));
 }
 
 function loadFormatPage(page, btn){
-    document.querySelectorAll('.format-tab').forEach(b=>b.classList.remove('bg-teal-300','text-white','font-bold'));
-    btn.classList.add('bg-teal-300','text-white','font-bold');
+    document.querySelectorAll('.format-tab').forEach(el => el.classList.remove('active-tab'));
+    btn.classList.add('active-tab');
     loadIframe(page);
 }
 
+/* ------------------- 工具大禮包 ------------------- */
 function showToolTabs(){
     activateNav('nav-btn-selection');
+    clearTabs();
     document.getElementById('tool-tabs').classList.remove('hidden');
-    document.getElementById('format-tabs').classList.add('hidden');
-    loadExternalPage('選擇工具.html', document.querySelectorAll('#tool-tabs .sub-tab')[0]);
+    loadToolPage('選擇工具.html', document.querySelector('#tool-tabs .sub-tab'));
 }
 
-function loadExternalPage(page, btn){
-// 如果是工具子頁 → 顯示工具 tabs
-if (btn && btn.closest('#tool-tabs')) {
-    document.getElementById('tool-tabs').classList.remove('hidden');
-    document.getElementById('format-tabs').classList.add('hidden');
-
-// 如果是書面格式子頁 → 顯示書面格式第二級 tabs
-} else if (btn && btn.closest('#format-tabs')) {
-    document.getElementById('format-tabs').classList.remove('hidden');
-    document.getElementById('tool-tabs').classList.add('hidden');
-
-// 否則 → 隱藏所有子 tabs
-} else {
-    document.getElementById('format-tabs').classList.add('hidden');
-    document.getElementById('tool-tabs').classList.add('hidden');
-}
-
+function loadToolPage(page, btn){
+    document.querySelectorAll('.sub-tab').forEach(el => el.classList.remove('active-tab'));
+    btn.classList.add('active-tab');
     loadIframe(page);
 }
 
-// iframe 自動撐高函數
+/* ------------------- 參考資料 / 小測驗 ------------------- */
+function loadExternalPage(page, navId){
+    activateNav(navId);
+    clearTabs();
+    loadIframe(page);
+}
+
+/* ------------------- iframe 載入與撐高 ------------------- */
 function loadIframe(page){
     const iframe = document.getElementById('content-frame');
     iframe.src = page;
 
-    iframe.onload = function() {
+    iframe.onload = () => {
         try {
-            // 自動撐高 iframe
             const doc = iframe.contentDocument || iframe.contentWindow.document;
             iframe.style.height = doc.body.scrollHeight + 'px';
         } catch(e){
-            // 若跨域，使用預設高度
             iframe.style.height = '1200px';
         }
     };
-    updateLastUpdated();
+
+    updateTime();
 }
 
+/* ------------------- 首頁 ------------------- */
 function goHome(){
     activateNav('nav-btn-home');
-    document.getElementById('format-tabs').classList.add('hidden');
-    document.getElementById('tool-tabs').classList.add('hidden');
+    clearTabs();
     loadIframe('首頁.html');
 }
 
-function updateLastUpdated() {
-    const lastModifiedStr = document.lastModified;
-    const lastModifiedDate = new Date(lastModifiedStr);
-    if (isNaN(lastModifiedDate.getTime())) return;
-    const formatter = new Intl.DateTimeFormat('zh-TW', {
+/* ------------------- 更新時間 ------------------- */
+function updateTime(){
+    const t = new Date();
+    const fmt = new Intl.DateTimeFormat('zh-TW', {
         timeZone: 'Asia/Taipei',
-        year: 'numeric', month: '2-digit', day: '2-digit',
-        hour: '2-digit', minute: '2-digit', hour12: false
+        year:'numeric', month:'2-digit', day:'2-digit',
+        hour:'2-digit', minute:'2-digit', hour12:false
     });
-    const parts = formatter.formatToParts(lastModifiedDate);
-    const get = type => parts.find(p => p.type === type)?.value || '';
-    const year = get('year'), month = get('month'), day = get('day'), hour = get('hour'), minute = get('minute');
-    document.getElementById("last-updated").textContent = `最後更新時間：${year}年${month}月${day}日 ${hour}:${minute}`;
+    const txt = fmt.format(t).replace(/\//g,'-');
+    document.getElementById('last-updated').textContent = "最後更新時間：" + txt;
 }
 
-// 初始化
+/* ------------------- 初始化 ------------------- */
 goHome();
 </script>
 
