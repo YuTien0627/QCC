@@ -29,6 +29,8 @@
                     <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-900">品管圈（QCC）新手入門互動指南</h1>
                 </div>
                 <p class="text-xl text-gray-500">從概念到實踐，品質改善的旅程由此開始！</p>
+                <!-- 最後更新時間 -->
+                <p id="last-updated" class="text-sm text-gray-400 mt-2"></p>
             </div>
         </header>
 
@@ -37,14 +39,14 @@
             <button id="nav-btn-home" onclick="goHome()" class="nav-button active text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">🚀 首頁</button>
             <button id="nav-btn-selection" onclick="showToolTabs()" class="nav-button text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">🎁 工具大禮包</button>
             <button id="nav-btn-format" onclick="showFormatTabs()" class="nav-button text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">📝 書面格式</button>
-            <button id="nav-btn-tools" onclick="loadExternalPage('參考資料.html', this)" class="nav-button text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">🛠️ 參考資料</button>
-            <button id="nav-btn-quiz" onclick="loadExternalPage('小測驗.html', this)" class="nav-button text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">🎯 小試身手</button>
+            <button id="nav-btn-tools" onclick="loadExternalPage('參考資料.html','nav-btn-tools')" class="nav-button text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">🛠️ 參考資料</button>
+            <button id="nav-btn-quiz" onclick="loadExternalPage('小測驗.html','nav-btn-quiz')" class="nav-button text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">🎯 小試身手</button>
         </nav>
 
         <!-- 第二層書面格式 tabs -->
         <div id="format-tabs" class="hidden flex justify-center mt-4 space-x-3">
             <button class="format-tab px-4 py-2 rounded-lg bg-gray-200" onclick="loadFormatPage('書面格式_問題型.html', this)">🧩 問題型</button>
-            <button class="format-tab px-4 py-2 rounded-lg bg-gray-200" onclick="loadFormatPage('書面格式_解決型.html', this)">💡 解決型</button>
+            <button class="format-tab px-4 py-2 rounded-lg bg-gray-200" onclick="loadFormatPage('書面格式_課達型.html', this)">💡 課題達成型</button>
             <button class="format-tab px-4 py-2 rounded-lg bg-gray-200" onclick="loadFormatPage('書面格式_RCA.html', this)">🔍 RCA</button>
             <button class="format-tab px-4 py-2 rounded-lg bg-gray-200" onclick="loadFormatPage('書面格式_HFMEA.html', this)">⚠️ HFMEA</button>
         </div>
@@ -59,9 +61,6 @@
         <div id="content-area" class="px-4">
             <h2 class="text-2xl font-bold text-center mt-10">歡迎來到 QCC 主頁 🎉</h2>
         </div>
-
-        <!-- 最後更新時間 -->
-        <div class="text-center mt-6 text-gray-500" id="last-updated"></div>
 
     </div>
 
@@ -93,15 +92,22 @@
             activateNav('nav-btn-selection');
             document.getElementById('tool-tabs').classList.remove('hidden');
             document.getElementById('format-tabs').classList.add('hidden');
+            // 預設載入品管工具
             loadExternalPage('選擇工具.html', document.querySelectorAll('#tool-tabs .sub-tab')[0]);
         }
 
         // 外層其他頁面載入
         function loadExternalPage(page, btn){
-            // 高亮子 tab
-            const parentTabs = btn.parentElement.querySelectorAll('button');
-            parentTabs.forEach(b=>b.classList.remove('bg-teal-300','text-white','font-bold'));
-            btn.classList.add('bg-teal-300','text-white','font-bold');
+            // 隱藏所有第二層 tabs
+            document.getElementById('format-tabs').classList.add('hidden');
+            document.getElementById('tool-tabs').classList.add('hidden');
+
+            // 高亮子 tab（如果屬於 tab container 才需要）
+            if(btn && btn.parentElement){
+                const parentTabs = btn.parentElement.querySelectorAll('button');
+                parentTabs.forEach(b=>b.classList.remove('bg-teal-300','text-white','font-bold'));
+                btn.classList.add('bg-teal-300','text-white','font-bold');
+            }
 
             fetch(page).then(res=>res.text()).then(html=>{
                 document.getElementById('content-area').innerHTML = html;
@@ -151,7 +157,7 @@
             }
         }
 
-        // 執行最後更新時間
+        // 啟動時更新最後修改時間
         updateLastUpdated();
     </script>
 
