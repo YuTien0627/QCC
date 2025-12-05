@@ -91,94 +91,71 @@
 
     <script>
         // --- 決策樹資料結構 (Decision Tree Content) ---
-        // 使用 var 避免在動態載入時產生重複宣告的錯誤
-        var decisionTree = {
-            // Q1: 挑戰類型
-            "Q1": {
-                title: "關卡一：您想挑戰什麼類型的任務？",
-                icon: "🤔",
+        const decisionTree = {
+            Q1: { 
+                title: "🐾 關卡一：挑戰類型", 
+                question: "您想處理的是「【已經發生】的麻煩事/壞結果」 (問題型)？還是【未來想達成】的新成就/好水準 (課題型)？", 
+                icon: "🤔", 
                 options: [
-                    { 
-                        text: "😭 現有缺失或異常 (問題解決型)：已經發生了麻煩事/壞結果，我要解決它！", 
-                        next: "Q2", 
-                        color: "btn-pink" 
-                    },
-                    { 
-                        text: "🤩 未來目標或任務 (課題達成型)：未來我想達成一個新成就或新水準！", 
-                        next: "R_GOAL", 
-                        color: "btn-purple" 
-                    }
+                    { text: "😭 現有缺失或異常 (問題解決型)", next: "Q2", style: "btn-pink" },
+                    { text: "🤩 未來目標或任務 (課題達成型)", next: "R_GOAL", style: "btn-purple" }
                 ]
             },
-            // Q2: 預防或解決
-            "Q2": {
-                title: "關卡二：您的目標是預防還是解決？",
-                icon: "🛡️",
+            Q2: { 
+                title: "🚨 關卡二：預防或解決", 
+                question: "您的目標是「【預先】阻止流程中【潛在】的風險發生」嗎？ (像打預防針一樣)", 
+                icon: "🛡️", 
                 options: [
-                    { 
-                        text: "🎯 是，預先評估與控制風險 (預防針)：阻止流程中潛在的風險發生。", 
-                        next: "R_HFMEA", 
-                        color: "btn-purple" 
-                    },
-                    { 
-                        text: "🤕 否，分析已經發生的問題 (解毒劑)：針對已發生的問題進行分析。", 
-                        next: "Q3", 
-                        color: "btn-pink" 
-                    }
+                    { text: "🎯 是，預先評估與控制風險 (預防針)", next: "R_HFMEA", style: "btn-purple" },
+                    { text: "🤕 否，分析已經發生的問題 (解毒劑)", next: "Q3", style: "btn-pink" }
                 ]
             },
-            // Q3: 事件嚴重性
-            "Q3": {
-                title: "關卡三：問題的嚴重程度與深度？",
-                icon: "🌋",
+            Q3: { 
+                title: "💥 關卡三：事件嚴重性", 
+                question: "這個問題是「【超級嚴重】的重大/不良事件」，您需要找出【系統性的最終原因】並【保證不再發生】嗎？", 
+                icon: "🔍", 
                 options: [
-                    { 
-                        text: "🚀 是，追查根本原因 (重大不良事件)：超級嚴重的事件，必須找到系統性的最終原因並保證不再發生。", 
-                        next: "R_RCA", 
-                        color: "btn-pink" 
-                    },
-                    { 
-                        text: "🧹 否，一般性缺失改善 (日常品質提升)：一般性的缺失、抱怨或數據不佳。", 
-                        next: "R_QCC", 
-                        color: "btn-purple" 
-                    }
+                    { text: "🚀 是，追查根本原因 (重大不良事件)", next: "R_RCA", style: "btn-purple" },
+                    { text: "🧹 否，一般性缺失改善 (日常品質提升)", next: "R_QCC", style: "btn-pink" }
                 ]
             },
             
-            // --- 結果 (Results) ---
-            "R_GOAL": {
-                isResult: true,
-                title: "🎉 您的挑戰目標：【課題達成型】",
-                icon: "🏆",
-                method: "💡 課題達成型 (Goal-Achievement)",
-                purpose: "專門幫助您從「現在」走到「目標」。重點是【發揮創意找方法】，達成您的 KPI 或挑戰！",
-                color: "goal-green"
+            // --- 結果頁面 (Results) ---
+            // 【修正】: 統一屬性名稱為 methodology 和 colorClass，並新增 isResult 旗標
+            R_GOAL: { 
+                title: "🎉 恭喜！您找到了成功鑰匙！", 
+                methodology: "💡 課題達成型 (Goal-Achievement)", 
+                purpose: "這方法專門幫助您從「現在」走到「目標」。重點是【發揮創意找方法】，達成您的 KPI 或挑戰！", 
+                icon: "🏆", 
+                isResult: true, 
+                colorClass: "goal-green" // 使用簡化顏色名稱
             },
-            "R_HFMEA": {
+            R_HFMEA: { 
+                title: "💖 風險防護罩已啟動！", 
+                methodology: "🛡️ HFMEA (醫療失效模式與效應分析)", 
+                purpose: "這就像是流程的【預警雷達】。它能幫助您在風險發生前，找到流程中所有可能的「地雷」並提前控制，讓流程更安全！", 
+                icon: "🚨", 
                 isResult: true,
-                title: "🎉 您的挑戰目標：【風險預防型】",
-                icon: "🚨",
-                method: "🛡️ HFMEA (醫療失效模式與效應分析)",
-                purpose: "流程的【預警雷達】。它能幫助您在風險發生前，找到流程中所有可能的「地雷」並提前控制，讓流程更安全！",
-                color: "goal-green"
+                colorClass: "secondary-purple"
             },
-            "R_RCA": {
+            R_RCA: { 
+                title: "🕵️‍♂️ 系統偵探出動！", 
+                methodology: "🔎 RCA (根本原因分析)", 
+                purpose: "當發生【重大不良事件】時，您需要這套工具深入挖掘問題的Root Cause (根源)。它會找出系統性的漏洞，確保這類事件不會再在同樣的地方跌倒！", 
+                icon: "🤯", 
                 isResult: true,
-                title: "🎉 您的挑戰目標：【根本原因追查型】",
-                icon: "🔍",
-                method: "🔎 RCA (根本原因分析)",
-                purpose: "當發生【重大不良事件】時，這套工具能深入挖掘問題的Root Cause (根源)，找出系統性的漏洞，確保這類事件不會再在同樣的地方跌倒！",
-                color: "issue-red"
+                colorClass: "issue-red"
             },
-            "R_QCC": {
+            R_QCC: { 
+                title: "🛠️ 日常優化專家就是您！", 
+                methodology: "✨ QCC (問題解決型/品質改善)", 
+                purpose: "這是您提升日常流程品質的【萬用工具箱】！當有缺失、抱怨或數據不佳時，它能引導您系統化地「找原因 → 解決原因」，讓現況變得更好！", 
+                icon: "🌈", 
                 isResult: true,
-                title: "🎉 您的挑戰目標：【日常品質改善型】",
-                icon: "🛠️",
-                method: "✨ QCC (品管圈) - 問題解決型",
-                purpose: "提升日常流程品質的【萬用工具箱】！當有缺失、抱怨或數據不佳時，它能引導您系統化地「找原因 → 解決原因」，讓現況變得更好！",
-                color: "goal-green"
+                colorClass: "primary-pink"
             }
         };
+        // --- 決策樹資料結構 (Decision Tree Content) 結束 ---
 
         // --- 應用程式狀態管理 (Logic for running the app) ---
         // 變數使用 var 避免重複宣告錯誤
@@ -189,7 +166,7 @@
 
         // 【新增的初始化函數】確保每次腳本執行時都能重設狀態並抓取 DOM 元素
         function initializeToolSelector() {
-             // 1. 重設應用程式狀態
+            // 1. 重設應用程式狀態
             currentStepKey = "Q1"; 
             history = []; 
             
@@ -215,8 +192,8 @@
             if (head) {
                 // 為了避免重複插入 style 標籤，可以在插入前檢查
                 if (!document.getElementById('tool-selector-styles')) {
-                     style.id = 'tool-selector-styles';
-                     head.appendChild(style);
+                    style.id = 'tool-selector-styles';
+                    head.appendChild(style);
                 }
             }
             
@@ -243,9 +220,10 @@
                 // 確保選項文字以粗體呈現
                 const optionText = option.text.replace(/【[^】]*】/g, (match) => `<span class="font-extrabold text-shadow-sm">${match}</span>`);
 
-                html += `<button class="btn ${option.color}" 
-                                 onclick="navigate('${nextStep}', '${step}', this.textContent.trim())"
-                                 data-next="${nextStep}">
+                // 【修正】：使用 option.style 來設定按鈕顏色
+                html += `<button class="btn ${option.style}" 
+                                      onclick="navigate('${nextStep}', '${step}', this.textContent.trim())"
+                                      data-next="${nextStep}">
                             <span class="text-xl mr-3 font-extrabold">${String.fromCharCode(65 + index)}</span> 
                             <span class="flex-grow">${optionText}</span>
                         </button>`;
@@ -254,39 +232,44 @@
             
             // 檢查 DOM 元素是否成功抓取
             if(questionCardContainer) {
-                 questionCardContainer.innerHTML = html;
+                questionCardContainer.innerHTML = html;
             } else {
-                 console.error("Error: questionCardContainer not found. Cannot render question.");
+                console.error("Error: questionCardContainer not found. Cannot render question.");
             }
         }
 
         /** 渲染結果卡片 */
         function renderResult(step) {
             const result = decisionTree[step];
-            
+            // 【修正】：使用新的 colorClass 屬性
+            const color = result.colorClass;
+
             var html = `<div class="animate-in fade-in zoom-in duration-500 text-center">`;
-            html += `<div class="w-24 h-24 mx-auto mb-6 bg-${result.color} rounded-full flex items-center justify-center animate-bounce-once shadow-2xl">`;
+            // 【修正】：使用 color 變數來組裝類別
+            html += `<div class="w-24 h-24 mx-auto mb-6 bg-${color} rounded-full flex items-center justify-center animate-bounce-once shadow-2xl">`;
             html += `<span class="text-5xl">${result.icon}</span>`;
             html += `</div>`;
             
             html += `<h2 class="text-4xl font-extrabold text-gray-900 mb-4">${result.title}</h2>`;
-            html += `<div class="inline-block p-4 rounded-xl bg-${result.color}/10 border-l-4 border-${result.color} mx-auto max-w-lg mb-6 shadow-md">`;
-            html += `<h3 class="text-2xl font-bold text-gray-800 mb-2">${result.method}</h3>`;
+            // 【修正】：使用 color 變數來組裝類別
+            html += `<div class="inline-block p-4 rounded-xl bg-${color}/10 border-l-4 border-${color} mx-auto max-w-lg mb-6 shadow-md">`;
+            // 【修正】：使用 methodology 屬性
+            html += `<h3 class="text-2xl font-bold text-gray-800 mb-2">${result.methodology}</h3>`;
             html += `<p class="text-gray-600 text-lg">${result.purpose}</p>`;
             html += `</div>`;
             
             // 重置按鈕
             html += `<button class="btn bg-gray-500/80 text-white hover:bg-gray-700 mx-auto mt-6 w-auto px-12 py-3" 
-                             onclick="navigate('Q1')">
+                                  onclick="navigate('Q1')">
                         🔄 重新挑戰 (從頭開始)
                     </button>`;
             html += `</div>`;
             
-             // 檢查 DOM 元素是否成功抓取
+            // 檢查 DOM 元素是否成功抓取
             if(questionCardContainer) {
-                 questionCardContainer.innerHTML = html;
+                questionCardContainer.innerHTML = html;
             } else {
-                 console.error("Error: questionCardContainer not found. Cannot render result.");
+                console.error("Error: questionCardContainer not found. Cannot render result.");
             }
         }
 
@@ -308,10 +291,12 @@
 
             // 渲染當前狀態
             const current = decisionTree[currentStepKey];
+            // 【修正】：檢查 current.isResult 旗標
             if (current && current.isResult) {
-                 html += `<span class="text-goal-green font-bold flex items-center space-x-1">${current.icon} <span>${current.method}</span></span>`;
+                // 【修正】：使用 methodology 和 colorClass
+                html += `<span class="text-${current.colorClass} font-bold flex items-center space-x-1">${current.icon} <span>${current.methodology}</span></span>`;
             } else if (current) {
-                 html += `<span class="text-gray-800 font-bold flex items-center space-x-1">${current.icon} <span>${current.title.split('：')[0]}</span></span>`;
+                html += `<span class="text-gray-800 font-bold flex items-center space-x-1">${current.icon} <span>${current.title.split('：')[0]}</span></span>`;
             }
             
             if(historyTrailDiv) {
@@ -321,6 +306,7 @@
             }
 
             // 根據當前步驟渲染問題或結果
+            // 【修正】：檢查 current.isResult 旗標
             if (current && current.isResult) {
                 renderResult(currentStepKey);
             } else if (current) {
@@ -333,7 +319,9 @@
         function navigate(nextState, questionKey, selectedText) {
             // 如果是從問題跳轉到下一個步驟，記錄歷史
             if (questionKey && selectedText) {
-                history.push({ key: questionKey, selection: nextState, text: selectedText });
+                // 為了讓回溯時能顯示正確的選項文字，需要清理多餘的空格
+                const cleanedText = selectedText.trim().split(/\s+/).slice(1).join(' ').trim();
+                history.push({ key: questionKey, selection: nextState, text: cleanedText });
             } else if (nextState === 'Q1') {
                 // 這是重置邏輯
                 history = [];
