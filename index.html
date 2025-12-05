@@ -1,169 +1,156 @@
 <!DOCTYPE html>
 <html lang="zh-TW" class="scroll-smooth">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>品管圈（QCC）新手入門互動指南</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body { font-family: 'Inter', sans-serif; background-color: #ecfdf5; }
-        .section-title { border-left: 6px solid #0d9488; padding-left: 0.75rem; transition: all 0.3s ease-in-out; }
-        .nav-button { transition: all 0.3s ease-in-out; border-bottom: 3px solid transparent; }
-        .nav-button.active { color: #0d9488; border-color: #0d9488; font-weight: 700; }
-        .format-tab, .sub-tab { transition: all 0.3s ease-in-out; }
-        .ai-chat-response { white-space: pre-wrap; }
-        .loading-spinner { border: 4px solid #f3f3f3; border-top: 4px solid #0d9488; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>品管圈（QCC）新手入門互動指南</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+    body { font-family: 'Inter', sans-serif; background-color: #ecfdf5; }
+    .section-title { border-left: 6px solid #0d9488; padding-left: 0.75rem; transition: all 0.3s ease-in-out; }
+    .nav-button { transition: all 0.3s ease-in-out; border-bottom: 3px solid transparent; }
+    .nav-button.active { color: #0d9488; border-color: #0d9488; font-weight: 700; }
+    .format-tab, .sub-tab { transition: all 0.3s ease-in-out; }
+    .ai-chat-response { white-space: pre-wrap; }
+    .loading-spinner { border: 4px solid #f3f3f3; border-top: 4px solid #0d9488; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+</style>
 </head>
 <body class="antialiased">
 
-    <div class="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8">
-        <!-- 標題 -->
-        <header class="text-center py-10 bg-white shadow-xl rounded-xl mb-6 border-t-8 border-teal-600">
-            <div class="flex flex-col items-center">
-                <div class="flex items-center justify-center mb-2">
-                    <img src="https://raw.githubusercontent.com/YuTien0627/QCC/main/%E5%93%81%E7%AE%A1%E9%83%A8LOGO%20(%E5%8E%BB%E8%83%8C).png"
-                         alt="奇美醫院品質管理部 Logo"
-                         class="w-12 h-12 sm:w-14 sm:h-14 mr-3 object-contain">
-                    <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-900">品管圈（QCC）新手入門互動指南</h1>
-                </div>
-                <p class="text-xl text-gray-500">從概念到實踐，品質改善的旅程由此開始！</p>
+<div class="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8">
+    <!-- 標題 -->
+    <header class="text-center py-10 bg-white shadow-xl rounded-xl mb-6 border-t-8 border-teal-600">
+        <div class="flex flex-col items-center">
+            <div class="flex items-center justify-center mb-2">
+                <img src="https://raw.githubusercontent.com/YuTien0627/QCC/main/%E5%93%81%E7%AE%A1%E9%83%A8LOGO%20(%E5%8E%BB%E8%83%8C).png"
+                     alt="奇美醫院品質管理部 Logo"
+                     class="w-12 h-12 sm:w-14 sm:h-14 mr-3 object-contain">
+                <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-900">品管圈（QCC）新手入門互動指南</h1>
             </div>
-        </header>
-
-        <!-- 外層導航列 -->
-        <nav class="sticky top-0 z-10 flex justify-center bg-white p-2 rounded-xl shadow-lg mb-4 space-x-4">
-            <button id="nav-btn-home" onclick="goHome()" class="nav-button active text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">🚀 首頁</button>
-            <button id="nav-btn-selection" onclick="showToolTabs()" class="nav-button text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">🎁 工具大禮包</button>
-            <button id="nav-btn-format" onclick="showFormatTabs()" class="nav-button text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">📝 書面格式</button>
-            <button id="nav-btn-tools" onclick="loadExternalPage('參考資料.html','nav-btn-tools')" class="nav-button text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">🛠️ 參考資料</button>
-            <button id="nav-btn-quiz" onclick="loadExternalPage('小測驗.html','nav-btn-quiz')" class="nav-button text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">🎯 小試身手</button>
-        </nav>
-
-        <!-- 第二層書面格式 tabs 容器 -->
-        <div id="format-tabs-container" class="mt-4 h-12">
-            <div id="format-tabs" class="flex justify-center space-x-3 h-full">
-                <button class="format-tab px-4 py-2 rounded-lg bg-gray-200" onclick="loadFormatPage('書面格式_問題型.html', this)">🧩 問題型</button>
-                <button class="format-tab px-4 py-2 rounded-lg bg-gray-200" onclick="loadFormatPage('書面格式_課達型.html', this)">💡 課題達成型</button>
-                <button class="format-tab px-4 py-2 rounded-lg bg-gray-200" onclick="loadFormatPage('書面格式_RCA.html', this)">🔍 RCA</button>
-                <button class="format-tab px-4 py-2 rounded-lg bg-gray-200" onclick="loadFormatPage('書面格式_HFMEA.html', this)">⚠️ HFMEA</button>
-            </div>
+            <p class="text-xl text-gray-500">從概念到實踐，品質改善的旅程由此開始！</p>
         </div>
+    </header>
 
-        <!-- 第二層工具大禮包 tabs 容器 -->
-        <div id="tool-tabs-container" class="mt-4 h-12">
-            <div id="tool-tabs" class="flex justify-center space-x-3 h-full">
-                <button class="sub-tab px-4 py-2 rounded-lg bg-gray-200" onclick="loadExternalPage('選擇工具.html', this)">🛠️ 品管工具</button>
-                <button class="sub-tab px-4 py-2 rounded-lg bg-gray-200" onclick="loadExternalPage('品管手法.html', this)">📚 品管手法</button>
-            </div>
+    <!-- 外層導航列 -->
+    <nav class="sticky top-0 z-10 flex justify-center bg-white p-2 rounded-xl shadow-lg mb-4 space-x-4">
+        <button id="nav-btn-home" onclick="goHome()" class="nav-button active text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">🚀 首頁</button>
+        <button id="nav-btn-selection" onclick="showToolTabs()" class="nav-button text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">🎁 工具大禮包</button>
+        <button id="nav-btn-format" onclick="showFormatTabs()" class="nav-button text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">📝 書面格式</button>
+        <button id="nav-btn-tools" onclick="loadExternalPage('參考資料.html','nav-btn-tools')" class="nav-button text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">🛠️ 參考資料</button>
+        <button id="nav-btn-quiz" onclick="loadExternalPage('小測驗.html','nav-btn-quiz')" class="nav-button text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">🎯 小試身手</button>
+    </nav>
+
+    <!-- 第二層書面格式 tabs 容器 -->
+    <div id="format-tabs-container" class="mt-4 h-12">
+        <div id="format-tabs" class="flex justify-center space-x-3 h-full">
+            <button class="format-tab px-4 py-2 rounded-lg bg-gray-200" onclick="loadFormatPage('書面格式_問題型.html', this)">🧩 問題型</button>
+            <button class="format-tab px-4 py-2 rounded-lg bg-gray-200" onclick="loadFormatPage('書面格式_課達型.html', this)">💡 課題達成型</button>
+            <button class="format-tab px-4 py-2 rounded-lg bg-gray-200" onclick="loadFormatPage('書面格式_RCA.html', this)">🔍 RCA</button>
+            <button class="format-tab px-4 py-2 rounded-lg bg-gray-200" onclick="loadFormatPage('書面格式_HFMEA.html', this)">⚠️ HFMEA</button>
         </div>
-
-        <!-- 內容區 -->
-        <div id="content-area" class="px-4">
-            <h2 class="text-2xl font-bold text-center mt-10">歡迎來到 QCC 主頁 🎉</h2>
-        </div>
-
-        <!-- 頁面底部更新時間 -->
-        <div class="text-right text-gray-400 text-sm mt-6">
-            <span id="last-updated"></span>
-        </div>
-
     </div>
 
-    <script>
-        // 外層導航高亮
-        function activateNav(id){
-            document.querySelectorAll('.nav-button').forEach(btn=>btn.classList.remove('active'));
-            document.getElementById(id)?.classList.add('active');
+    <!-- 第二層工具大禮包 tabs 容器 -->
+    <div id="tool-tabs-container" class="mt-4 h-12">
+        <div id="tool-tabs" class="flex justify-center space-x-3 h-full">
+            <button class="sub-tab px-4 py-2 rounded-lg bg-gray-200" onclick="loadExternalPage('選擇工具.html', this)">🛠️ 品管工具</button>
+            <button class="sub-tab px-4 py-2 rounded-lg bg-gray-200" onclick="loadExternalPage('品管手法.html', this)">📚 品管手法</button>
+        </div>
+    </div>
+
+    <!-- 內容區 -->
+    <div id="content-area" class="px-4">
+        <h2 class="text-2xl font-bold text-center mt-10">歡迎來到 QCC 主頁 🎉</h2>
+    </div>
+
+    <!-- 頁面底部更新時間 -->
+    <div class="text-right text-gray-400 text-sm mt-6">
+        <span id="last-updated"></span>
+    </div>
+</div>
+
+<script>
+    // 外層導航高亮
+    function activateNav(id){
+        document.querySelectorAll('.nav-button').forEach(btn=>btn.classList.remove('active'));
+        document.getElementById(id)?.classList.add('active');
+    }
+
+    // 外層書面格式
+    function showFormatTabs(){
+        activateNav('nav-btn-format');
+        document.getElementById('format-tabs-container').style.visibility = 'visible';
+        document.getElementById('tool-tabs-container').style.visibility = 'hidden';
+        loadFormatPage('書面格式_問題型.html', document.querySelectorAll('.format-tab')[0]);
+    }
+
+    function loadFormatPage(page, btn){
+        document.querySelectorAll('.format-tab').forEach(b=>b.classList.remove('bg-teal-300','text-white','font-bold'));
+        btn.classList.add('bg-teal-300','text-white','font-bold');
+        fetch(page).then(res=>res.text()).then(html=>{
+            document.getElementById('content-area').innerHTML = html;
+        });
+    }
+
+    // 工具大禮包
+    function showToolTabs(){
+        activateNav('nav-btn-selection');
+        document.getElementById('tool-tabs-container').style.visibility = 'visible';
+        document.getElementById('format-tabs-container').style.visibility = 'hidden';
+        loadExternalPage('選擇工具.html', document.querySelectorAll('#tool-tabs .sub-tab')[0]);
+    }
+
+    // 外層其他頁面載入
+    function loadExternalPage(page, btn){
+        document.getElementById('format-tabs-container').style.visibility = 'hidden';
+        document.getElementById('tool-tabs-container').style.visibility = 'hidden';
+
+        // 高亮第一層
+        if(btn){
+            const parent = btn.closest('.sub-tab') ? btn.parentElement.parentElement.id : '';
+            if(parent==='tool-tabs'){
+                activateNav('nav-btn-selection');
+                document.getElementById('tool-tabs-container').style.visibility = 'visible';
+            }
         }
 
-        // 外層書面格式
-        function showFormatTabs(){
-            activateNav('nav-btn-format');
-            document.getElementById('format-tabs-container').style.visibility = 'visible';
-            document.getElementById('tool-tabs-container').style.visibility = 'hidden';
-            loadFormatPage('書面格式_問題型.html', document.querySelectorAll('.format-tab')[0]);
-        }
-
-        function loadFormatPage(page, btn){
-            document.querySelectorAll('.format-tab').forEach(b=>b.classList.remove('bg-teal-300','text-white','font-bold'));
+        // 高亮 tab
+        if(btn && btn.parentElement){
+            const parentTabs = btn.parentElement.querySelectorAll('button');
+            parentTabs.forEach(b=>b.classList.remove('bg-teal-300','text-white','font-bold'));
             btn.classList.add('bg-teal-300','text-white','font-bold');
-            fetch(page).then(res=>res.text()).then(html=>{
-                document.getElementById('content-area').innerHTML = html;
-            });
         }
 
-        // 工具大禮包
-        function showToolTabs(){
-            activateNav('nav-btn-selection');
-            document.getElementById('tool-tabs-container').style.visibility = 'visible';
-            document.getElementById('format-tabs-container').style.visibility = 'hidden';
-            loadExternalPage('選擇工具.html', document.querySelectorAll('#tool-tabs .sub-tab')[0]);
-        }
+        // 加載內容
+        fetch(page).then(res=>res.text()).then(html=>{
+            document.getElementById('content-area').innerHTML = html;
+        });
+    }
 
-        // 外層其他頁面載入
-        function loadExternalPage(page, btn){
-            document.getElementById('format-tabs-container').style.visibility = 'hidden';
-            document.getElementById('tool-tabs-container').style.visibility = 'hidden';
+    // 回首頁
+    function goHome(){
+        activateNav('nav-btn-home');
+        document.getElementById('format-tabs-container').style.visibility = 'hidden';
+        document.getElementById('tool-tabs-container').style.visibility = 'hidden';
+        document.getElementById('content-area').innerHTML = "<h2 class='text-2xl font-bold text-center mt-10'>歡迎來到 QCC 主頁 🎉</h2>";
+    }
 
-            if(btn && btn.parentElement){
-                const parentTabs = btn.parentElement.querySelectorAll('button');
-                parentTabs.forEach(b=>b.classList.remove('bg-teal-300','text-white','font-bold'));
-                btn.classList.add('bg-teal-300','text-white','font-bold');
-            }
+    // ========== 最後更新時間：使用檔案最後修改時間 ==========
+    function updateLastUpdated() {
+        const lastModifiedStr = document.lastModified;
+        const lastModifiedDate = new Date(lastModifiedStr);
+        if (isNaN(lastModifiedDate.getTime())) { return; }
+        const formatter = new Intl.DateTimeFormat('zh-TW', {timeZone:'Asia/Taipei',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false});
+        const parts = formatter.formatToParts(lastModifiedDate);
+        const get = type => parts.find(p=>p.type===type)?.value || '';
+        const year = get('year'), month = get('month'), day = get('day'), hour = get('hour'), minute = get('minute');
+        const el = document.getElementById("last-updated");
+        if(el){ el.textContent = `最後更新時間（中原標準時間）: ${year}年${month}月${day}日 ${hour}:${minute}`; }
+    }
 
-            fetch(page).then(res=>res.text()).then(html=>{
-                document.getElementById('content-area').innerHTML = html;
-            });
-        }
-
-        // 回首頁
-        function goHome(){
-            activateNav('nav-btn-home');
-            document.getElementById('format-tabs-container').style.visibility = 'hidden';
-            document.getElementById('tool-tabs-container').style.visibility = 'hidden';
-            document.getElementById('content-area').innerHTML = "<h2 class='text-2xl font-bold text-center mt-10'>歡迎來到 QCC 主頁 🎉</h2>";
-        }
-
-        // ========== 最後更新時間：使用檔案最後修改時間 ==========
-        function updateLastUpdated() {
-            const lastModifiedStr = document.lastModified;
-            const lastModifiedDate = new Date(lastModifiedStr);
-
-            if (isNaN(lastModifiedDate.getTime())) {
-                console.warn('無法解析 document.lastModified：', lastModifiedStr);
-                return;
-            }
-
-            const formatter = new Intl.DateTimeFormat('zh-TW', {
-                timeZone: 'Asia/Taipei',
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-                hour: '2-digit',
-                minute: '2-digit',
-                hour12: false
-            });
-
-            const parts = formatter.formatToParts(lastModifiedDate);
-            const get = type => parts.find(p => p.type === type)?.value || '';
-
-            const year = get('year');
-            const month = get('month');
-            const day = get('day');
-            const hour = get('hour');
-            const minute = get('minute');
-
-            const el = document.getElementById("last-updated");
-            if (el) {
-                el.textContent = `最後更新時間（中原標準時間）: ${year}年${month}月${day}日 ${hour}:${minute}`;
-            }
-        }
-
-        // 頁面載入時更新時間
-        window.addEventListener('DOMContentLoaded', updateLastUpdated);
-    </script>
+    window.addEventListener('DOMContentLoaded', updateLastUpdated);
+</script>
 
 </body>
 </html>
