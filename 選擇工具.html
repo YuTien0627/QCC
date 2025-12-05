@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>品管工具選哪招？跟我走！ - 單卡版</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <script>
         // Tailwind 配置 (顏色定義)
         tailwind.config = {
@@ -15,19 +15,18 @@
                         sans: ['Inter', 'Noto Sans TC', 'sans-serif'],
                     },
                     colors: {
-                        // 可愛風格的配色
-                        'primary-pink': '#F472B6', // 主色調：可愛粉
-                        'secondary-purple': '#A78BFA', // 次要色調：夢幻紫
-                        'goal-green': '#34D399', // 達成目標：清新綠
-                        'issue-red': '#F87171', // 問題警示：活力紅
-                        'bg-paper': '#FFFBEB', // 背景紙張色：奶油黃
+                        'primary-pink': '#F472B6', 
+                        'secondary-purple': '#A78BFA', 
+                        'goal-green': '#34D399', 
+                        'issue-red': '#F87171', 
+                        'bg-paper': '#FFFBEB',
                     }
                 }
             }
         }
     </script>
+
     <style>
-        /* 主要卡片容器的樣式 */
         .card-container {
             min-height: 400px;
             display: flex;
@@ -36,28 +35,23 @@
             align-items: center;
         }
 
-        /* 按鈕基礎樣式 */
         .btn {
             @apply p-4 rounded-xl font-extrabold text-xl shadow-lg transition-all duration-300 transform hover:scale-[1.03] hover:shadow-xl active:scale-[0.98] w-full text-left flex items-start;
-            min-height: 80px; /* 確保按鈕高度足夠 */
+            min-height: 80px;
         }
-        
-        /* 粉色主題按鈕 */
+
         .btn-pink {
             @apply bg-primary-pink text-white hover:bg-pink-500 border-b-4 border-pink-700/50;
         }
-        
-        /* 紫色主題按鈕 */
+
         .btn-purple {
             @apply bg-secondary-purple text-white hover:bg-purple-500 border-b-4 border-purple-700/50;
         }
 
-        /* 標題樣式 */
         .question-title {
             @apply text-3xl font-black text-gray-800 mb-6 border-l-8 border-primary-pink pl-4;
         }
 
-        /* 歷史軌跡樣式 */
         .history-item {
             @apply inline-flex items-center space-x-2 cursor-pointer transition-colors duration-200;
         }
@@ -77,8 +71,7 @@
             透過決策樹，迅速找到最適合您的品管方法
         </p>
 
-        <div id="history-trail" class="bg-white/70 backdrop-blur-sm p-4 rounded-xl shadow-inner mb-8 min-h-[50px] flex items-center flex-wrap space-x-2 text-sm text-gray-500">
-            </div>
+        <div id="history-trail" class="bg-white/70 backdrop-blur-sm p-4 rounded-xl shadow-inner mb-8 min-h-[50px] flex items-center flex-wrap space-x-2 text-sm text-gray-500"></div>
 
         <div id="question-card-container" class="bg-white p-6 md:p-10 rounded-2xl shadow-2xl border-b-4 border-primary-pink/50 card-container">
             <p class="text-center text-gray-500">正在載入決策樹...</p>
@@ -90,7 +83,7 @@
     </div>
 
     <script>
-        // --- 決策樹資料結構 (Decision Tree Content) ---
+        // --- 決策樹資料 ---
         const decisionTree = {
             Q1: { 
                 title: "🐾 關卡一：挑戰類型", 
@@ -103,7 +96,7 @@
             },
             Q2: { 
                 title: "🚨 關卡二：預防或解決", 
-                question: "您的目標是「【預先】阻止流程中【潛在】的風險發生」嗎？ (像打預防針一樣)", 
+                question: "您的目標是「【預先】阻止流程中【潛在】的風險發生」嗎？", 
                 icon: "🛡️", 
                 options: [
                     { text: "🎯 是，預先評估與控制風險 (預防針)", next: "R_HFMEA", style: "btn-purple" },
@@ -119,21 +112,19 @@
                     { text: "🧹 否，一般性缺失改善 (日常品質提升)", next: "R_QCC", style: "btn-pink" }
                 ]
             },
-            
-            // --- 結果頁面 (Results) ---
-            // 【修正】: 統一屬性名稱為 methodology 和 colorClass，並新增 isResult 旗標
+            // --- 結果 ---
             R_GOAL: { 
                 title: "🎉 恭喜！您找到了成功鑰匙！", 
                 methodology: "💡 課題達成型 (Goal-Achievement)", 
                 purpose: "這方法專門幫助您從「現在」走到「目標」。重點是【發揮創意找方法】，達成您的 KPI 或挑戰！", 
                 icon: "🏆", 
                 isResult: true, 
-                colorClass: "goal-green" // 使用簡化顏色名稱
+                colorClass: "goal-green"
             },
             R_HFMEA: { 
                 title: "💖 風險防護罩已啟動！", 
                 methodology: "🛡️ HFMEA (醫療失效模式與效應分析)", 
-                purpose: "這就像是流程的【預警雷達】。它能幫助您在風險發生前，找到流程中所有可能的「地雷」並提前控制，讓流程更安全！", 
+                purpose: "這就像流程的【預警雷達】，幫助您提前控制風險！", 
                 icon: "🚨", 
                 isResult: true,
                 colorClass: "secondary-purple"
@@ -141,7 +132,7 @@
             R_RCA: { 
                 title: "🕵️‍♂️ 系統偵探出動！", 
                 methodology: "🔎 RCA (根本原因分析)", 
-                purpose: "當發生【重大不良事件】時，您需要這套工具深入挖掘問題的Root Cause (根源)。它會找出系統性的漏洞，確保這類事件不會再在同樣的地方跌倒！", 
+                purpose: "當發生重大不良事件時，它會找出系統性的漏洞，避免再犯！", 
                 icon: "🤯", 
                 isResult: true,
                 colorClass: "issue-red"
@@ -149,199 +140,119 @@
             R_QCC: { 
                 title: "🛠️ 日常優化專家就是您！", 
                 methodology: "✨ QCC (問題解決型/品質改善)", 
-                purpose: "這是您提升日常流程品質的【萬用工具箱】！當有缺失、抱怨或數據不佳時，它能引導您系統化地「找原因 → 解決原因」，讓現況變得更好！", 
+                purpose: "提升日常流程品質的【萬用工具箱】，系統化「找原因 → 解決原因」！", 
                 icon: "🌈", 
                 isResult: true,
                 colorClass: "primary-pink"
             }
         };
-        // --- 決策樹資料結構 (Decision Tree Content) 結束 ---
 
-        // --- 應用程式狀態管理 (Logic for running the app) ---
-        // 變數使用 var 避免重複宣告錯誤
-        var currentStepKey; 
-        var history; 
-        var historyTrailDiv;
-        var questionCardContainer;
+        // 顏色對應 Tailwind class
+        const colorMap = {
+            'goal-green': 'bg-goal-green',
+            'secondary-purple': 'bg-secondary-purple',
+            'issue-red': 'bg-issue-red',
+            'primary-pink': 'bg-primary-pink'
+        };
 
-        // 【新增的初始化函數】確保每次腳本執行時都能重設狀態並抓取 DOM 元素
+        // --- 狀態 ---
+        let currentStepKey = "Q1"; 
+        let history = [];
+        let historyTrailDiv = document.getElementById('history-trail');
+        let questionCardContainer = document.getElementById('question-card-container');
+
+        // --- 初始化 ---
         function initializeToolSelector() {
-            // 1. 重設應用程式狀態
-            currentStepKey = "Q1"; 
-            history = []; 
-            
-            // 2. 重新抓取 DOM 元素
-            historyTrailDiv = document.getElementById('history-trail');
-            questionCardContainer = document.getElementById('question-card-container');
-            
-            // 3. 處理 CSS 動畫載入 (確保只載入一次)
-            var style = document.createElement('style');
-            style.innerHTML = `
-                .animate-bounce-once {
-                    animation: bounce 0.8s ease-in-out 1;
-                }
-                @keyframes bounce {
-                    0%, 100% { transform: translateY(0); }
-                    20% { transform: translateY(-15px); }
-                    40% { transform: translateY(0); }
-                    60% { transform: translateY(-7px); }
-                    80% { transform: translateY(0); }
-                }
-            `;
-            var head = document.head || document.getElementsByTagName('head')[0];
-            if (head) {
-                // 為了避免重複插入 style 標籤，可以在插入前檢查
-                if (!document.getElementById('tool-selector-styles')) {
-                    style.id = 'tool-selector-styles';
-                    head.appendChild(style);
-                }
-            }
-            
-            // 4. 啟動應用程式渲染
             renderLadder();
         }
 
-
-        // --- 渲染函數 (Render Functions) ---
-
-        /** 渲染問題卡片 */
+        // --- 渲染問題卡片 ---
         function renderQuestion(step) {
             const currentStep = decisionTree[step];
-            
-            // 標題
-            var html = `<div class="animate-in fade-in zoom-in duration-300">`;
+            let html = `<div class="animate-in fade-in zoom-in duration-300">`;
             html += `<h2 class="question-title">${currentStep.icon} ${currentStep.title}</h2>`;
-            html += `<p class="text-gray-500 mb-6 text-lg">請根據您的需求，選擇一個最符合的選項：</p>`;
-            
-            // 選項按鈕
+            html += `<p class="text-gray-500 mb-6 text-lg">${currentStep.question}</p>`;
             html += `<div class="space-y-4">`;
             currentStep.options.forEach((option, index) => {
-                const nextStep = option.next;
-                // 確保選項文字以粗體呈現
-                const optionText = option.text.replace(/【[^】]*】/g, (match) => `<span class="font-extrabold text-shadow-sm">${match}</span>`);
-
-                // 【修正】：使用 option.style 來設定按鈕顏色
-                html += `<button class="btn ${option.style}" 
-                                      onclick="navigate('${nextStep}', '${step}', this.textContent.trim())"
-                                      data-next="${nextStep}">
-                            <span class="text-xl mr-3 font-extrabold">${String.fromCharCode(65 + index)}</span> 
-                            <span class="flex-grow">${optionText}</span>
+                html += `<button class="btn ${option.style}" onclick="navigate('${option.next}', '${step}', this.textContent)">
+                            <span class="text-xl mr-3 font-extrabold">${String.fromCharCode(65 + index)}</span>
+                            <span class="flex-grow">${option.text}</span>
                         </button>`;
             });
             html += `</div></div>`;
-            
-            // 檢查 DOM 元素是否成功抓取
-            if(questionCardContainer) {
-                questionCardContainer.innerHTML = html;
-            } else {
-                console.error("Error: questionCardContainer not found. Cannot render question.");
-            }
+            questionCardContainer.innerHTML = html;
         }
 
-        /** 渲染結果卡片 */
+        // --- 渲染結果卡片 ---
         function renderResult(step) {
             const result = decisionTree[step];
-            // 【修正】：使用新的 colorClass 屬性
-            const color = result.colorClass;
+            const bgColor = colorMap[result.colorClass] || 'bg-gray-200';
 
-            var html = `<div class="animate-in fade-in zoom-in duration-500 text-center">`;
-            // 【修正】：使用 color 變數來組裝類別
-            html += `<div class="w-24 h-24 mx-auto mb-6 bg-${color} rounded-full flex items-center justify-center animate-bounce-once shadow-2xl">`;
+            let html = `<div class="animate-in fade-in zoom-in duration-500 text-center">`;
+            html += `<div class="${bgColor} w-24 h-24 mx-auto mb-6 rounded-full flex items-center justify-center animate-bounce-once shadow-2xl">`;
             html += `<span class="text-5xl">${result.icon}</span>`;
             html += `</div>`;
-            
             html += `<h2 class="text-4xl font-extrabold text-gray-900 mb-4">${result.title}</h2>`;
-            // 【修正】：使用 color 變數來組裝類別
-            html += `<div class="inline-block p-4 rounded-xl bg-${color}/10 border-l-4 border-${color} mx-auto max-w-lg mb-6 shadow-md">`;
-            // 【修正】：使用 methodology 屬性
+            html += `<div class="inline-block p-4 rounded-xl ${bgColor}/10 border-l-4 border-${result.colorClass} mx-auto max-w-lg mb-6 shadow-md">`;
             html += `<h3 class="text-2xl font-bold text-gray-800 mb-2">${result.methodology}</h3>`;
             html += `<p class="text-gray-600 text-lg">${result.purpose}</p>`;
             html += `</div>`;
-            
-            // 重置按鈕
-            html += `<button class="btn bg-gray-500/80 text-white hover:bg-gray-700 mx-auto mt-6 w-auto px-12 py-3" 
-                                  onclick="navigate('Q1')">
-                        🔄 重新挑戰 (從頭開始)
-                    </button>`;
+            html += `<button class="btn bg-gray-500/80 text-white hover:bg-gray-700 mx-auto mt-6 w-auto px-12 py-3" onclick="navigate('Q1')">🔄 重新挑戰 (從頭開始)</button>`;
             html += `</div>`;
-            
-            // 檢查 DOM 元素是否成功抓取
-            if(questionCardContainer) {
-                questionCardContainer.innerHTML = html;
-            } else {
-                console.error("Error: questionCardContainer not found. Cannot render result.");
-            }
+
+            questionCardContainer.innerHTML = html;
         }
 
-        /** 渲染歷史軌跡 */
+        // --- 渲染歷史軌跡 ---
         function renderLadder() {
-            var html = `<span class="font-bold text-base text-primary-pink mr-2">🗺️ 您的選擇路徑：</span>`;
-            
-            // 渲染步驟
+            let html = `<span class="font-bold text-base text-primary-pink mr-2">🗺️ 您的選擇路徑：</span>`;
             history.forEach((item, index) => {
-                // 每個歷史項目
-                html += `
-                    <div class="history-item group" onclick="rewindToStep('${item.key}')">
-                        <span class="text-primary-pink font-bold">${index + 1}.</span>
-                        <span class="rewind-text text-gray-600">${item.text}</span>
-                        <span class="text-gray-400">»</span>
-                    </div>
-                `;
+                html += `<div class="history-item group" onclick="rewindToStep('${item.key}')">
+                            <span class="text-primary-pink font-bold">${index+1}.</span>
+                            <span class="rewind-text text-gray-600">${item.text}</span>
+                            <span class="text-gray-400">»</span>
+                         </div>`;
             });
 
-            // 渲染當前狀態
             const current = decisionTree[currentStepKey];
-            // 【修正】：檢查 current.isResult 旗標
-            if (current && current.isResult) {
-                // 【修正】：使用 methodology 和 colorClass
+            if(current && current.isResult) {
                 html += `<span class="text-${current.colorClass} font-bold flex items-center space-x-1">${current.icon} <span>${current.methodology}</span></span>`;
-            } else if (current) {
+            } else if(current) {
                 html += `<span class="text-gray-800 font-bold flex items-center space-x-1">${current.icon} <span>${current.title.split('：')[0]}</span></span>`;
             }
-            
-            if(historyTrailDiv) {
-                historyTrailDiv.innerHTML = html;
-            } else {
-                console.error("Error: historyTrailDiv not found. Cannot render history.");
-            }
+            historyTrailDiv.innerHTML = html;
 
-            // 根據當前步驟渲染問題或結果
-            // 【修正】：檢查 current.isResult 旗標
-            if (current && current.isResult) {
+            if(current && current.isResult) {
                 renderResult(currentStepKey);
-            } else if (current) {
+            } else if(current) {
                 renderQuestion(currentStepKey);
             }
         }
 
-
-        // --- 導航函數 (Navigation Function) ---
+        // --- 導航 ---
         function navigate(nextState, questionKey, selectedText) {
-            // 如果是從問題跳轉到下一個步驟，記錄歷史
-            if (questionKey && selectedText) {
-                // 為了讓回溯時能顯示正確的選項文字，需要清理多餘的空格
+            if(questionKey && selectedText) {
                 const cleanedText = selectedText.trim().split(/\s+/).slice(1).join(' ').trim();
                 history.push({ key: questionKey, selection: nextState, text: cleanedText });
-            } else if (nextState === 'Q1') {
-                // 這是重置邏輯
+            } else if(nextState === 'Q1') {
                 history = [];
             }
             currentStepKey = nextState;
-            renderLadder(); 
+            renderLadder();
         }
 
-        // --- 回溯函數 (Rewind Function) ---
+        // --- 回溯 ---
         function rewindToStep(targetKey) {
             const targetIndex = history.findIndex(item => item.key === targetKey);
-            if (targetIndex !== -1) {
+            if(targetIndex !== -1) {
                 history = history.slice(0, targetIndex);
-                navigate(targetKey);
             }
+            currentStepKey = targetKey;
+            renderLadder();
         }
 
-        // 【關鍵修正】: 腳本一載入，即刻啟動應用程式
+        // --- 啟動 ---
         initializeToolSelector();
-
     </script>
 
 </body>
