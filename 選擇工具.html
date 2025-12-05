@@ -78,11 +78,11 @@
         </p>
 
         <div id="history-trail" class="bg-white/70 backdrop-blur-sm p-4 rounded-xl shadow-inner mb-8 min-h-[50px] flex items-center flex-wrap space-x-2 text-sm text-gray-500">
-            <span class="font-bold text-base text-primary-pink">🗺️ 您的選擇路徑：</span>
-        </div>
+            </div>
 
         <div id="question-card-container" class="bg-white p-6 md:p-10 rounded-2xl shadow-2xl border-b-4 border-primary-pink/50 card-container">
-            </div>
+            <p class="text-center text-gray-500">正在載入決策樹...</p>
+        </div>
 
         <p class="text-center text-sm text-gray-400 mt-8">
             此為互動式決策樹，點擊選項後將導向下一關或最終建議。
@@ -90,9 +90,8 @@
     </div>
 
     <script>
-        // *** 修正點：將關鍵全域變數改為 var，避免 appendChild/動態載入時重複宣告的錯誤 ***
-
         // --- 決策樹資料結構 (Decision Tree Content) ---
+        // 使用 var 避免在動態載入時產生重複宣告的錯誤
         var decisionTree = {
             // Q1: 挑戰類型
             "Q1": {
@@ -182,11 +181,48 @@
         };
 
         // --- 應用程式狀態管理 (Logic for running the app) ---
-        // *** 修正點：將 const/let 改為 var ***
-        var currentStepKey = "Q1"; 
-        var history = []; 
-        var historyTrailDiv = document.getElementById('history-trail');
-        var questionCardContainer = document.getElementById('question-card-container');
+        // 變數使用 var 避免重複宣告錯誤
+        var currentStepKey; 
+        var history; 
+        var historyTrailDiv;
+        var questionCardContainer;
+
+        // 【新增的初始化函數】確保每次腳本執行時都能重設狀態並抓取 DOM 元素
+        function initializeToolSelector() {
+             // 1. 重設應用程式狀態
+            currentStepKey = "Q1"; 
+            history = []; 
+            
+            // 2. 重新抓取 DOM 元素
+            historyTrailDiv = document.getElementById('history-trail');
+            questionCardContainer = document.getElementById('question-card-container');
+            
+            // 3. 處理 CSS 動畫載入 (確保只載入一次)
+            var style = document.createElement('style');
+            style.innerHTML = `
+                .animate-bounce-once {
+                    animation: bounce 0.8s ease-in-out 1;
+                }
+                @keyframes bounce {
+                    0%, 100% { transform: translateY(0); }
+                    20% { transform: translateY(-15px); }
+                    40% { transform: translateY(0); }
+                    60% { transform: translateY(-7px); }
+                    80% { transform: translateY(0); }
+                }
+            `;
+            var head = document.head || document.getElementsByTagName('head')[0];
+            if (head) {
+                // 為了避免重複插入 style 標籤，可以在插入前檢查
+                if (!document.getElementById('tool-selector-styles')) {
+                     style.id = 'tool-selector-styles';
+                     head.appendChild(style);
+                }
+            }
+            
+            // 4. 啟動應用程式渲染
+            renderLadder();
+        }
 
 
         // --- 渲染函數 (Render Functions) ---
@@ -216,7 +252,12 @@
             });
             html += `</div></div>`;
             
-            questionCardContainer.innerHTML = html;
+            // 檢查 DOM 元素是否成功抓取
+            if(questionCardContainer) {
+                 questionCardContainer.innerHTML = html;
+            } else {
+                 console.error("Error: questionCardContainer not found. Cannot render question.");
+            }
         }
 
         /** 渲染結果卡片 */
@@ -229,4 +270,91 @@
             html += `</div>`;
             
             html += `<h2 class="text-4xl font-extrabold text-gray-900 mb-4">${result.title}</h2>`;
-            html += `<div class="inline-block p-4 rounded-xl bg-${result.color}/1
+            html += `<div class="inline-block p-4 rounded-xl bg-${result.color}/10 border-l-4 border-${result.color} mx-auto max-w-lg mb-6 shadow-md">`;
+            html += `<h3 class="text-2xl font-bold text-gray-800 mb-2">${result.method}</h3>`;
+            html += `<p class="text-gray-600 text-lg">${result.purpose}</p>`;
+            html += `</div>`;
+            
+            // 重置按鈕
+            html += `<button class="btn bg-gray-500/80 text-white hover:bg-gray-700 mx-auto mt-6 w-auto px-12 py-3" 
+                             onclick="navigate('Q1')">
+                        🔄 重新挑戰 (從頭開始)
+                    </button>`;
+            html += `</div>`;
+            
+             // 檢查 DOM 元素是否成功抓取
+            if(questionCardContainer) {
+                 questionCardContainer.innerHTML = html;
+            } else {
+                 console.error("Error: questionCardContainer not found. Cannot render result.");
+            }
+        }
+
+        /** 渲染歷史軌跡 */
+        function renderLadder() {
+            var html = `<span class="font-bold text-base text-primary-pink mr-2">🗺️ 您的選擇路徑：</span>`;
+            
+            // 渲染步驟
+            history.forEach((item, index) => {
+                // 每個歷史項目
+                html += `
+                    <div class="history-item group" onclick="rewindToStep('${item.key}')">
+                        <span class="text-primary-pink font-bold">${index + 1}.</span>
+                        <span class="rewind-text text-gray-600">${item.text}</span>
+                        <span class="text-gray-400">»</span>
+                    </div>
+                `;
+            });
+
+            // 渲染當前狀態
+            const current = decisionTree[currentStepKey];
+            if (current && current.isResult) {
+                 html += `<span class="text-goal-green font-bold flex items-center space-x-1">${current.icon} <span>${current.method}</span></span>`;
+            } else if (current) {
+                 html += `<span class="text-gray-800 font-bold flex items-center space-x-1">${current.icon} <span>${current.title.split('：')[0]}</span></span>`;
+            }
+            
+            if(historyTrailDiv) {
+                historyTrailDiv.innerHTML = html;
+            } else {
+                console.error("Error: historyTrailDiv not found. Cannot render history.");
+            }
+
+            // 根據當前步驟渲染問題或結果
+            if (current && current.isResult) {
+                renderResult(currentStepKey);
+            } else if (current) {
+                renderQuestion(currentStepKey);
+            }
+        }
+
+
+        // --- 導航函數 (Navigation Function) ---
+        function navigate(nextState, questionKey, selectedText) {
+            // 如果是從問題跳轉到下一個步驟，記錄歷史
+            if (questionKey && selectedText) {
+                history.push({ key: questionKey, selection: nextState, text: selectedText });
+            } else if (nextState === 'Q1') {
+                // 這是重置邏輯
+                history = [];
+            }
+            currentStepKey = nextState;
+            renderLadder(); 
+        }
+
+        // --- 回溯函數 (Rewind Function) ---
+        function rewindToStep(targetKey) {
+            const targetIndex = history.findIndex(item => item.key === targetKey);
+            if (targetIndex !== -1) {
+                history = history.slice(0, targetIndex);
+                navigate(targetKey);
+            }
+        }
+
+        // 【關鍵修正】: 腳本一載入，即刻啟動應用程式
+        initializeToolSelector();
+
+    </script>
+
+</body>
+</html>
