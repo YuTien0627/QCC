@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html lang="zh-TW" class="scroll-smooth">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>品管圈（QCC）新手入門互動指南</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body { font-family: 'Inter', sans-serif; background-color: #ecfdf5; }
-        .nav-button { transition: all 0.3s ease-in-out; border-bottom: 3px solid transparent; }
-        .nav-button.active { color: #0d9488; border-color: #0d9488; font-weight: 700; }
-        .format-tab, .sub-tab { transition: all 0.3s ease-in-out; min-height: 40px; }
-        #content-area { min-height: 500px; }
-        #content-frame { width: 100%; height: 100%; border: none; min-height: 500px; }
-        #last-updated { text-align: right; margin-top: 1rem; color: #555; font-size: 0.9rem; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>品管圈（QCC）新手入門互動指南</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+    body { font-family: 'Inter', sans-serif; background-color: #ecfdf5; }
+    .nav-button { transition: all 0.3s ease-in-out; border-bottom: 3px solid transparent; }
+    .nav-button.active { color: #0d9488; border-color: #0d9488; font-weight: 700; }
+    .format-tab, .sub-tab { transition: all 0.3s ease-in-out; min-height: 40px; }
+    #content-area { width: 100%; }
+    #content-frame { width: 100%; border: none; min-height: 500px; }
+    #last-updated { text-align: right; margin-top: 1rem; color: #555; font-size: 0.9rem; }
+</style>
 </head>
 <body class="antialiased">
 
@@ -55,7 +55,7 @@
         <button class="sub-tab px-4 py-2 rounded-lg bg-gray-200" onclick="loadExternalPage('品管手法.html', this)">📚 品管手法</button>
     </div>
 
-    <!-- 內容區 (使用 iframe) -->
+    <!-- 內容區 -->
     <div id="content-area" class="px-4">
         <iframe id="content-frame" src=""></iframe>
     </div>
@@ -66,81 +66,92 @@
 </div>
 
 <script>
-    function activateNav(id){
-        document.querySelectorAll('.nav-button').forEach(btn=>btn.classList.remove('active'));
-        document.getElementById(id)?.classList.add('active');
-    }
+function activateNav(id){
+    document.querySelectorAll('.nav-button').forEach(btn=>btn.classList.remove('active'));
+    document.getElementById(id)?.classList.add('active');
+}
 
-    function showFormatTabs(){
-        activateNav('nav-btn-format');
-        document.getElementById('format-tabs').classList.remove('hidden');
-        document.getElementById('tool-tabs').classList.add('hidden');
-        loadFormatPage('書面格式_問題型.html', document.querySelectorAll('.format-tab')[0]);
-    }
+function showFormatTabs(){
+    activateNav('nav-btn-format');
+    document.getElementById('format-tabs').classList.remove('hidden');
+    document.getElementById('tool-tabs').classList.add('hidden');
+    loadFormatPage('書面格式_問題型.html', document.querySelectorAll('.format-tab')[0]);
+}
 
-    function loadFormatPage(page, btn){
-        document.querySelectorAll('.format-tab').forEach(b=>b.classList.remove('bg-teal-300','text-white','font-bold'));
+function loadFormatPage(page, btn){
+    document.querySelectorAll('.format-tab').forEach(b=>b.classList.remove('bg-teal-300','text-white','font-bold'));
+    btn.classList.add('bg-teal-300','text-white','font-bold');
+    loadIframe(page);
+}
+
+function showToolTabs(){
+    activateNav('nav-btn-selection');
+    document.getElementById('tool-tabs').classList.remove('hidden');
+    document.getElementById('format-tabs').classList.add('hidden');
+    loadExternalPage('選擇工具.html', document.querySelectorAll('#tool-tabs .sub-tab')[0]);
+}
+
+function loadExternalPage(page, btn){
+    if(btn){
+        const parentTabs = btn.parentElement.querySelectorAll('button');
+        parentTabs.forEach(b=>b.classList.remove('bg-teal-300','text-white','font-bold'));
         btn.classList.add('bg-teal-300','text-white','font-bold');
-        document.getElementById('content-frame').src = page;
-        updateLastUpdated();
     }
-
-    function showToolTabs(){
-        activateNav('nav-btn-selection');
+    if(btn?.closest('#tool-tabs')){
         document.getElementById('tool-tabs').classList.remove('hidden');
         document.getElementById('format-tabs').classList.add('hidden');
-        loadExternalPage('選擇工具.html', document.querySelectorAll('#tool-tabs .sub-tab')[0]);
-    }
-
-    function loadExternalPage(page, btn){
-        // 高亮子 tab
-        if(btn){
-            const parentTabs = btn.parentElement.querySelectorAll('button');
-            parentTabs.forEach(b=>b.classList.remove('bg-teal-300','text-white','font-bold'));
-            btn.classList.add('bg-teal-300','text-white','font-bold');
-        }
-
-        // 顯示正確第二層
-        if(btn?.closest('#tool-tabs')){
-            document.getElementById('tool-tabs').classList.remove('hidden');
-            document.getElementById('format-tabs').classList.add('hidden');
-        } else if(btn?.closest('#format-tabs')){
-            document.getElementById('format-tabs').classList.remove('hidden');
-            document.getElementById('tool-tabs').classList.add('hidden');
-        } else {
-            document.getElementById('format-tabs').classList.add('hidden');
-            document.getElementById('tool-tabs').classList.add('hidden');
-        }
-
-        document.getElementById('content-frame').src = page;
-        updateLastUpdated();
-    }
-
-    function goHome(){
-        activateNav('nav-btn-home');
+    } else if(btn?.closest('#format-tabs')){
+        document.getElementById('format-tabs').classList.remove('hidden');
+        document.getElementById('tool-tabs').classList.add('hidden');
+    } else {
         document.getElementById('format-tabs').classList.add('hidden');
         document.getElementById('tool-tabs').classList.add('hidden');
-        document.getElementById('content-frame').src = '首頁.html';
-        updateLastUpdated();
     }
+    loadIframe(page);
+}
 
-    function updateLastUpdated() {
-        const lastModifiedStr = document.lastModified;
-        const lastModifiedDate = new Date(lastModifiedStr);
-        if (isNaN(lastModifiedDate.getTime())) return;
-        const formatter = new Intl.DateTimeFormat('zh-TW', {
-            timeZone: 'Asia/Taipei',
-            year: 'numeric', month: '2-digit', day: '2-digit',
-            hour: '2-digit', minute: '2-digit', hour12: false
-        });
-        const parts = formatter.formatToParts(lastModifiedDate);
-        const get = type => parts.find(p => p.type === type)?.value || '';
-        const year = get('year'), month = get('month'), day = get('day'), hour = get('hour'), minute = get('minute');
-        document.getElementById("last-updated").textContent = `最後更新時間（中原標準時間）: ${year}年${month}月${day}日 ${hour}:${minute}`;
-    }
+// iframe 自動撐高函數
+function loadIframe(page){
+    const iframe = document.getElementById('content-frame');
+    iframe.src = page;
 
-    // 初始化
-    goHome();
+    iframe.onload = function() {
+        try {
+            // 自動撐高 iframe
+            const doc = iframe.contentDocument || iframe.contentWindow.document;
+            iframe.style.height = doc.body.scrollHeight + 'px';
+        } catch(e){
+            // 若跨域，使用預設高度
+            iframe.style.height = '1200px';
+        }
+    };
+    updateLastUpdated();
+}
+
+function goHome(){
+    activateNav('nav-btn-home');
+    document.getElementById('format-tabs').classList.add('hidden');
+    document.getElementById('tool-tabs').classList.add('hidden');
+    loadIframe('首頁.html');
+}
+
+function updateLastUpdated() {
+    const lastModifiedStr = document.lastModified;
+    const lastModifiedDate = new Date(lastModifiedStr);
+    if (isNaN(lastModifiedDate.getTime())) return;
+    const formatter = new Intl.DateTimeFormat('zh-TW', {
+        timeZone: 'Asia/Taipei',
+        year: 'numeric', month: '2-digit', day: '2-digit',
+        hour: '2-digit', minute: '2-digit', hour12: false
+    });
+    const parts = formatter.formatToParts(lastModifiedDate);
+    const get = type => parts.find(p => p.type === type)?.value || '';
+    const year = get('year'), month = get('month'), day = get('day'), hour = get('hour'), minute = get('minute');
+    document.getElementById("last-updated").textContent = `最後更新時間（中原標準時間）: ${year}年${month}月${day}日 ${hour}:${minute}`;
+}
+
+// 初始化
+goHome();
 </script>
 
 </body>
