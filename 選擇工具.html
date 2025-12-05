@@ -378,7 +378,8 @@
         }
 
         // 應用程式啟動時，導航到第一個問題
-        window.onload = () => {
+        // 使用 IIFE (立即執行函數) 確保在頁面結構載入後立即啟動渲染，而不是等待 window.onload
+        (function init() {
              // 定義讓結果圖示彈跳一次的 CSS 動畫
             const style = document.createElement('style');
             style.innerHTML += `
@@ -395,8 +396,8 @@
             `;
             document.head.appendChild(style);
             
-            navigate('Q1');
-        };
+            navigate('Q1'); // 立即渲染第一個步驟
+        })();
     </script>
 
 </body>
