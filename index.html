@@ -6,22 +6,19 @@
     <title>品管圈（QCC）新手入門互動指南</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #ecfdf5; }
-        .section-title { border-left: 6px solid #0d9488; padding-left: 0.75rem; transition: all 0.3s ease-in-out; }
+        body { font-family: 'Inter', sans-serif; background-color: #ecfdf5; margin:0; }
         .nav-button { transition: all 0.3s ease-in-out; border-bottom: 3px solid transparent; }
         .nav-button.active { color: #0d9488; border-color: #0d9488; font-weight: 700; }
-        .format-tab, .sub-tab { transition: all 0.3s ease-in-out; min-height: 40px; }
-        .ai-chat-response { white-space: pre-wrap; }
-        .loading-spinner { border: 4px solid #f3f3f3; border-top: 4px solid #0d9488; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        #content-area { min-height: 500px; } /* 保留高度空間避免跳動 */
+        .format-tab, .sub-tab { transition: all 0.3s ease-in-out; min-height: 50px; }
+        #content-area { width: 100%; min-height: 500px; }
         #content-frame { width: 100%; height: 100%; border: none; min-height: 500px; }
-        #last-updated { text-align: right; margin-top: 1rem; color: #555; font-size: 0.9rem; }
+        #last-updated { text-align: right; margin-top: 0.5rem; color: #555; font-size: 0.9rem; }
     </style>
 </head>
 <body class="antialiased">
 
 <div class="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8">
+
     <!-- 標題 -->
     <header class="text-center py-10 bg-white shadow-xl rounded-xl mb-6 border-t-8 border-teal-600">
         <div class="flex flex-col items-center">
@@ -35,7 +32,7 @@
         </div>
     </header>
 
-    <!-- 外層導航列 -->
+    <!-- 第一層導航列 -->
     <nav class="sticky top-0 z-10 flex justify-center bg-white p-2 rounded-xl shadow-lg mb-4 space-x-4">
         <button id="nav-btn-home" onclick="goHome()" class="nav-button active text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">🚀 首頁</button>
         <button id="nav-btn-selection" onclick="showToolTabs()" class="nav-button text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">🎁 工具大禮包</button>
@@ -47,7 +44,7 @@
     <!-- 第二層書面格式 tabs -->
     <div id="format-tabs" class="flex justify-center mt-4 space-x-3 min-h-[50px] hidden">
         <button class="format-tab px-4 py-2 rounded-lg bg-gray-200" onclick="loadFormatPage('書面格式_問題型.html', this)">🧩 問題型</button>
-        <button class="format-tab px-4 py-2 rounded-lg bg-gray-200" onclick="loadFormatPage('書面格式_解決型.html', this)">💡 解決型</button>
+        <button class="format-tab px-4 py-2 rounded-lg bg-gray-200" onclick="loadFormatPage('書面格式_課達型.html', this)">💡 課達型</button>
         <button class="format-tab px-4 py-2 rounded-lg bg-gray-200" onclick="loadFormatPage('書面格式_RCA.html', this)">🔍 RCA</button>
         <button class="format-tab px-4 py-2 rounded-lg bg-gray-200" onclick="loadFormatPage('書面格式_HFMEA.html', this)">⚠️ HFMEA</button>
     </div>
@@ -58,7 +55,7 @@
         <button class="sub-tab px-4 py-2 rounded-lg bg-gray-200" onclick="loadExternalPage('品管手法.html', this)">📚 品管手法</button>
     </div>
 
-    <!-- 內容區 (使用 iframe) -->
+    <!-- 內容區 (iframe) -->
     <div id="content-area" class="px-4">
         <iframe id="content-frame" src=""></iframe>
     </div>
@@ -96,18 +93,17 @@
         activateNav('nav-btn-selection');
         document.getElementById('tool-tabs').classList.remove('hidden');
         document.getElementById('format-tabs').classList.add('hidden');
-        // 預設載入品管工具
         loadExternalPage('選擇工具.html', document.querySelectorAll('#tool-tabs .sub-tab')[0]);
     }
 
-    // 外層其他頁面載入 (iframe)
+    // 其他頁面載入 (iframe)
     function loadExternalPage(page, btn){
         // 高亮子 tab
         const parentTabs = btn.parentElement.querySelectorAll('button');
         parentTabs.forEach(b=>b.classList.remove('bg-teal-300','text-white','font-bold'));
         btn.classList.add('bg-teal-300','text-white','font-bold');
 
-        // 讓第二層 tabs 保留空間
+        // 顯示第二層 tabs 空間
         if(btn.closest('#tool-tabs')){
             document.getElementById('tool-tabs').classList.remove('hidden');
             document.getElementById('format-tabs').classList.add('hidden');
@@ -115,13 +111,11 @@
             document.getElementById('format-tabs').classList.remove('hidden');
             document.getElementById('tool-tabs').classList.add('hidden');
         } else {
-            // 沒有第二層頁簽的頁面保留高度
             document.getElementById('format-tabs').classList.add('hidden');
             document.getElementById('tool-tabs').classList.add('hidden');
         }
 
-        const iframe = document.getElementById('content-frame');
-        iframe.src = page;
+        document.getElementById('content-frame').src = page;
         updateLastUpdated();
     }
 
@@ -130,13 +124,11 @@
         activateNav('nav-btn-home');
         document.getElementById('format-tabs').classList.add('hidden');
         document.getElementById('tool-tabs').classList.add('hidden');
-        const iframe = document.getElementById('content-frame');
-        iframe.src = '';
-        document.getElementById('content-area').innerHTML = "<h2 class='text-2xl font-bold text-center mt-10'>歡迎來到 QCC 主頁 🎉</h2>";
+        document.getElementById('content-frame').src = '首頁.html';
         updateLastUpdated();
     }
 
-    // ========== 最後更新時間 ==========
+    // 最後更新時間
     function updateLastUpdated() {
         const lastModifiedStr = document.lastModified;
         const lastModifiedDate = new Date(lastModifiedStr);
