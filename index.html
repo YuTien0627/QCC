@@ -37,8 +37,8 @@
             <button id="nav-btn-home" onclick="goHome()" class="nav-button active text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">🚀 首頁</button>
             <button id="nav-btn-selection" onclick="showToolTabs()" class="nav-button text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">🎁 工具大禮包</button>
             <button id="nav-btn-format" onclick="showFormatTabs()" class="nav-button text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">📝 書面格式</button>
-            <button id="nav-btn-tools" onclick="loadExternalPage('參考資料.html','nav-btn-tools')" class="nav-button text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">🛠️ 參考資料</button>
-            <button id="nav-btn-quiz" onclick="loadExternalPage('小測驗.html','nav-btn-quiz')" class="nav-button text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">🎯 小試身手</button>
+            <button id="nav-btn-tools" onclick="loadExternalPage('參考資料.html', this)" class="nav-button text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">🛠️ 參考資料</button>
+            <button id="nav-btn-quiz" onclick="loadExternalPage('小測驗.html', this)" class="nav-button text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">🎯 小試身手</button>
         </nav>
 
         <!-- 第二層書面格式 tabs -->
@@ -59,6 +59,9 @@
         <div id="content-area" class="px-4">
             <h2 class="text-2xl font-bold text-center mt-10">歡迎來到 QCC 主頁 🎉</h2>
         </div>
+
+        <!-- 最後更新時間 -->
+        <div class="text-center mt-6 text-gray-500" id="last-updated"></div>
 
     </div>
 
@@ -90,7 +93,6 @@
             activateNav('nav-btn-selection');
             document.getElementById('tool-tabs').classList.remove('hidden');
             document.getElementById('format-tabs').classList.add('hidden');
-            // 預設載入品管工具
             loadExternalPage('選擇工具.html', document.querySelectorAll('#tool-tabs .sub-tab')[0]);
         }
 
@@ -113,6 +115,44 @@
             document.getElementById('tool-tabs').classList.add('hidden');
             document.getElementById('content-area').innerHTML = "<h2 class='text-2xl font-bold text-center mt-10'>歡迎來到 QCC 主頁 🎉</h2>";
         }
+
+        // ========== 最後更新時間：使用檔案最後修改時間 ==========
+        function updateLastUpdated() {
+            const lastModifiedStr = document.lastModified;
+            const lastModifiedDate = new Date(lastModifiedStr);
+
+            if (isNaN(lastModifiedDate.getTime())) {
+                console.warn('無法解析 document.lastModified：', lastModifiedStr);
+                return;
+            }
+
+            const formatter = new Intl.DateTimeFormat('zh-TW', {
+                timeZone: 'Asia/Taipei',
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false
+            });
+
+            const parts = formatter.formatToParts(lastModifiedDate);
+            const get = type => parts.find(p => p.type === type)?.value || '';
+
+            const year = get('year');
+            const month = get('month');
+            const day = get('day');
+            const hour = get('hour');
+            const minute = get('minute');
+
+            const el = document.getElementById("last-updated");
+            if (el) {
+                el.textContent = `最後更新時間（中原標準時間）: ${year}年${month}月${day}日 ${hour}:${minute}`;
+            }
+        }
+
+        // 執行最後更新時間
+        updateLastUpdated();
     </script>
 
 </body>
