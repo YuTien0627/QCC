@@ -177,47 +177,7 @@
             R_RCA: { title: "🕵️‍♂️ 系統偵探出動！", methodology: "🔎 RCA (根本原因分析)", purpose: "當發生【重大不良事件】時，您需要這套工具深入挖掘問題的Root Cause (根源)。它會找出系統性的漏洞，確保這類事件不會再在同樣的地方跌倒！", icon: "🤯", bgColor: "bg-issue-red/15", textColor: "text-issue-red", borderColor: "border-issue-red" },
             R_QCC: { title: "🛠️ 日常優化專家就是您！", methodology: "✨ QCC (問題解決型/品質改善)", purpose: "這是您提升日常流程品質的【萬用工具箱】！當有缺失、抱怨或數據不佳時，它能引導您系統化地「找原因 → 解決原因」，讓現況變得更好！", icon: "🌈", bgColor: "bg-primary-pink/15", textColor: "text-primary-pink", borderColor: "border-primary-pink" },
             
-            // --- 新增：詳細實施步驟頁面 (Details) ---
-            D_GOAL: {
-                title: "🎯 課題達成型：實施步驟 (PDCA)", icon: "🏆", color: "text-goal-green",
-                steps: [
-                    { num: 1, title: "PLAN (計畫)：確立目標、擬定計畫", detail: "清楚定義想要達成的目標和衡量指標 (KPI)。根據目標，設計具體的實施步驟和時程。", icon: "📝" },
-                    { num: 2, title: "DO (執行)：實施計畫", detail: "按照規劃好的步驟進行操作。在這個階段，需要持續監控進度並記錄過程中的數據。", icon: "🏃" },
-                    { num: 3, title: "CHECK (查核)：評估結果、比較差異", detail: "根據紀錄的數據，將實際結果與原先設定的目標進行比較，分析達成度與差異原因。", icon: "📊" },
-                    { num: 4, title: "ACT (處置)：標準化、持續改進", detail: "如果目標達成，則將成功的經驗標準化。如果未達成，則調整計畫，開始新一輪的 PDCA 循環。", icon: "🔄" },
-                ]
-            },
-            D_HFMEA: {
-                title: "🛡️ HFMEA：實施步驟 (風險預警)", icon: "🚨", color: "text-secondary-purple",
-                steps: [
-                    { num: 1, title: "確立流程/服務主題", detail: "選擇一個需要評估風險的流程，如藥物給予流程、設備交接流程等。", icon: "📌" },
-                    { num: 2, title: "組成跨職能團隊", detail: "召集熟悉該流程的各部門專家，共同參與分析。", icon: "🤝" },
-                    { num: 3, title: "繪製詳細流程圖", detail: "將流程拆解到最細部的步驟，識別每個步驟的『潛在失效點』。", icon: "🗺️" },
-                    { num: 4, title: "分析失效模式與後果", detail: "對於每個失效點，討論可能出錯的方式 (Mode) 和造成的後果 (Effect)。計算 RPN 值。", icon: "💥" },
-                    { num: 5, title: "實施與評估控制措施", detail: "針對高 RPN 的失效模式，設計預防性的控制措施，並確認措施實施後的風險是否降低。", icon: "✅" },
-                ]
-            },
-            D_RCA: {
-                title: "🔎 RCA：實施步驟 (系統偵錯)", icon: "🤯", color: "text-issue-red",
-                steps: [
-                    { num: 1, title: "界定與描述問題", detail: "清晰地定義『什麼發生了？誰/在哪裡？何時？嚴重性？』，並設定調查範圍。", icon: "📋" },
-                    { num: 2, title: "收集資料與證據", detail: "收集所有相關文件、紀錄、訪談資料，重建事件的發生經過。", icon: "📂" },
-                    { num: 3, title: "找出根本原因", detail: "使用 5 Whys、魚骨圖等工具，持續向下追問，從直接原因找到潛在的系統性原因。", icon: "❓" },
-                    { num: 4, title: "制定與實施糾正措施", detail: "措施應針對『根本原因』而非症狀。設計多重防護機制 (Barrier) 來防止再發。", icon: "🔧" },
-                    { num: 5, title: "評估結果與標準化", detail: "確認措施實施後的成效。將有效的新流程或規定納入標準作業，確保持續性。", icon: "📜" },
-                ]
-            },
-            D_QCC: {
-                title: "✨ QCC：實施步驟 (日常優化)", icon: "🌈", color: "text-primary-pink",
-                steps: [
-                    { num: 1, title: "選定主題", detail: "從日常數據或抱怨中，選擇一個具體、可改善的品質問題作為主題。", icon: "🎯" },
-                    { num: 2, title: "現狀把握與目標設定", detail: "收集數據，確認問題的嚴重程度與範圍。設定明確的改善目標。", icon: "📈" },
-                    { num: 3, title: "分析原因", detail: "使用層別法、柏拉圖、魚骨圖等工具，從眾多原因中找出『主要原因』。", icon: "🧠" },
-                    { num: 4, title: "制定對策與實施", detail: "針對主要原因，提出多種解決方案，選擇最佳對策並執行。", icon: "💡" },
-                    { num: 5, title: "效果確認與標準化", detail: "再次收集數據，確認對策是否有效達成目標。將成功的做法寫入標準作業。", icon: "💯" },
-                ]
-            }
-        };
+;
         // --- 決策樹資料結構 (Decision Tree Content) 結束 ---
 
 
