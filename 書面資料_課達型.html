@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QCC 專案追蹤儀表板</title>
+    <!-- 載入 Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Noto+Sans+TC:wght@500;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* 統一字體為 Noto Sans TC */
+        body {
+            font-family: 'Noto Sans TC', 'Inter', sans-serif;
+        }
+
+        /* 步驟卡片陰影統一與 hover 效果 */
+        .step-card {
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.06);
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .step-card:hover:not(.selected) {
+            transform: translateX(4px) scale(1.01);
+            box-shadow: 0 6px 10px rgba(0,0,0,0.15);
+        }
+        .step-card.selected {
+            /* 保持選中時的可愛粉色強調 */
+            box-shadow: 0 10px 20px rgba(217,70,239,0.3);
+            transform: scale(1.02);
+            background-color: #fce7f3; /* pink-100 */
+            border: 4px solid #c084fc; /* purple-400 */
+        }
+    </style>
+</head>
+<body class="bg-pink-50 min-h-screen p-4 md:p-8">
+
+    <!-- 主容器圓角和陰影更突出 -->
+    <div class="max-w-6xl mx-auto bg-white rounded-[3rem] shadow-2xl overflow-hidden ring-4 ring-pink-200">
+        
+        <!-- 頂部標題與說明 - 新增 text-center 類別 -->
+        <header class="bg-teal-400 p-8 md:p-10 text-white rounded-t-[3rem] shadow-xl text-center">
+            <!-- h1 內新增 justify-center 類別以置中內容 (圖標+文字) -->
+            <h1 class="text-3xl md:text-5xl font-extrabold mb-2 flex items-center justify-center text-teal-900">
+                <span class="mr-3 text-3xl">✨</span>
+                QCC 九大步驟知識儀表板
+            </h1>
+            <p class="text-teal-800 text-lg font-medium">快速查閱 PDCA 循環的關鍵執行重點與常見陷阱！</p>
+        </header>
+
+        <!-- 主要內容區塊：兩排佈局 (在小螢幕上會堆疊) -->
+        <div class="p-6 md:p-10 flex flex-col md:flex-row gap-8">
+
+            <!-- 左欄：步驟列表 (導航) -->
+            <nav class="md:w-1/3 sticky top-4">
+                <h2 class="text-2xl font-bold text-teal-700 mb-6 flex items-center">
+                    <span class="mr-2 text-3xl">📚</span> 課答型魔法步驟清單
+                </h2>
+                <ul id="step-list" class="space-y-4">
+                    <!-- 步驟項目將由 JavaScript 動態生成 -->
+                </ul>
+            </nav>
+
+            <!-- 右欄：步驟詳細內容 -->
+            <main id="step-content-main" class="md:w-2/3">
+                
+                <div id="step-content">
+                    <!-- 預設歡迎畫面 -->
+                    <div id="welcome-message" class="text-center p-10 bg-teal-50 rounded-2xl border-4 border-teal-300">
+                        <p class="text-3xl mb-4 text-teal-600 font-medium">歡迎使用 QCC 儀表板！</p>
+                        <p class="text-4xl font-bold text-teal-800">請在左側點擊步驟開始查閱。💚</p>
+                        <div class="text-6xl mt-6">⭐</div>
+                    </div>
+                </div>
+
+                <!-- 步驟內容模板 (隱藏) -->
+                <template id="content-template">
+                    <div>
+                        <!-- 步驟標題 -->
+                        <h3 class="text-3xl font-extrabold text-teal-800 mb-6 p-2 border-b-4 border-teal-300">
+                            <span id="content-title"></span>
+                        </h3>
+                        
+                        <!-- 區塊 1: 撰寫重點 (黃色風格) -->
+                        <div class="mb-8 p-6 bg-amber-50 rounded-2xl border-4 border-amber-400 shadow-lg">
+                            <h4 class="text-2xl font-bold text-amber-700 mb-4 flex items-center">
+                                <span class="mr-2 text-3xl">📝</span> 撰寫重點 (Key Points)
+                            </h4>
+                            <ul id="key-points" class="list-disc pl-6 space-y-3 text-gray-700 text-lg">
+                                <!-- Key points will be inserted here -->
+                            </ul>
+                        </div>
+
+                        <!-- 區塊 2: 常見的品管工具 (綠色風格) -->
+                        <div class="mb-8 p-6 bg-teal-50 rounded-2xl border-4 border-teal-400 shadow-lg">
+                            <h4 class="text-2xl font-bold text-teal-700 mb-4 flex items-center">
+                                <span class="mr-2 text-3xl">🧰</span> 常見的品管工具 (QC Tools)
+                            </h4>
+                            <ul id="qc-tools" class="list-disc pl-6 space-y-3 text-gray-700 text-lg">
+                                <!-- QC Tools will be inserted here -->
+                            </ul>
+                        </div>
+
+                        <!-- 區塊 3: 常見錯誤 (紅色風格 - 警示區塊) -->
+                        <div class="mb-8 p-6 bg-rose-50 rounded-2xl border-4 border-rose-400 shadow-lg">
+                            <h4 class="text-2xl font-bold text-rose-700 mb-4 flex items-center">
+                                <span class="mr-2 text-3xl">❌</span> 常見錯誤 (Common Mistakes)
+                            </h4>
+                            <div id="common-mistakes" class="space-y-4 text-gray-700">
+                                <!-- Common Mistakes will be inserted here -->
+                            </div>
+                        </div>
+
+                        <!-- 區塊 4: Q&A (獨立區塊，紫色風格 - 詢問區塊) -->
+                        <div class="p-6 bg-indigo-50 rounded-2xl border-4 border-indigo-400 shadow-lg">
+                            <h4 class="text-2xl font-bold text-indigo-700 mb-4 flex items-center">
+                                <span class="mr-2 text-3xl">💡</span> 步驟 Q&A (Quick Answers)
+                            </h4>
+                            <div id="faq" class="space-y-4 text-gray-700">
+                                <!-- FAQ will be inserted here -->
+                            </div>
+                        </div>
+                    </div>
+                </template>
+
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // QCC 步驟數據
+        const stepsData = [
+            {
+                id: 1,
+                name: "主題選定",
+                enName: "Theme Selection",
+                icon: "🎯",
+                keyPoints: [
+                    "選定主題需有量化指標（例如：降低費用、提升效率）。",
+                    "需說明選題理由，佐證其對各方的效益（對病人、同仁、院方）。",
+                    "必須執行文獻查證，以強化主題的重要性。",
+                ],
+                qcTools: ["親和圖法 (KJ法)", "矩陣圖法", "趨勢圖"],
+                commonMistakes: ["題目範圍過大或過小，缺乏量化指標。", "未進行充分文獻查證，主題重要性薄弱。", "選題理由與團隊能力不符。"],
+                faq: {
+                    question: "主題被上級指定怎麼辦？",
+                    answer: "可以省略主題一覽表的評選矩陣，但一定要清楚敘述主題的來源、動機及重要性！",
+                }
+            },
+            {
+                id: 2,
+                name: "活動計劃擬訂",
+                enName: "Activity Planning",
+                icon: "🗓️",
+                keyPoints: [
+                    "依據「課題達成型」的 PDCA 流程擬定詳細計畫。",
+                    "利用甘特圖（Gantt Chart）呈現，清楚標示 WHAT, WHEN, HOW, WHO, WHERE。",
+                    "區分計畫線（預計）與實施線（實際），以便隨時檢視進度。",
+                ],
+                qcTools: ["甘特圖 (Gantt Chart)", "柏拉圖 (Pareto Chart)"],
+                commonMistakes: ["計劃過於理想，未考慮實際執行困難。", "未區分計畫線與實施線，難以追蹤偏差。", "執行者、資源、地點等資訊模糊。"],
+                faq: {
+                    question: "活動期間多久比較合適？",
+                    answer: "活動期間長度需合理分配，以確保能完成從主題選定到標準化的完整 PDCA 循環，通常建議在 6 個月內。",
+                }
+            },
+            {
+                id: 3,
+                name: "課題明確化",
+                enName: "Problem Clarification",
+                icon: "🔍",
+                keyPoints: [
+                    "描繪相關作業流程圖，並標註本次改善範圍。",
+                    "掌握項目必須以「名詞」呈現，且最好有文獻或標竿資料佐證。",
+                    "透過望差值（期望水準 - 現況水準）來確認最需要解決的「攻堅點」。",
+                ],
+                qcTools: ["流程圖 (Flow Chart)", "魚骨圖 (特性要因圖)", "柏拉圖 (Pareto Chart)"],
+                commonMistakes: ["課題點停留在表象，未深入探究根本原因。", "望差值計算錯誤或期望水準缺乏依據。", "攻堅點選擇缺乏邏輯或數據支持。"],
+                faq: {
+                    question: "如何選擇真正的「攻堅點」？",
+                    answer: "挑選望差值最大、消除望差的可能性最高、且工作場所因應力最強的項目！",
+                }
+            },
+            {
+                id: 4,
+                name: "目標設定",
+                enName: "Target Setting",
+                icon: "🏆",
+                keyPoints: [
+                    "蒐集改善前的現況數據，並使用 5W2H 說明數據收集的方法。",
+                    "目標值設定需有可靠依據（如標竿學習、醫學會建議、實證文獻）。",
+                    "設定的目標值必須符合 SMART 原則（具體、可衡量、可達成、相關、有時限）。",
+                ],
+                qcTools: ["5W2H 分析法", "SMART 原則", "管制圖 (Control Chart)"],
+                commonMistakes: ["目標設定過高或過低，缺乏量化數據支撐。", "目標依據不充足，只是憑空想像。", "數據收集方法不具體，難以複製。"],
+                faq: {
+                    question: "目標達成率的公式是什麼？",
+                    answer: "目標達成率 = (改善後 – 改善前) / (目標值 – 改善前) x 100%。",
+                }
+            },
+            {
+                id: 5,
+                name: "方策擬訂",
+                enName: "Strategy Formulation",
+                icon: "💭",
+                keyPoints: [
+                    "針對選定的攻堅點，使用腦力激盪發想多個解決策略（方策）。",
+                    "使用「方策效果評估表」評價每個方策的重要性、安全性、效益性。",
+                    "選定評價總分高於一定分數的方策作為後續追究對象。",
+                ],
+                qcTools: ["腦力激盪法 (Brainstorming)", "評估矩陣", "系統圖法"],
+                commonMistakes: ["方策發想缺乏針對性，與課題點無直接關聯。", "評估時只看效益，忽略安全性或執行難度。", "評估標準不一致或主觀性太強。"],
+                faq: {
+                    question: "評價方策時的重點是什麼？",
+                    answer: "不僅要看效果（效益性），更要注重「安全性」和實施的「重要性」！",
+                }
+            },
+            {
+                id: 6,
+                name: "最適策追究",
+                enName: "Optimal Strategy Pursuit",
+                icon: "✅",
+                keyPoints: [
+                    "針對選定的方策，預測實施過程可能發生的「障礙」與「副作用」。",
+                    "提出消除障礙與副作用的具體作法，形成「成功劇本」。",
+                    "將確認後的方策「具體化」形成詳細的實施計畫（誰、何時、何地、如何做）。",
+                ],
+                qcTools: ["PDPC 法 (過程決策計畫圖)", "具體化形成表", "流程圖"],
+                commonMistakes: ["未充分預測障礙與副作用，導致實施中途受阻。", "對策具體化不足，責任、時間、地點劃分不清。", "應對障礙的預防措施不夠完善。"],
+                faq: {
+                    question: "什麼是「副作用」？",
+                    answer: "副作用是指實施方策後可能產生、但並非預期中的負面影響，需要提前思考應對！例如，提高效率卻犧牲了部分準確性。",
+                }
+            },
+            {
+                id: 7,
+                name: "最適策實施與檢討",
+                enName: "Implementation and Review",
+                icon: "🛠️",
+                keyPoints: [
+                    "依照具體化形成表，確實執行計畫。",
+                    "確認對策執行情形（過程面指標），檢視實施的品質與達成率。",
+                    "實施後進行檢討（優點/缺點），並決定對策處置（列入標準或再對策）。",
+                ],
+                qcTools: ["檢核表 (Checklist)", "管制圖 (Control Chart)", "PDCA 循環"],
+                commonMistakes: ["未即時記錄與檢討執行過程，導致問題累積。", "遇到困難未及時修正，導致進度嚴重落後。", "對策檢討流於形式，沒有具體決策。"],
+                faq: {
+                    question: "如果對策執行後未達預期目標怎麼辦？",
+                    answer: "應回到上一步驟進行更詳細的分析，決定是「再對策」（修正現有方策）還是「回頭檢討課題」（重新審視課題點或目標）！",
+                }
+            },
+            {
+                id: 8,
+                name: "效果確認",
+                enName: "Effect Confirmation",
+                icon: "📊",
+                keyPoints: [
+                    "收集改善中、改善後數據，繪製條形圖與目標值進行比較（有形成果）。",
+                    "計算目標達成率與進步率，並將附加效益（如費用減少）轉化為金額。",
+                    "確認「無形成果」（如 QC 手法運用能力、團隊精神）並繪製雷達圖。",
+                ],
+                qcTools: ["推移圖 (Run Chart)", "柏拉圖", "雷達圖 (Radar Chart)"],
+                commonMistakes: ["數據收集期程過短，無法證明長期穩定效果。", "只計算有形成果，忽略了團隊成長等無形成果。", "數據呈現方式不夠清晰或圖表選擇不當。"],
+                faq: {
+                    question: "雷達圖評分前、後差在哪裡？",
+                    answer: "雷達圖呈現的是圈員在活動前後的成長與能力提升（如 QC 手法運用能力、團隊精神等），是用來衡量無形成果的重要工具。",
+                }
+            },
+            {
+                id: 9,
+                name: "標準化",
+                enName: "Standardization",
+                icon: "📖",
+                keyPoints: [
+                    "確認有效的措施，必須修改或納入標準化作業書（SOP）。",
+                    "標準化需依循正式程序：提案、會議同意、主管簽核、系統調整。",
+                    "標準化後需追蹤「效果維持」3-6 個月，建議使用推移圖確認成效不反彈。",
+                ],
+                qcTools: ["標準作業書 (SOP)", "推移圖", "標準化檢核表"],
+                commonMistakes: ["未經正式程序核准修改 SOP，標準化無效。", "標準化內容僅有對策，未涵蓋整個作業流程。", "標準化後未安排教育訓練，或未追蹤效果維持狀況。"],
+                faq: {
+                    question: "標準化要包含哪些內容？",
+                    answer: "包含：修改後的標準書內容、生效日期、所有相關系統的調整，以及負責維護的單位/人員。",
+                }
+            },
+            {
+                id: 10,
+                name: "檢討與改進",
+                enName: "Review and Improvement",
+                icon: "📈",
+                keyPoints: [
+                    "依活動步驟全面性檢討優點、缺點和未來努力方向。",
+                    "整理本期活動的殘留問題與後續改善計畫。",
+                    "決定下一期活動的主題，持續推動品質改善。",
+                ],
+                qcTools: ["活動檢討一覽表", "殘留問題表"],
+                commonMistakes: ["檢討流於形式，未依步驟全面性進行。", "未能客觀分析失敗原因，將責任歸咎於外部因素。", "未將殘留問題轉為下一期主題的具體規劃。"],
+                faq: {
+                    question: "檢討只需要看結果嗎？",
+                    answer: "不！檢討必須是「全面性」的，從主題選定到標準化，每個步驟的執行過程都要檢視，才能真正學到經驗。",
+                }
+            }
+        ];
+
+        let activeStep = null;
+        const stepListElement = document.getElementById('step-list');
+        const stepContentElement = document.getElementById('step-content');
+        const contentTemplate = document.getElementById('content-template');
+        const welcomeMessage = document.getElementById('welcome-message');
+
+        // 渲染步驟列表
+        function renderStepList() {
+            stepListElement.innerHTML = '';
+            stepsData.forEach(step => {
+                const li = document.createElement('li');
+                
+                // 按鈕改為 flex-col 讓文字能垂直堆疊
+                const button = document.createElement('button');
+                button.dataset.stepId = step.id;
+                
+                // 使用 Flex 容器來包裝文字，並設定 alignment: start
+                const contentWrapper = document.createElement('div');
+                contentWrapper.className = 'flex flex-col items-start';
+                
+                // Line 1: 中文名稱 (維持 font-bold text-xl)
+                const chineseLine = document.createElement('span');
+                chineseLine.className = 'font-bold text-xl'; 
+                chineseLine.textContent = `${step.id}. ${step.name}`; // e.g., "1. 主題選定"
+
+                // Line 2: 英文名稱 (text-base, text-gray-600, mt-1 for spacing)
+                const englishLine = document.createElement('span');
+                englishLine.className = 'text-base text-gray-600 mt-1 pl-[1.5rem]'; 
+                // [1.5rem] 是一個估計值，用來跳過 "1. " 或 "10. " 的寬度，使 ( 對齊中文的起點。
+                englishLine.textContent = `(${step.enName})`; // e.g., "(Theme Selection)"
+
+                contentWrapper.appendChild(chineseLine);
+                contentWrapper.appendChild(englishLine);
+
+                // 應用新的 step-card 樣式
+                button.className = `step-card w-full text-left py-3 px-4 rounded-xl flex items-start 
+                                     ${activeStep === step.id ? 'selected' : 'bg-white text-gray-800 border border-teal-200'}`;
+                
+                // 添加可愛的圖示
+                const iconSpan = document.createElement('span');
+                iconSpan.textContent = step.icon;
+                iconSpan.className = "mr-3 text-2xl mt-1"; // mt-1 讓圖標稍微往下移，與中文名稱中心對齊
+                button.prepend(iconSpan);
+
+                // 加入文字內容包裝器
+                button.appendChild(contentWrapper);
+
+                button.addEventListener('click', () => {
+                    setActiveStep(step.id);
+                });
+
+                li.appendChild(button);
+                stepListElement.appendChild(li);
+            });
+        }
+
+        // 設置選中的步驟並更新內容
+        function setActiveStep(id) {
+            activeStep = id;
+            renderStepList(); // 重新渲染列表以更新選中樣式
+            renderStepContent(id);
+        }
+
+        // 渲染右欄的步驟內容
+        function renderStepContent(id) {
+            const step = stepsData.find(s => s.id === id);
+            if (!step) return;
+
+            // 隱藏歡迎畫面
+            if (welcomeMessage) {
+                welcomeMessage.style.display = 'none';
+            }
+
+            // 使用模板複製結構
+            const content = contentTemplate.content.cloneNode(true);
+            const contentDiv = document.createElement('div');
+            contentDiv.appendChild(content);
+
+            // 更新標題
+            contentDiv.querySelector('#content-title').innerHTML = `<span class="text-4xl mr-3">${step.icon}</span> ${step.name}`;
+
+            // --- 區塊 1: 撰寫重點 (Key Points) ---
+            const keyPointsList = contentDiv.querySelector('#key-points');
+            keyPointsList.innerHTML = '';
+            step.keyPoints.forEach(point => {
+                const li = document.createElement('li');
+                li.textContent = point;
+                li.className = "text-lg text-gray-700 leading-relaxed";
+                keyPointsList.appendChild(li);
+            });
+
+            // --- 區塊 2: 常見的品管工具 (QC Tools) ---
+            const qcToolsList = contentDiv.querySelector('#qc-tools');
+            qcToolsList.innerHTML = '';
+            step.qcTools.forEach(tool => {
+                const li = document.createElement('li');
+                li.textContent = tool;
+                li.className = "text-lg text-gray-700 leading-relaxed font-medium text-teal-800";
+                qcToolsList.appendChild(li);
+            });
+
+            // --- 區塊 3: 常見錯誤 (Common Mistakes) ---
+            const commonMistakesDiv = contentDiv.querySelector('#common-mistakes');
+            commonMistakesDiv.innerHTML = `
+                <ul class="list-disc pl-6 space-y-2">
+                    ${step.commonMistakes.map(m => `<li class="text-lg text-gray-700 leading-relaxed">${m}</li>`).join('')}
+                </ul>
+            `;
+            
+            // --- 區塊 4: Q&A (FAQ) ---
+            const faqDiv = contentDiv.querySelector('#faq');
+            faqDiv.innerHTML = `
+                <div class="bg-white p-4 rounded-xl shadow-md border-l-4 border-indigo-500">
+                    <p class="text-xl font-bold text-indigo-800 mb-1">Q: ${step.faq.question}</p>
+                    <p class="text-lg text-gray-600 pl-2">A: ${step.faq.answer}</p>
+                </div>
+            `;
+
+
+            // 清空舊內容並添加新內容
+            stepContentElement.innerHTML = '';
+            stepContentElement.appendChild(contentDiv);
+        }
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            renderStepList();
+            // 預設選中第一個步驟
+            setActiveStep(1); 
+        });
+    </script>
+
+</body>
+</html>
