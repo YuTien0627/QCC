@@ -90,39 +90,133 @@
             </div>
         </header>
 
-        <!-- 導航頁籤 -->
-        <nav class="sticky top-0 z-10 flex justify-center bg-white p-2 rounded-xl shadow-lg mb-8 space-x-4">
-            <button id="nav-btn-home"
-                    onclick="goHome()"
-                    class="nav-button active text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">
-                🚀 首頁
-            </button>
+<!-- ========================= -->
+<!-- 🧭 外層導覽列（你的原本版本） -->
+<!-- ========================= -->
+<nav class="sticky top-0 z-10 flex justify-center bg-white p-2 rounded-xl shadow-lg mb-8 space-x-4">
+    <button id="nav-btn-home"
+        onclick="goHome()"
+        class="nav-button active text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">
+        🚀 首頁
+    </button>
 
-            <button id="nav-btn-selection tools"
-                onclick="loadExternalPage('選擇工具.html', 'nav-btn-selection tools')"
-                class="nav-button text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">
-                🎁 工具大禮包
-            </button>
+    <button id="nav-btn-selection"
+        onclick="loadExternalPage('選擇工具.html', 'nav-btn-selection')"
+        class="nav-button text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">
+        🎁 工具大禮包
+    </button>
 
-            <button id="nav-btn-form"
-                    onclick="loadExternalPage('書面格式_問題型.html', 'nav-btn-form')"
-                    class="nav-button text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">
-                📝 書面格式
-            </button>
+    <button id="nav-btn-format"
+        onclick="showFormatTabs()"
+        class="nav-button text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">
+        📝 書面格式
+    </button>
 
-            <button id="nav-btn-tools"
-                    onclick="loadExternalPage('參考資料.html', 'nav-btn-tools')"
-                    class="nav-button text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">
-                🛠️ 參考資料
-            </button>
+    <button id="nav-btn-tools"
+        onclick="loadExternalPage('參考資料.html', 'nav-btn-tools')"
+        class="nav-button text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">
+        🛠️ 參考資料
+    </button>
 
-            <!-- 小試身手 頁籤（依你 GitHub 的檔名調整，如有不同請改這裡） -->
-            <button id="nav-btn-quiz"
-                    onclick="loadExternalPage('小測驗.html', 'nav-btn-quiz')"
-                    class="nav-button text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">
-                🎯 小試身手
-            </button>
-        </nav>
+    <button id="nav-btn-quiz"
+        onclick="loadExternalPage('小測驗.html', 'nav-btn-quiz')"
+        class="nav-button text-lg px-6 py-2 text-gray-600 hover:text-teal-600 hover:border-teal-600">
+        🎯 小試身手
+    </button>
+</nav>
+
+
+<!-- ========================= -->
+<!-- 📦 內容區塊 -->
+<!-- ========================= -->
+<div id="content-area" class="px-4"></div>
+
+
+<!-- ========================= -->
+<!-- ⭐ 書面格式 第二層 TABS -->
+<!-- ========================= -->
+<div id="format-tabs" class="hidden flex justify-center mt-4 space-x-3">
+    <button class="format-tab px-4 py-2 rounded-lg bg-gray-200"
+        onclick="loadFormatPage('書面格式_問題型.html', this)">
+        🧩 問題型
+    </button>
+
+    <button class="format-tab px-4 py-2 rounded-lg bg-gray-200"
+        onclick="loadFormatPage('書面格式_解決型.html', this)">
+        💡 解決型
+    </button>
+
+    <button class="format-tab px-4 py-2 rounded-lg bg-gray-200"
+        onclick="loadFormatPage('書面格式_RCA.html', this)">
+        🔍 RCA
+    </button>
+
+    <button class="format-tab px-4 py-2 rounded-lg bg-gray-200"
+        onclick="loadFormatPage('書面格式_HFMEA.html', this)">
+        ⚠️ HFMEA
+    </button>
+</div>
+
+
+<!-- ========================= -->
+<!-- ⭐⭐ JS：外層 + 內層 Tabs 控制邏輯 ⭐⭐ -->
+<!-- ========================= -->
+<script>
+    // 外層頁籤高亮
+    function activateNav(id) {
+        document.querySelectorAll('.nav-button').forEach(btn => btn.classList.remove('active'));
+        document.getElementById(id)?.classList.add('active');
+    }
+
+    // ⭐ 點書面格式 → 顯示第二層 tabs
+    function showFormatTabs() {
+        activateNav('nav-btn-format');
+
+        document.getElementById('format-tabs').classList.remove('hidden');
+
+        // 預設載入「問題型」
+        loadFormatPage('書面格式_問題型.html',
+            document.querySelectorAll('.format-tab')[0]
+        );
+    }
+
+    // ⭐ 動態載入書面格式子頁（fetch）
+    function loadFormatPage(page, btn) {
+        // 高亮內層 tab
+        document.querySelectorAll('.format-tab')
+            .forEach(b => b.classList.remove('bg-teal-300', 'text-white', 'font-bold'));
+
+        btn.classList.add('bg-teal-300', 'text-white', 'font-bold');
+
+        fetch(page)
+            .then(res => res.text())
+            .then(html => {
+                document.getElementById('content-area').innerHTML = html;
+            });
+    }
+
+    // ⭐ 載入其他外層頁面（原本邏輯）
+    function loadExternalPage(page, btnId) {
+        activateNav(btnId);
+
+        // 隱藏第二層 tabs
+        document.getElementById('format-tabs').classList.add('hidden');
+
+        fetch(page)
+            .then(res => res.text())
+            .then(html => {
+                document.getElementById('content-area').innerHTML = html;
+            });
+    }
+
+    // 首頁顯示
+    function goHome() {
+        activateNav('nav-btn-home');
+        document.getElementById('format-tabs').classList.add('hidden');
+        document.getElementById('content-area').innerHTML =
+            "<h2 class='text-2xl font-bold text-center mt-10'>歡迎來到 QCC 主頁 🎉</h2>";
+    }
+</script>
 
         <!-- 首頁內容 -->
         <main id="page-home" class="space-y-12 mb-10">
