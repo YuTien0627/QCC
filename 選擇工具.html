@@ -31,6 +31,7 @@
             font-family: 'Inter', 'Noto Sans TC', sans-serif;
             background: linear-gradient(135deg, #FDFCFB 0%, #E2E8F0 100%);
         }
+
         .btn {
             @apply px-12 py-8 rounded-full font-extrabold text-7xl md:text-8xl transition duration-300 shadow-lg border-b-4 border-opacity-70;
             white-space: normal;
@@ -54,7 +55,7 @@
 
 <body class="min-h-screen flex justify-center p-4">
 
-<div id="app" class="w-full max-w-4xl bg-bg-paper shadow-2xl rounded-3xl p-6 md:p-12 border-4 border-primary-pink/30 animate-popIn my-auto">
+<div id="app" class="w-full max-w-4xl bg-bg-paper shadow-2xl rounded-3xl p-6 md:p-12 border-4 border-primary-pink/30 animate-popIn mx-auto">
     <header class="text-center mb-8 md:mb-10">
         <h1 class="text-4xl md:text-5xl font-extrabold text-gray-800 mb-3 leading-tight">
             🛠️ 品管工具選哪招？跟我走！ 💡
@@ -103,7 +104,7 @@ const decisionTree = {
             { text: "🧹 否，一般性缺失改善 (日常品質提升)", next: "R_QCC", style: "btn-pink" }
         ]
     },
-    R_GOAL: { title: "🎉 恭喜！您找到了成功鑰匙！", methodology: "💡 課題達成型 (Goal-Achievement)", purpose: "這方法專門幫助您從「現在」走到「目標」。重點是【發揮創意找方法】，達成您的 KPI 或挑戰！", icon: "🏆", bgColor: "bg-goal-green/15", textColor: "text-goal-green", borderColor: "border-goal-green" },
+    R_GOAL: { title: "🎉 恭喜！您找到了成功鑰匙！", methodology: "💡課題達成型 (Goal-Achievement)", purpose: "這方法專門幫助您從「現在」走到「目標」。重點是【發揮創意找方法】，達成您的 KPI 或挑戰！", icon: "🏆", bgColor: "bg-goal-green/15", textColor: "text-goal-green", borderColor: "border-goal-green" },
     R_HFMEA: { title: "💖 風險防護罩已啟動！", methodology: "🛡️ HFMEA (醫療失效模式與效應分析)", purpose: "這就像是流程的【預警雷達】。它能幫助您在風險發生前，找到流程中所有可能的「地雷」並提前控制，讓流程更安全！", icon: "🚨", bgColor: "bg-secondary-purple/15", textColor: "text-secondary-purple", borderColor: "border-secondary-purple" },
     R_RCA: { title: "🕵️‍♂️ 系統偵探出動！", methodology: "🔎 RCA (根本原因分析)", purpose: "當發生【重大不良事件】時，您需要這套工具深入挖掘問題的Root Cause (根源)。它會找出系統性的漏洞，確保這類事件不會再在同樣的地方跌倒！", icon: "🤯", bgColor: "bg-issue-red/15", textColor: "text-issue-red", borderColor: "border-issue-red" },
     R_QCC: { title: "🛠️ 日常優化專家就是您！", methodology: "✨ QCC (問題解決型/品質改善)", purpose: "這是您提升日常流程品質的【萬用工具箱】！當有缺失、抱怨或數據不佳時，它能引導您系統化地「找原因 → 解決原因」，讓現況變得更好！", icon: "🌈", bgColor: "bg-primary-pink/15", textColor: "text-primary-pink", borderColor: "border-primary-pink" }
@@ -279,5 +280,4 @@ function rewindToStep(targetKey) {
 })();
 </script>
 
-</body>
 </html>
