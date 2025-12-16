@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QCC 知識挑戰：趣味版</title> <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght=500;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* 從 參考資料.html 繼承的通用樣式 */
+        :root {
+            font-family: 'Inter', 'Noto Sans TC', sans-serif;
+        }
+        body {
+            background-color: #ecfdf5; /* 使用 參考資料.html 的背景色 (淺薄荷綠) */
+        }
+        .section-title { /* 參考資料.html 的樣式，保留以確保樣式設定完整 */
+            border-left: 6px solid #0D9488;
+            padding-left: 0.75rem;
+        }
+        .resource-card:hover { /* 參考資料.html 的樣式 */
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px -3 rgba(0,0,0,0.1), 0 4px 6px -2 rgba(0,0,0,0.05);
+        }
+        
+        /* 從 小測驗.html 繼承的關鍵樣式 (保持內容呈現樣式不變) */
+        .quiz-type-btn {
+            color: white;
+            padding: 2.5rem 2rem;
+            border-radius: 1.5rem;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            transform: scale(1);
+        }
+        .quiz-type-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        .choice-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .correct-answer-fade {
+            animation: pulse-green 1.5s infinite alternate;
+        }
+        @keyframes pulse-green {
+            from { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            to { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+        }
+    </style>
+</head>
+
+<body class="min-h-screen p-4 sm:p-8">
+
+<div class="max-w-5xl mx-auto bg-white shadow-2xl rounded-2xl overflow-hidden transform transition duration-500 hover:shadow-3xl border-t-8 border-teal-600">
+    
+    <header class="bg-gradient-to-r from-teal-500 to-teal-400 text-white p-6 sm:p-8 md:p-10 shadow-lg">
+        <h1 class="text-3xl font-extrabold tracking-tight">QCC 知識挑戰：趣味版</h1>
+        <p class="mt-2 text-teal-100">檢驗你對 QCC 概念的掌握程度！</p>
+    </header>
+    
+    <main class="p-4 sm:p-8 md:p-10">
+        <div class="w-full max-w-lg mx-auto"> 
+            
+            <div id="intro-screen">
+                <h2 class="text-4xl font-extrabold text-center text-purple-800 mb-6">🎯 QCC 知識挑戰</h2>
+                <p class="text-xl text-center text-gray-600 mb-8">透過選擇不同的測驗類型，來檢驗你對 QCC 概念的熟悉度！</p>
+                
+                <div class="space-y-6">
+                    <button class="quiz-type-btn w-full bg-blue-500 hover:bg-blue-600 shadow-xl shadow-blue-300" data-quiz-type="basic">
+                        🚀 基礎概念 (5題)
+                    </button>
+                    <button class="quiz-type-btn w-full bg-green-500 hover:bg-green-600 shadow-xl shadow-green-300" data-quiz-type="advanced">
+                        🧠 進階應用 (5題)
+                    </button>
+                    <button class="quiz-type-btn w-full bg-red-500 hover:bg-red-600 shadow-xl shadow-red-300" data-quiz-type="all">
+                        🔥 完整挑戰 (10題)
+                    </button>
+                </div>
+            </div>
+
+            <div id="quiz-container" class="hidden">
+                <div class="flex justify-between items-center mb-6">
+                    <p class="text-xl font-bold text-gray-700">第 <span id="current-q-index">1</span> 題 / 共 <span id="total-q-count">10</span> 題</p>
+                    <p class="text-xl font-bold text-purple-600">分數: <span id="user-score">0</span></p>
+                </div>
+
+                <div id="question-area" class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg border-2 border-purple-200">
+                    <h3 id="question-text" class="text-2xl font-extrabold text-gray-800 mb-6 leading-relaxed">
+                        ...問題內容...
+                    </h3>
+                    <div id="choices-container" class="space-y-4">
+                        </div>
+                </div>
+
+                <div id="quiz-feedback" class="hidden">
+                    </div>
+
+                <div class="mt-8 flex justify-center">
+                    <button id="main-action-btn" class="px-8 py-3 bg-purple-600 text-white font-bold rounded-xl shadow-lg shadow-purple-300 hover:bg-purple-700 disabled:opacity-50 transition duration-300" disabled>
+                        下一題 (Next)
+                    </button>
+                </div>
+            </div>
+
+            <div id="result-container" class="hidden">
+                </div>
+        </div>
+    </main>
+</div>
+
+<script src="quiz_data.js"></script> 
+
+<script>
+    // 注意：const allQuestions 變數現在已從 quiz_data.js 載入，可以直接使用。
+
+    // --- Quiz Logic (Keeping settings and content unchanged) ---
+    const domRefs = {
+        introScreen: document.getElementById('intro-screen'),
+        quizContainer: document.getElementById('quiz-container'),
+        resultContainer: document.getElementById('result-container'),
+        currentQIndexEl: document.getElementById('current-q-index'),
+        totalQCountEl: document.getElementById('total-q-count'),
+        userScoreEl: document.getElementById('user-score'),
+        questionText: document.getElementById('question-text'),
+        choicesContainer: document.getElementById('choices-container'),
+        quizFeedback: document.getElementById('quiz-feedback'),
+        mainActionBtn: document.getElementById('main-action-btn'),
+        quizTypeBtns: document.querySelectorAll('.quiz-type-btn')
+    };
+
+    let currentQuestions = [];
+    let currentQuestionIndex = 0;
+    let userScore = 0;
+    let selectedAnswerIndex = -1;
+
+    function init() {
+        // Attach event listeners to quiz type buttons
+        domRefs.quizTypeBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                startQuiz(btn.getAttribute('data-quiz-type'));
+            });
+        });
+        
+        // Attach event listener to main action button
+        domRefs.mainActionBtn.addEventListener('click', handleMainAction);
+    }
+
+    function startQuiz(type) {
+        // 由於 allQuestions 現在是一個全域變數 (來自 quiz_data.js)，這裡可以直接使用。
+        if (type === 'basic') {
+            currentQuestions = allQuestions.filter(q => q.type === 'basic');
+        } else if (type === 'advanced') {
+            currentQuestions = allQuestions.filter(q => q.type === 'advanced');
+        } else { // 'all' or default
+            currentQuestions = allQuestions;
+        }
+
+        currentQuestionIndex = 0;
+        userScore = 0;
+        
+        domRefs.introScreen.classList.add('hidden');
+        domRefs.resultContainer.classList.add('hidden');
+        domRefs.quizContainer.classList.remove('hidden');
+        
+        domRefs.totalQCountEl.textContent = currentQuestions.length;
+        domRefs.userScoreEl.textContent = userScore;
+
+        displayQuestion();
+    }
+
+    function displayQuestion() {
+        const questionData = currentQuestions[currentQuestionIndex];
+        selectedAnswerIndex = -1; // Reset selection
+
+        domRefs.currentQIndexEl.textContent = currentQuestionIndex + 1;
+        domRefs.questionText.textContent = questionData.question;
+        domRefs.choicesContainer.innerHTML = ''; // Clear previous choices
+        domRefs.quizFeedback.classList.add('hidden');
+        domRefs.mainActionBtn.disabled = true;
+        domRefs.mainActionBtn.textContent = '確認答案 (Check)';
+        
+        // Remove 'Next' functionality if we are checking the answer
+        domRefs.mainActionBtn.removeEventListener('click', handleMainAction);
+        domRefs.mainActionBtn.addEventListener('click', checkAnswer, { once: true });
+
+
+        questionData.choices.forEach((choice, index) => {
+            const button = document.createElement('button');
+            // 使用符合新格式風格的按鈕樣式
+            button.className = 'choice-btn w-full text-left p-4 bg-purple-50 text-gray-800 rounded-lg border-2 border-purple-200 shadow-sm transition duration-200 transform hover:bg-purple-100 hover:shadow-md';
+            button.innerHTML = `<span class="font-bold mr-3">${String.fromCharCode(65 + index)}</span> ${choice.text}`;
+            button.setAttribute('data-index', index);
+            
+            button.addEventListener('click', () => {
+                if(selectedAnswerIndex !== -1) return; // Prevent selection change after the first one
+                
+                // Clear previous selection visually
+                domRefs.choicesContainer.querySelectorAll('.choice-btn').forEach(btn => {
+                    btn.classList.remove('border-purple-600', 'bg-purple-200');
+                    btn.classList.add('bg-purple-50', 'border-purple-200');
+                });
+
+                // Apply new selection visually
+                button.classList.remove('bg-purple-50', 'border-purple-200');
+                button.classList.add('border-purple-600', 'bg-purple-200');
+                selectedAnswerIndex = index;
+                domRefs.mainActionBtn.disabled = false;
+            });
+
+            domRefs.choicesContainer.appendChild(button);
+        });
+    }
+
+    function checkAnswer() {
+        if (selectedAnswerIndex === -1) return; // Should not happen if button is enabled
+        
+        // Remove the one-time checkAnswer listener and re-add the default one
+        domRefs.mainActionBtn.removeEventListener('click', checkAnswer);
+        domRefs.mainActionBtn.addEventListener('click', handleMainAction);
+
+        const questionData = currentQuestions[currentQuestionIndex];
+        const isCorrect = (selectedAnswerIndex === questionData.correct_index);
+        
+        // Disable all choices
+        domRefs.choicesContainer.querySelectorAll('.choice-btn').forEach(btn => {
+            btn.disabled = true;
+        });
+
+        const selectedEl = domRefs.choicesContainer.querySelector(`[data-index="${selectedAnswerIndex}"]`);
+        
+        let feedbackText = '';
+        let feedbackClass = '';
+
+        if (isCorrect) {
+            userScore++;
+            domRefs.userScoreEl.textContent = userScore;
+            
+            // Highlight selected answer as correct
+            selectedEl.classList.remove('bg-purple-200','border-purple-600');
+            selectedEl.classList.add('bg-green-200','border-green-500','shadow-inner');
+            selectedEl.classList.add('correct-answer-fade'); // For extra visual feedback
+            
+            feedbackText = `<span class="text-3xl mr-3">✅</span> ${questionData.feedback_correct}`;
+            feedbackClass = 'bg-green-50 text-green-700 border-green-500 shadow-green-200';
+            
+        } else {
+            // Highlight selected answer as incorrect
+            selectedEl.classList.remove('bg-purple-200','border-purple-600');
+            selectedEl.classList.add('bg-red-200','border-red-500','shadow-inner');
+
+            // Highlight the correct answer
+            const correctEl = domRefs.choicesContainer.querySelector(`[data-index="${questionData.correct_index}"]`);
+            if(correctEl){
+                correctEl.classList.remove('bg-purple-50','border-purple-200');
+                correctEl.classList.add('bg-green-200','border-green-500','shadow-inner');
+                correctEl.classList.add('correct-answer-fade');
+            }
+            
+            feedbackText = `<span class="text-3xl mr-3">❌</span> ${questionData.feedback_incorrect}`;
+            feedbackClass = 'bg-red-50 text-red-700 border-red-500 shadow-red-200';
+        }
+        
+        domRefs.quizFeedback.className = `mt-6 p-4 text-center rounded-xl font-bold transition-all duration-300 transform scale-100 border-2 ${feedbackClass}`;
+        domRefs.quizFeedback.innerHTML = feedbackText;
+        domRefs.quizFeedback.classList.remove('hidden');
+        domRefs.mainActionBtn.disabled = false;
+        domRefs.mainActionBtn.textContent = '下一題 (Next)';
+    }
+
+    function handleMainAction() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < currentQuestions.length) {
+            displayQuestion();
+            domRefs.mainActionBtn.disabled = true;
+        } else {
+            showResults();
+        }
+    }
+
+    function showResults() {
+        domRefs.quizContainer.classList.add('hidden');
+        domRefs.resultContainer.classList.remove('hidden');
+
+        let html = `<h2 class="text-3xl font-bold text-center text-purple-700 mb-4">🎉 測驗完成！</h2>
+        <p class="text-xl text-center text-gray-700 mb-4">你的總分：<span class="font-extrabold text-pink-600">${userScore} / ${currentQuestions.length}</span></p>`;
+        
+        let resultMessage = '';
+        let resultColor = '';
+        const percentage = (userScore / currentQuestions.length) * 100;
+
+        if (percentage === 100) {
+            resultMessage = '你是 QCC 大師！所有概念都掌握得爐火純青！';
+            resultColor = 'text-green-600';
+        } else if (percentage >= 80) {
+            resultMessage = '表現優異！對 QCC 概念有非常好的理解。';
+            resultColor = 'text-blue-600';
+        } else if (percentage >= 60) {
+            resultMessage = '表現不錯！建議針對錯題再複習一次。';
+            resultColor = 'text-yellow-600';
+        } else {
+            resultMessage = '需要加強！建議從基礎概念重新學習。';
+            resultColor = 'text-red-600';
+        }
+
+        html += `<p class="text-2xl font-bold text-center ${resultColor} mb-8">${resultMessage}</p>`;
+        
+        // 由於您要求內容和設定不變，回顧區塊只顯示分數，並提供重新開始按鈕。
+        html += `<h3 class="text-xl font-bold text-gray-500 mb-4 border-b pb-2">準備好重新挑戰了嗎？</h3>`;
+        
+        html += `
+        <div class="mt-8 flex justify-center">
+            <button id="restart-btn" class="px-8 py-3 bg-teal-600 text-white font-bold rounded-xl shadow-lg shadow-teal-300 hover:bg-teal-700 transition duration-300">
+                重新挑戰 (Restart)
+            </button>
+        </div>`;
+
+        domRefs.resultContainer.innerHTML = html;
+        document.getElementById('restart-btn').addEventListener('click', () => {
+            domRefs.resultContainer.classList.add('hidden');
+            domRefs.introScreen.classList.remove('hidden');
+        });
+    }
+
+    // Initialize when the page loads
+    window.addEventListener('load', init);
+</script>
+</body>
+</html>
