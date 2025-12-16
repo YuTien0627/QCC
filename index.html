@@ -144,35 +144,16 @@ function goHome(){
 }
 
 /* ------------------- 更新時間 ------------------- */
-<div id="last-update" class="text-sm text-gray-500 text-center mt-4">
-    最後更新：讀取中...
-</div>
+function updateTime(){
+    const t = new Date();
+    const fmt = new Intl.DateTimeFormat('zh-TW', {
+        timeZone: 'Asia/Taipei',
+        year:'numeric', month:'2-digit', day:'2-digit',
+        hour:'2-digit', minute:'2-digit', hour12:false
+    });
+    const txt = fmt.format(t).replace(/\//g,'-');
+    document.getElementById('last-updated').textContent = "最後更新時間：" + txt;
 
-<script>
-    // 自動抓 index.html 的 Last-Modified header
-    fetch('index.html', { method: 'HEAD' })
-        .then(response => {
-            const lastModified = response.headers.get('Last-Modified');
-            if (lastModified) {
-                // 轉換成本地時區格式
-                const date = new Date(lastModified);
-                const formatted = date.toLocaleString('zh-TW', {
-                    year: 'numeric',
-                    month: '2-digit',
-                    day: '2-digit',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                });
-                document.getElementById('last-update').innerText = `最後更新：${formatted}`;
-            } else {
-                document.getElementById('last-update').innerText = '最後更新：無法取得檔案時間';
-            }
-        })
-        .catch(err => {
-            console.error(err);
-            document.getElementById('last-update').innerText = '最後更新：讀取失敗';
-        });
-</script>
 
 /* ------------------- 初始化 ------------------- */
 goHome();
