@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QCC 知識挑戰</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+body { font-family:'Noto Sans TC',sans-serif; background-color:#ecfdf5; }
+.quiz-card { background-color:#ffffff; border-radius:1.5rem; box-shadow:0 20px 35px -18px rgba(15,23,42,0.45); }
+.quiz-type-btn { color:white; padding:2rem 1.5rem; border-radius:1rem; font-weight:700; font-size:1.5rem; transition: transform 0.2s, box-shadow 0.2s; border:2px solid white; flex-grow:1; }
+.quiz-type-btn:hover { transform: translateY(-3px) scale(1.02); box-shadow:0 10px 25px rgba(0,0,0,0.2); }
+.answer-option { transition: all 0.3s; cursor:pointer; border-width:2px; background:white; padding:1.5rem; border-radius:1rem; box-shadow:0 5px 15px rgba(0,0,0,0.1); margin-bottom:0.75rem; }
+.answer-option:hover:not(.disabled) { transform: translateY(-2px); box-shadow:0 8px 18px rgba(0,0,0,0.15); }
+.correct-blink { animation: correctBlink 0.5s ease-in-out 3; pointer-events:none; }
+@keyframes correctBlink { 0%,100% {background-color:#6ee7b7;border-color:#059669; transform: scale(1.05);} 50% {background-color:#d1fae5;border-color:#10b981; transform: scale(1);} }
+.incorrect-shake { animation: incorrectShake 0.4s ease-in-out; pointer-events:none; filter:grayscale(80%);}
+@keyframes incorrectShake { 0%,100%{transform:translateX(0);background-color:#fca5a5;border-color:#dc2626;} 20%,60%{transform:translateX(-6px);} 40%,80%{transform:translateX(6px);} }
+.fun-action-btn { background-image: linear-gradient(to right,#06b6d4,#0d9488); color:white; transition: all 0.2s; padding:1.5rem; border-radius:1rem; font-size:1.5rem; font-weight:700; }
+.fun-action-btn:hover:not(:disabled) { transform: scale(1.02); box-shadow:0 8px 20px rgba(0,0,0,0.3); }
+.fun-action-btn:disabled { background:#9ca3af; cursor:not-allowed; }
+#quizFeedback { font-size:1.5rem; line-height:1.4; }
+</style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+
+<div id="app" class="w-full max-w-4xl p-6 quiz-card">
+    <h1 id="mainTitle" class="text-4xl font-extrabold text-teal-700 text-center mb-6">🛠️ QCC 知識點點名 🎯</h1>
+    
+    <div id="welcomeScreen" class="p-8 rounded-xl shadow-md text-center">
+        <h2 class="text-3xl font-bold mb-6">🏆 請選擇挑戰類型 🏆</h2>
+        <div id="typeSelector" class="flex flex-col md:flex-row gap-4 mb-8">
+            <button id="selectProblemType" data-type="problem" class="quiz-type-btn bg-teal-500 hover:bg-teal-600">問題解決型</button>
+            <button id="selectSolutionType" data-type="solution" class="quiz-type-btn bg-indigo-500 hover:bg-indigo-600">課題達成型</button>
+        </div>
+    </div>
+
+    <div id="progressSection" class="mb-4 hidden">
+        <div id="progressDisplay" class="text-lg font-bold text-teal-700 mb-2 text-center">準備開始...</div>
+        <div class="w-full bg-gray-200 rounded-full h-3">
+            <div id="progressBar" class="bg-gradient-to-r from-teal-400 to-indigo-500 h-3 rounded-full transition-all duration-500" style="width:0%"></div>
+        </div>
+    </div>
+
+    <div id="quizContainer" class="hidden p-6 rounded-xl shadow-md border-2 border-teal-300">
+        <p id="quizQuestion" class="text-2xl font-extrabold text-gray-800 text-center mb-6">題目內容</p>
+        <div id="quizOptions"></div>
+        <div id="quizFeedback" class="hidden mt-4 p-4 text-center rounded-xl font-bold border-2"></div>
+        <button id="mainActionBtn" class="fun-action-btn w-full mt-6">進行下一題</button>
+    </div>
+
+    <div id="resultContainer" class="hidden mt-6 p-6 rounded-xl shadow-md border-2 border-teal-400"></div>
+</div>
+
+<script type="module">
+import { PROBLEM_STEPS_DATA, SOLUTION_STEPS_DATA } from './quizData.js';
+
+// ---- 互動程式碼保持不變 ----
+// 你的 initializeQuiz(), startQuiz(), displayQuestion(), selectAnswer(), updateProgressDisplay(), showResults()
+// 以及全域狀態變數 (currentQuestions, currentQuestionIndex, userScore, stepPerformance, domRefs)
+// 都可以直接複製原始碼放這裡
+
+// 全域狀態變數
+  let currentQuestions = []; // 儲存當前模式的 9 題
+  let currentQuestionIndex = -1;
+  let userScore = 0;
+  let quizInProgress = false;
+  let stepPerformance = {}; // 追蹤每個 QCC 步驟的表現
+  let selectedQuizType = 'problem'; // 儲存選擇的類型
+
+  // 全域 DOM 元素容器：在 initializeQuiz 載入後，所有函數都將透過這個物件訪問元素
+  let domRefs = {};
+       /**
+         * 根據選擇的類型開始測驗
+         * @param {string} quizType - 'problem' or 'solution'
+         */
+        function startQuiz(quizType) {
+            selectedQuizType = quizType;
+            // 根據選擇的類型載入對應的題目集
+            if (quizType === 'problem') {
+                // *** 題目順序固定，不隨機排序 ***
+                currentQuestions = PROBLEM_STEPS_DATA.flatMap(step => step.quiz);
+                domRefs.mainTitle.innerHTML = '🛠️ QCC 問題解決型挑戰 🎯';
+            } else if (quizType === 'solution') {
+                // *** 題目順序固定，不隨機排序 ***
+                currentQuestions = SOLUTION_STEPS_DATA.flatMap(step => step.quiz);
+                domRefs.mainTitle.innerHTML = '✨ QCC 課題達成型挑戰 🚀';
+            }
+
+            // 隱藏歡迎畫面，顯示測驗區塊
+            domRefs.welcomeScreen.classList.add('hidden');
+            domRefs.progressSection.classList.remove('hidden');
+            domRefs.quizContainer.classList.remove('hidden');
+
+            currentQuestionIndex = 0; 
+            quizInProgress = true;
+            displayQuestion();
+            domRefs.mainActionBtn.textContent = '進行下一題';
+            domRefs.mainActionBtn.disabled = true;
+            // 需先選擇答案才能繼續
+            domRefs.resultContainer.classList.add('hidden');
+        }
+
+        /**
+         * 顯示當前題目
+         */
+        function displayQuestion() {
+            const currentQuestion = currentQuestions[currentQuestionIndex];
+            // 更新進度顯示
+            updateProgressDisplay();
+            // 更新題目
+            // 由於題目內容現在可能包含 HTML 標籤，我們直接使用 innerHTML
+            domRefs.quizQuestion.innerHTML = `<span class="text-pink-500">[${currentQuestion.step}]</span> ${currentQuestion.question}`;
+            // 更新選項
+            domRefs.quizOptions.innerHTML = '';
+            currentQuestion.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                // 應用大區塊樣式
+                optionElement.className = `answer-option bg-white p-5 md:p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 border-purple-200 text-lg md:text-xl font-medium text-gray-700`;
+                optionElement.innerHTML = `
+            
+                    <!-- START: 根據用戶需求修改的圈圈樣式 -->
+                    <!-- 使用 inline-flex 和 items-center/justify-center 實現完美置中 -->
+                    <!-- 使用 w-8 h-8 增大圈圈尺寸 -->
+                    <span class="inline-flex items-center justify-center w-8 h-8 bg-purple-100 text-purple-700 rounded-full mr-3 border-2 border-purple-400 font-extrabold text-lg">${String.fromCharCode(65 + index)}</span>
+                    <!-- END: 根據用戶需求修改的圈圈樣式 -->
+                    ${option}
+                `;
+                optionElement.dataset.index = index;
+                
+         
+               // 加上點擊事件
+                optionElement.addEventListener('click', () => selectAnswer(index, optionElement, currentQuestion));
+                domRefs.quizOptions.appendChild(optionElement);
+            });
+            // 確保回饋區塊是隱藏的
+            domRefs.quizFeedback.classList.add('hidden');
+            // 清除上次的按鈕狀態，重新綁定選項點擊
+            domRefs.quizOptions.querySelectorAll('.answer-option').forEach(el => el.classList.remove('disabled'));
+        }
+
+        /**
+         * 處理用戶點擊答案的事件
+         * @param {number} selectedIndex - 用戶選擇的選項索引
+         * @param {HTMLElement} selectedElement - 用戶點擊的選項 DOM 元素
+         * @param {object} questionData - 當前問題的資料
+         */
+        function selectAnswer(selectedIndex, selectedElement, questionData) {
+            const correct = selectedIndex === 
+                questionData.correctAnswerIndex;
+            
+            // 1. 禁用所有選項，防止重複點擊
+            domRefs.quizOptions.querySelectorAll('.answer-option').forEach(el => {
+                el.classList.add('disabled');
+                // 移除原有的 hover 效果
+                el.classList.remove('hover:shadow-lg', 'hover:shadow-lg', 'hover:shadow-2xl');
+                el.style.pointerEvents = 'none'; // 徹底禁用
+          
+            });
+
+            // 2. 處理分數和追蹤
+            const stepName = questionData.step;
+            if (stepPerformance[stepName] === undefined) {
+                 stepPerformance[stepName] = { correct: 0, total: 0 };
+            }
+            stepPerformance[stepName].total++;
+            // 3. 給予誇張的視覺回饋
+            let feedbackText = '';
+            let feedbackClass = '';
+
+            if (correct) {
+                userScore++;
+                stepPerformance[stepName].correct++;
+                // 加上正確答案的閃爍動畫
+                selectedElement.classList.add('correct-blink');
+                feedbackText = `<span class="text-3xl mr-3">🎉</span> ${questionData.feedback_correct || "🎯 答對了！你真是個 QCC 小天才！"}`;
+                feedbackClass = 'bg-green-50 text-green-700 border-green-500 shadow-green-200';
+            } else {
+                // 加上錯誤答案的晃動動畫
+                selectedElement.classList.add('incorrect-shake');
+                // 標示出正確答案
+                const correctElement = domRefs.quizOptions.querySelector(`[data-index="${questionData.correctAnswerIndex}"]`);
+                if (correctElement) {
+                    correctElement.classList.remove('bg-white', 'border-purple-200');
+                    correctElement.classList.add('bg-green-200', 'border-green-500', 'shadow-inner');
+                }
+
+                feedbackText = `<span class="text-3xl mr-3">❌</span> ${questionData.feedback_incorrect ||
+                    "💡 答錯了！沒關係，看看正確答案是哪一個！"}`;
+                feedbackClass = 'bg-red-50 text-red-700 border-red-500 shadow-red-200';
+            }
+            
+            // 4. 顯示回饋區塊
+            domRefs.quizFeedback.className = `mt-6 p-4 text-center rounded-xl font-bold transition-all duration-300 transform scale-100 border-2 ${feedbackClass}`;
+            domRefs.quizFeedback.innerHTML = feedbackText;
+            domRefs.quizFeedback.classList.remove('hidden');
+
+            // 5. 啟用主要按鈕，讓用戶手動點擊下一題
+            domRefs.mainActionBtn.textContent = (currentQuestionIndex < currentQuestions.length - 1) ?
+                '繼續下一題' : '查看最終成果！';
+            domRefs.mainActionBtn.disabled = false;
+        }
+
+        /**
+         * 更新進度條和文字顯示
+         */
+        function updateProgressDisplay() {
+            const total = currentQuestions.length;
+            const current = currentQuestionIndex + 1;
+            const percentage = (current / total) * 100;
+            domRefs.progressDisplay.textContent = `第 ${current} 題 / 共 ${total} 題 | 目前得分: ${userScore} 分`;
+            domRefs.progressBar.style.width = `${percentage}%`;
+        }
+
+        /**
+         * 顯示最終結果和分析
+         */
+        function showResults() {
+            quizInProgress = false;
+            domRefs.quizContainer.classList.add('hidden');
+            domRefs.progressSection.classList.add('hidden'); // 隱藏進度條
+            domRefs.resultContainer.classList.remove('hidden');
+            
+            const totalQuestions = currentQuestions.length;
+            const percentage = Math.round((userScore / totalQuestions) * 100);
+
+            let resultTitle = '';
+            let resultClass = '';
+            let resultText = '';
+            // 根據選擇的類型微調結果描述
+            const typeLabel = selectedQuizType === 'problem' ?
+                '問題解決型' : '課題達成型';
+            const stepData = selectedQuizType === 'problem' ? PROBLEM_STEPS_DATA : SOLUTION_STEPS_DATA;
+            if (percentage >= 90) {
+                resultTitle = '🎉 傳奇大師級！';
+                resultText = `你在 ${typeLabel} 領域的 QCC 知識已達頂尖水平！所有步驟都掌握得非常紮實，可以擔任導師了！`;
+                resultClass = 'text-green-700 border-green-500 bg-green-100';
+            } else if (percentage >= 70) {
+                resultTitle = '👍 優秀實務家！';
+                resultText = `表現非常棒！你對 ${typeLabel} 的核心步驟有很好的理解，只需要在細節處再加強就能更完美。`;
+                resultClass = 'text-blue-700 border-blue-500 bg-blue-100';
+            } else if (percentage >= 50) {
+                resultTitle = '🧐 穩健學習中！';
+                resultText = `你已經掌握了 ${typeLabel} 大部分知識，但還有一些步驟需要回頭複習。繼續努力！`;
+                resultClass = 'text-yellow-700 border-yellow-500 bg-yellow-100';
+            } else {
+                resultTitle = '🚀 挑戰者模式！';
+                resultText = `沒關係，這只是開始！透過這次 ${typeLabel} 測驗，你知道該從 ${typeLabel} 的哪個步驟補強了！`;
+                resultClass = 'text-red-700 border-red-500 bg-red-100';
+            }
+
+            // 弱點分析 HTML
+            let analysisHTML = `
+                <h3 class="text-2xl font-bold text-gray-700 mt-8 mb-4 border-b-2 border-dashed pb-2">🧠 知識弱點分析 (${typeLabel})</h3>
+                <p class="text-gray-600 mb-4">根據你的作答，我們為你分析了在 QCC 九大步驟中，哪個環節可能需要加強：</p>
+                <ul class="space-y-3">
+        
+                `;
+
+            // 確保按順序顯示 9 個步驟的表現，並從 stepData 中獲取步驟名稱
+            stepData.forEach(step => {
+                const stepName = step.name;
+                
+                // 從 stepPerformance 中取出追蹤的數據
+                const performance = stepPerformance[stepName] || { 
+                    correct: 0, total: 0 };
+                
+                // 由於是單一題目的測驗模式，total 應該是 1
+                const totalInStep = 1; 
+                
+                if (performance.total > 0) {
+     
+                    const accuracy = (performance.correct / totalInStep) * 100;
+                    let icon = '🟢';
+                    let textClass = 'text-green-600';
+                    if (accuracy < 50) {
+        
+                        icon = '🔴';
+                        textClass = 'text-red-600 font-bold';
+                    } else if (accuracy < 100) { 
+                        icon = '🟡';
+  
+                        textClass = 'text-yellow-600';
+                    }
+
+                    analysisHTML += `
+                        <li class="flex items-center p-2 bg-gray-50 rounded-lg shadow-sm">
+    
+                            <span class="mr-3 text-xl">${icon}</span>
+                            <span class="font-semibold w-1/3">${step.id}.
+                                ${stepName}:</span>
+                            <span class="${textClass}">${performance.correct} / ${totalInStep} 題 (${accuracy.toFixed(0)}%)</span>
+                        </li>
+                    `;
+                }
+            });
+
+            analysisHTML += `</ul>`;
+            domRefs.resultContainer.innerHTML = `
+                <!-- 更改: 增大結果標題字體至 md:text-4xl -->
+                <h2 class="text-4xl md:text-4xl font-extrabold text-center mb-4 ${resultClass}">${resultTitle}</h2>
+                <!-- 更改: 增大總得分字體至 md:text-2xl -->
+                <p class="text-center text-xl md:text-2xl text-gray-600 mb-6">總得分：${userScore} / ${totalQuestions} 題</p>
+                <!-- 🎯 這裡修改了字體大小：將 md:text-2xl 改為 md:text-xl -->
+                <div class="p-4 rounded-xl ${resultClass} text-center font-semibold text-xl md:text-xl">
+                    ${resultText}
+            
+                </div>
+                
+                ${analysisHTML} <!-- 注入弱點分析區塊 -->
+                
+                <button id="restartQuizBtn" class="fun-action-btn w-full mt-8 py-4 text-2xl font-bold rounded-xl shadow-lg hover:shadow-2xl">
+                   
+                    再來一輪挑戰！
+                </button>
+            `;
+            // 重新開始功能：綁定到新的按鈕上
+            document.getElementById('restartQuizBtn').addEventListener('click', initializeQuiz);
+            // 確保主按鈕被移除事件並保持隱藏
+            domRefs.mainActionBtn.removeEventListener('click', handleMainAction);
+        }
+        
+        // 隨機打亂數組 (現在未被使用，但保留以防未來需要)
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        /**
+         * 初始化測驗狀態和 UI (現在是類型選擇畫面)
+         */
+        function initializeQuiz() {
+            // 1. 獲取所有 DOM 元素並儲存到 domRefs
+            domRefs.mainTitle = document.getElementById('mainTitle');
+            domRefs.welcomeScreen = document.getElementById('welcomeScreen');
+            domRefs.progressSection = document.getElementById('progressSection');
+            domRefs.quizContainer = document.getElementById('quizContainer');
+            domRefs.quizQuestion = document.getElementById('quizQuestion');
+            domRefs.quizOptions = document.getElementById('quizOptions');
+            domRefs.quizFeedback = document.getElementById('quizFeedback');
+            domRefs.mainActionBtn = document.getElementById('mainActionBtn');
+            domRefs.progressDisplay = document.getElementById('progressDisplay');
+            domRefs.progressBar = document.getElementById('progressBar');
+            domRefs.resultContainer = document.getElementById('resultContainer');
+
+            const selectProblemType = document.getElementById('selectProblemType'); 
+            const selectSolutionType = document.getElementById('selectSolutionType');
+
+            // 2. 重置狀態變數
+            currentQuestionIndex = -1;
+            userScore = 0;
+            quizInProgress = false;
+            stepPerformance = {}; 
+            selectedQuizType = 'problem'; 
+            currentQuestions = []; 
+
+            // 3. 重置 UI 顯示
+            domRefs.mainTitle.innerHTML = '🛠️ QCC 知識點點名 🎯';
+            domRefs.welcomeScreen.classList.remove('hidden');
+            domRefs.progressSection.classList.add('hidden');
+            domRefs.quizContainer.classList.add('hidden');
+            domRefs.resultContainer.classList.add('hidden');
+
+            // 4. 綁定類型選擇按鈕事件
+            if (selectProblemType && selectSolutionType) {
+                // 先移除舊的，再綁定新的 (防止重複綁定)
+                selectProblemType.onclick = null; 
+                selectSolutionType.onclick = null;
+                selectProblemType.onclick = () => startQuiz('problem');
+                selectSolutionType.onclick = () => startQuiz('solution');
+            }
+            
+            // 5. 綁定主要動作按鈕 (in-quiz flow)
+            // 確保每次重置都能正確綁定到 handleMainAction
+            domRefs.mainActionBtn.removeEventListener('click', handleMainAction);
+            domRefs.mainActionBtn.addEventListener('click', handleMainAction);
+        }
+
+        // 頁面載入時執行初始化
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializeQuiz);
+        } else {
+            initializeQuiz();
+        }
+
+
+</script>
+
+</body>
+</html>
