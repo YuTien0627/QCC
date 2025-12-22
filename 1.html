@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>品管工具選哪招？跟我走！ - 單卡版</title>
+    <title>品管工具選哪招？跟我走！</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -30,10 +30,7 @@
         body {
             font-family: 'Inter', 'Noto Sans TC', sans-serif;
             background: linear-gradient(135deg, #FDFCFB 0%, #E2E8F0 100%);
-            margin: 0;
-            padding: 0;
         }
-
         .btn {
             @apply px-12 py-8 rounded-full font-extrabold text-7xl md:text-8xl transition duration-300 shadow-lg border-b-4 border-opacity-70;
             white-space: normal;
@@ -41,66 +38,47 @@
         .btn-pink { @apply bg-primary-pink text-white border-primary-pink/80 hover:bg-pink-500 hover:border-pink-600 active:translate-y-1 active:shadow-sm; }
         .btn-purple { @apply bg-secondary-purple text-white border-secondary-purple/80 hover:bg-violet-500 hover:border-violet-600 active:translate-y-1 active:shadow-sm; }
         .btn-reset { @apply bg-gray-400 text-white border-gray-500 hover:bg-gray-500 hover:border-gray-600 active:translate-y-1 active:shadow-sm text-base; }
-
         .decision-card { transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease; }
-        @keyframes popIn { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
-        .animate-popIn { animation: popIn 0.5s ease-out; }
-
-        .fun-question-card {
-            box-shadow: 10px 10px 0 0 #F472B6, 15px 15px 0 0 #A78BFA;
-            transition: all 0.2s ease-out;
-        }
-        .fun-question-card:hover {
-            transform: translate(-2px, -2px);
-            box-shadow: 12px 12px 0 0 #F472B6, 17px 17px 0 0 #A78BFA;
-        }
-
-        .breadcrumb-node {
-            @apply flex items-center bg-secondary-purple text-white text-sm font-semibold px-3 py-1 rounded-full shadow-md;
-            cursor: pointer;
-        }
-        .breadcrumb-node-active { @apply bg-primary-pink text-white; }
-        .breadcrumb-node-result { @apply bg-primary-pink/20 text-gray-800; }
+        .fun-question-card { box-shadow: 10px 10px 0 0 #F472B6, 15px 15px 0 0 #A78BFA; }
     </style>
 </head>
 
-<body>
+<body class="min-h-screen flex flex-col items-center p-4">
 
-<!-- ✅ iframe-safe 外層容器 -->
-<div class="w-full flex justify-center py-10 px-4">
+    <!-- ✅【頁首 Header】你指定要當「當頭」的地方 -->
+    <header class="w-full max-w-5xl text-center mb-8">
+        <h1 class="text-4xl md:text-5xl font-extrabold text-gray-800 mb-3">
+            🛠️ 品管工具選哪招？跟我走！ 💡
+        </h1>
+        <p class="text-xl text-gray-500 font-medium">
+            單卡模式，專注當前問題！
+        </p>
+    </header>
 
-    <div id="app"
-        class="w-full max-w-5xl bg-bg-paper shadow-2xl rounded-3xl p-6 md:p-12 border-4 border-primary-pink/30 animate-popIn">
-
-        <!-- 頁首 -->
-        <header class="text-center mb-8 md:mb-10">
-            <h1 class="text-4xl md:text-5xl font-extrabold text-gray-800 mb-3 leading-tight">
-                🛠️ 品管工具選哪招？跟我走！ 💡
-            </h1>
-            <p class="text-xl text-gray-500 font-medium">單卡模式，專注當前問題！</p>
-        </header>
+    <!-- ✅【Body：決策樹本體】 -->
+    <main
+        id="app"
+        class="w-full max-w-5xl bg-bg-paper shadow-2xl rounded-3xl p-6 md:p-12 border-4 border-primary-pink/30 my-auto">
 
         <!-- 歷史足跡 -->
         <div id="history-trail"
-            class="flex flex-wrap gap-2 mb-8 items-center justify-center min-h-[40px] border-b pb-4 border-gray-200"></div>
+             class="flex flex-wrap gap-2 mb-8 items-center justify-center min-h-[40px] border-b pb-4 border-gray-200">
+        </div>
 
-        <!-- 問題卡片 -->
+        <!-- 問題卡片容器（決策樹核心） -->
         <div id="question-card-container" class="w-full"></div>
 
         <!-- 重置 -->
-        <div id="reset-button-container"
-            class="mt-8 pt-4 border-t border-gray-200 text-center">
+        <div class="mt-8 pt-4 border-t border-gray-200 text-center">
             <button class="btn btn-reset px-6 py-3" onclick="navigate('Q1')">
                 🔄 重置挑戰
             </button>
         </div>
-    </div>
+    </main>
 
-</div>
-
-<!-- ⚠️ JS：完全沿用你原本 -->
-<script>
-const decisionTree = {
+    <!-- 🔽 以下 JS 完全沒動 -->
+    <script>
+              const decisionTree = {
             Q1: { title: "🐾 關卡一：挑戰類型", question: "您想處理的是「【已經發生】的麻煩事/壞結果」 (問題型)？還是【未來想達成】的新成就/好水準 (課題型)？", icon: "🤔", options: [
                 { text: "😭 現有缺失或異常 (問題解決型)", next: "Q2", style: "btn-pink" },
                 { text: "🤩 未來目標或任務 (課題達成型)", next: "R_GOAL", style: "btn-purple" }
@@ -266,7 +244,7 @@ const decisionTree = {
             document.head.appendChild(style);
             navigate('Q1');
         })();
-</script>
+    </script>
 
 </body>
 </html>
