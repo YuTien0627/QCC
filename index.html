@@ -4,20 +4,53 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>品管圈（QCC）新手入門互動指南</title>
+
 <script src="https://cdn.tailwindcss.com"></script>
 
 <style>
-    body { font-family: 'Inter', sans-serif; background-color: #ecfdf5; }
-    .nav-button { transition: 0.3s; border-bottom: 3px solid transparent; }
-    .nav-button.active { color: #0d9488; border-color: #0d9488; font-weight: 700; }
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: #ecfdf5;
+    }
 
-    .format-tab, .sub-tab { transition: 0.3s; min-height: 40px; }
-    .active-tab { background-color: #0d9488 !important; color: white !important; font-weight: 700 !important; }
+    .nav-button {
+        transition: 0.3s;
+        border-bottom: 3px solid transparent;
+    }
+    .nav-button.active {
+        color: #0d9488;
+        border-color: #0d9488;
+        font-weight: 700;
+    }
 
-    #content-frame { width: 100%; border: none; min-height: 500px; }
-    #last-updated { margin-top: 1rem; text-align: right; color: #555; font-size: 0.9rem; }
+    .format-tab, .sub-tab {
+        transition: 0.3s;
+        min-height: 40px;
+    }
+    .active-tab {
+        background-color: #0d9488 !important;
+        color: white !important;
+        font-weight: 700 !important;
+    }
+
+    /* ✅ iframe 關鍵修正 */
+    #content-frame {
+        width: 100%;
+        border: none;
+        min-height: 500px;
+        display: block;              /* 防止 inline iframe 造成高度異常 */
+        transition: height 0.25s;    /* 切換 tab 不跳 */
+    }
+
+    #last-updated {
+        margin-top: 1rem;
+        text-align: right;
+        color: #555;
+        font-size: 0.9rem;
+    }
 </style>
 </head>
+
 <body class="antialiased">
 
 <div class="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8">
@@ -28,23 +61,37 @@
             <div class="flex items-center justify-center mb-2">
                 <img src="https://raw.githubusercontent.com/YuTien0627/QCC/main/%E5%93%81%E7%AE%A1%E9%83%A8LOGO%20(%E5%8E%BB%E8%83%8C).png"
                      class="w-12 h-12 sm:w-14 sm:h-14 mr-3 object-contain">
-                <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-900">品管圈（QCC）新手入門互動指南</h1>
+                <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-900">
+                    品管圈（QCC）新手入門互動指南
+                </h1>
             </div>
-            <p class="text-xl text-gray-500">從概念到實踐，品質改善的旅程由此開始！</p>
+            <p class="text-xl text-gray-500">
+                從概念到實踐，品質改善的旅程由此開始！
+            </p>
         </div>
     </header>
 
     <!-- 第一層導航 -->
     <nav class="sticky top-0 z-10 flex justify-center bg-white p-2 rounded-xl shadow-lg mb-4 space-x-4">
-        <button id="nav-btn-home" onclick="goHome()" class="nav-button active text-lg px-6 py-2">🚀 首頁</button>
+        <button id="nav-btn-home" onclick="goHome()" class="nav-button active text-lg px-6 py-2">
+            🚀 首頁
+        </button>
 
-        <button id="nav-btn-selection" onclick="showToolTabs()" class="nav-button text-lg px-6 py-2">🎁 工具大禮包</button>
+        <button id="nav-btn-selection" onclick="showToolTabs()" class="nav-button text-lg px-6 py-2">
+            🎁 工具大禮包
+        </button>
 
-        <button id="nav-btn-format" onclick="showFormatTabs()" class="nav-button text-lg px-6 py-2">📝 書面格式</button>
+        <button id="nav-btn-format" onclick="showFormatTabs()" class="nav-button text-lg px-6 py-2">
+            📝 書面格式
+        </button>
 
-        <button id="nav-btn-tools" onclick="loadExternalPage('參考資料.html', 'nav-btn-tools')" class="nav-button text-lg px-6 py-2">🛠️ 參考資料</button>
+        <button id="nav-btn-tools" onclick="loadExternalPage('參考資料.html', 'nav-btn-tools')" class="nav-button text-lg px-6 py-2">
+            🛠️ 參考資料
+        </button>
 
-        <button id="nav-btn-quiz" onclick="loadExternalPage('小測驗.html', 'nav-btn-quiz')" class="nav-button text-lg px-6 py-2">🎯 小試身手</button>
+        <button id="nav-btn-quiz" onclick="loadExternalPage('小測驗.html', 'nav-btn-quiz')" class="nav-button text-lg px-6 py-2">
+            🎯 小試身手
+        </button>
     </nav>
 
     <!-- 書面格式 tabs -->
@@ -68,16 +115,18 @@
 
     <!-- 更新時間 -->
     <div id="last-updated"></div>
+
 </div>
 
 <script>
-/* ------------------- 共用功能 ------------------- */
+/* ------------------- 共用 ------------------- */
 function activateNav(id){
-    document.querySelectorAll('.nav-button').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.nav-button')
+        .forEach(btn => btn.classList.remove('active'));
     document.getElementById(id)?.classList.add('active');
 }
 
-function clearTabs() {
+function clearTabs(){
     document.getElementById('format-tabs').classList.add('hidden');
     document.getElementById('tool-tabs').classList.add('hidden');
     document.querySelectorAll('.format-tab, .sub-tab')
@@ -93,7 +142,8 @@ function showFormatTabs(){
 }
 
 function loadFormatPage(page, btn){
-    document.querySelectorAll('.format-tab').forEach(el => el.classList.remove('active-tab'));
+    document.querySelectorAll('.format-tab')
+        .forEach(el => el.classList.remove('active-tab'));
     btn.classList.add('active-tab');
     loadIframe(page);
 }
@@ -107,27 +157,37 @@ function showToolTabs(){
 }
 
 function loadToolPage(page, btn){
-    document.querySelectorAll('.sub-tab').forEach(el => el.classList.remove('active-tab'));
+    document.querySelectorAll('.sub-tab')
+        .forEach(el => el.classList.remove('active-tab'));
     btn.classList.add('active-tab');
     loadIframe(page);
 }
 
-/* ------------------- 參考資料 / 小測驗 ------------------- */
+/* ------------------- 外部頁面 ------------------- */
 function loadExternalPage(page, navId){
     activateNav(navId);
     clearTabs();
     loadIframe(page);
 }
 
-/* ------------------- iframe 載入與撐高 ------------------- */
+/* ------------------- iframe 核心修正 ------------------- */
 function loadIframe(page){
     const iframe = document.getElementById('content-frame');
+
+    // ⭐ 關鍵：先清空高度，避免殘留前一頁
+    iframe.style.height = '0px';
     iframe.src = page;
 
     iframe.onload = () => {
         try {
             const doc = iframe.contentDocument || iframe.contentWindow.document;
-            iframe.style.height = doc.body.scrollHeight + 'px';
+
+            // ⭐ 等瀏覽器完成 layout 再抓高度
+            requestAnimationFrame(() => {
+                const height = doc.body.scrollHeight;
+                iframe.style.height = height + 'px';
+            });
+
         } catch(e){
             iframe.style.height = '1200px';
         }
@@ -152,7 +212,8 @@ function updateTime(){
         hour:'2-digit', minute:'2-digit', hour12:false
     });
     const txt = fmt.format(t).replace(/\//g,'-');
-    document.getElementById('last-updated').textContent = "最後更新時間：" + txt;
+    document.getElementById('last-updated').textContent =
+        '最後更新時間：' + txt;
 }
 
 /* ------------------- 初始化 ------------------- */
