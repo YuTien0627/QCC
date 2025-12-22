@@ -37,9 +37,13 @@
     <!-- 第一層導航 -->
     <nav class="sticky top-0 z-10 flex justify-center bg-white p-2 rounded-xl shadow-lg mb-4 space-x-4">
         <button id="nav-btn-home" onclick="goHome()" class="nav-button active text-lg px-6 py-2">🚀 首頁</button>
+
         <button id="nav-btn-selection" onclick="showToolTabs()" class="nav-button text-lg px-6 py-2">🎁 工具大禮包</button>
+
         <button id="nav-btn-format" onclick="showFormatTabs()" class="nav-button text-lg px-6 py-2">📝 書面格式</button>
+
         <button id="nav-btn-tools" onclick="loadExternalPage('參考資料.html', 'nav-btn-tools')" class="nav-button text-lg px-6 py-2">🛠️ 參考資料</button>
+
         <button id="nav-btn-quiz" onclick="loadExternalPage('小測驗.html', 'nav-btn-quiz')" class="nav-button text-lg px-6 py-2">🎯 小試身手</button>
     </nav>
 
@@ -99,10 +103,7 @@ function showToolTabs(){
     activateNav('nav-btn-selection');
     clearTabs();
     document.getElementById('tool-tabs').classList.remove('hidden');
-
-    // 直接載入 2.html，並選中第一個 sub-tab（品管工具）
-    const firstSubTab = document.querySelector('#tool-tabs .sub-tab');
-    loadToolPage('2.html', firstSubTab);
+    loadToolPage('選擇工具.html', document.querySelector('#tool-tabs .sub-tab'));
 }
 
 function loadToolPage(page, btn){
@@ -126,8 +127,6 @@ function loadIframe(page){
     iframe.onload = () => {
         try {
             const doc = iframe.contentDocument || iframe.contentWindow.document;
-            // 強制重繪動畫，避免跑版
-            void doc.body.offsetHeight;
             iframe.style.height = doc.body.scrollHeight + 'px';
         } catch(e){
             iframe.style.height = '1200px';
