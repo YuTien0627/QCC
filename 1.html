@@ -29,6 +29,15 @@
             font-family: 'Inter', 'Noto Sans TC', sans-serif;
             background-color: #ecfdf5;
         }
+        
+        /* 頁首風格：白底卡片＋上方青色粗條 */
+        .header-card {
+            background-color: #ffffff;
+            border-top: 8px solid #0d9488; /* teal-600 */
+            border-radius: 1rem;
+            box-shadow: 0 20px 35px -18px rgba(15, 23, 42, 0.45);
+        }
+
         .btn {
             @apply px-10 py-6 rounded-full font-extrabold text-3xl md:text-4xl transition duration-300 shadow-lg border-b-4 border-opacity-70;
             white-space: normal;
@@ -47,21 +56,14 @@
         .breadcrumb-node { @apply flex items-center bg-secondary-purple text-white text-sm font-semibold px-3 py-1 rounded-full shadow-md; cursor: pointer; }
         .breadcrumb-node-active { @apply bg-primary-pink text-white; }
         .breadcrumb-node-result { @apply bg-primary-pink/20 text-gray-800; }
-        /* 頁首風格：白底卡片＋上方青色粗條，向 index 看齊 */
-        .header-card {
-            background-color: #ffffff;
-            border-top: 8px solid #0d9488; /* teal-600 */
-            border-radius: 1rem;
-            box-shadow: 0 20px 35px -18px rgba(15, 23, 42, 0.45);
-        }
     </style>
 </head>
 <body class="min-h-screen py-10 px-4">
 
     <div id="app" class="w-full max-w-4xl mx-auto">
 
-        <!-- 頁首 -->
-        <header class="text-center mb-10">
+        <!-- 頁首：套用 header-card 樣式 -->
+        <header class="text-center mb-10 p-8 header-card">
             <h1 class="text-4xl md:text-5xl font-extrabold text-gray-800 mb-3 leading-tight">
                 🛠️ 品管工具選哪招？跟我走！ 💡
             </h1>
