@@ -310,13 +310,7 @@
                 content.classList.remove('hidden');
                 
                 title.innerText = data.title;
-                svgContainer.innerHTML = '';
-
-if (data.render) {
-    data.render(section);
-} else {
-    svgContainer.innerHTML = data.svg;
-};
+                svgContainer.innerHTML = data.svg;
                 desc.innerText = data.desc;
                 
                 content.classList.remove('fade-out');
