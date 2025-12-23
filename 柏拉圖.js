@@ -1,4 +1,13 @@
-export function initParetoChart(canvasId) {
+function renderPareto(containerId) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    // 清空舊內容（避免重複畫）
+    container.innerHTML = `
+        <canvas id="pareto-canvas" style="width:100%; height:100%;"></canvas>
+    `;
+
+    const ctx = document.getElementById('pareto-canvas').getContext('2d');
 
     const rawData = [
         { reason: '表面刮痕', count: 185 },
@@ -10,103 +19,69 @@ export function initParetoChart(canvasId) {
     ];
 
     rawData.sort((a, b) => b.count - a.count);
-    const totalCount = rawData.reduce((sum, item) => sum + item.count, 0);
 
-    const barWidthRatio = 0.8;
     const labels = rawData.map(d => d.reason);
+    const counts = rawData.map(d => d.count);
 
-    let runningSum = 0;
-    const lineData = [{ x: 0, y: 0 }];
-    const barData = [];
-    let eightyPercentPoint = null;
-
-    rawData.forEach((item, index) => {
-        runningSum += item.count;
-        const center = index + (barWidthRatio / 2);
-        const percentage = ((runningSum / totalCount) * 100).toFixed(1);
-
-        lineData.push({ x: center, y: percentage });
-        barData.push({ x: center, y: item.count });
-
-        if (percentage >= 80 && !eightyPercentPoint) {
-            eightyPercentPoint = {
-                x: center,
-                y: percentage,
-                count: runningSum
-            };
-        }
+    let running = 0;
+    const total = counts.reduce((a, b) => a + b, 0);
+    const cumulative = counts.map(c => {
+        running += c;
+        return +(running / total * 100).toFixed(1);
     });
 
-    const ctx = document.getElementById(canvasId).getContext('2d');
-
-    return new Chart(ctx, {
-        type: 'bar',
+    new Chart(ctx, {
         data: {
+            labels,
             datasets: [
                 {
-                    label: '累積百分比 (%)',
-                    data: lineData,
-                    type: 'line',
-                    borderColor: '#FF7EB9',
-                    borderWidth: 5,
-                    pointRadius: 7,
-                    pointBackgroundColor: '#FFFFFF',
-                    pointBorderColor: '#FF7EB9',
-                    pointBorderWidth: 3,
-                    yAxisID: 'yPercentage',
-                    tension: 0,
-                    order: 1
+                    type: 'bar',
+                    label: '次數',
+                    data: counts,
+                    backgroundColor: '#FBBF24',
+                    borderRadius: 10,
+                    yAxisID: 'y'
                 },
                 {
-                    label: '發生次數',
-                    data: barData,
-                    type: 'bar',
-                    backgroundColor: ['#A2D2FF', '#BDE0FE', '#FFC8DD', '#FFAFCC', '#FFB7B2', '#FFDAC1'],
-                    borderRadius: 15,
-                    yAxisID: 'yCount',
-                    order: 2,
-                    barPercentage: barWidthRatio,
-                    categoryPercentage: 1.0
+                    type: 'line',
+                    label: '累積百分比 (%)',
+                    data: cumulative,
+                    borderColor: '#FB7185',
+                    backgroundColor: '#FB7185',
+                    tension: 0,
+                    pointRadius: 5,
+                    yAxisID: 'y1'
                 }
             ]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            scales: {
-                x: {
-                    type: 'linear',
-                    min: 0,
-                    max: rawData.length,
-                    grid: { display: false },
-                    ticks: {
-                        stepSize: 1,
-                        callback: v => labels[Math.floor(v)] || ''
+            plugins: {
+                legend: {
+                    labels: {
+                        font: { weight: 'bold' }
                     }
-                },
-                yCount: {
-                    beginAtZero: true,
-                    title: { display: true, text: '次數' }
-                },
-                yPercentage: {
-                    position: 'right',
-                    beginAtZero: true,
-                    max: 100,
-                    title: { display: true, text: '累積百分比 (%)' }
                 }
             },
-            plugins: {
-                annotation: {
-                    annotations: {
-                        hLine: {
-                            type: 'line',
-                            yMin: eightyPercentPoint.count,
-                            yMax: eightyPercentPoint.count,
-                            xMin: 0,
-                            xMax: eightyPercentPoint.x,
-                            borderDash: [6, 6],
-                            yAxisID: 'yCount'
-                        }
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: '次數'
+                    }
+                },
+                y1: {
+                    beginAtZero: true,
+                    max: 100,
+                    position: 'right',
+                    title: {
+                        display: true,
+                        text: '累積百分比 (%)'
+                    },
+                    grid: {
+                        drawOnChartArea: false
                     }
                 }
             }
