@@ -11,8 +11,9 @@ window.renderPareto = function (containerId) {
     }
 
     // 初始化 Canvas 結構與基本樣式
+    // 透過調整 padding 讓圖表主體有更多垂直空間延伸
     container.innerHTML = `
-        <div style="width: 100%; height: 100%; background: #FFFFFF; border-radius: 40px; padding: 25px; box-shadow: 0 15px 35px rgba(255, 182, 193, 0.4); border: 6px solid #FFE4E1; box-sizing: border-box;">
+        <div style="width: 100%; height: 100%; background: #FFFFFF; border-radius: 40px; padding: 15px 25px; box-shadow: 0 15px 35px rgba(255, 182, 193, 0.4); border: 6px solid #FFE4E1; box-sizing: border-box;">
             <canvas id="pareto-canvas"></canvas>
         </div>
     `;
@@ -106,7 +107,12 @@ window.renderPareto = function (containerId) {
         },
         options: {
             responsive: true,
-            maintainAspectRatio: false,
+            maintainAspectRatio: false, // 允許寬高隨容器自由延伸
+            layout: {
+                padding: {
+                    top: 20 // 給予頂部標籤足夠空間
+                }
+            },
             scales: {
                 x: {
                     type: 'linear',
@@ -211,5 +217,5 @@ window.renderPareto = function (containerId) {
         }
     });
 
-    console.log('✅ Pareto Chart (Cute Style) rendered successfully');
+    console.log('✅ Pareto Chart (Extended View) rendered successfully');
 };
