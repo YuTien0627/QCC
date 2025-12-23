@@ -1,8 +1,7 @@
-function renderPareto(containerId) {
+window.renderPareto = function (containerId) {
     const container = document.getElementById(containerId);
     if (!container) return;
 
-    // 清空舊內容（避免重複畫）
     container.innerHTML = `
         <canvas id="pareto-canvas" style="width:100%; height:100%;"></canvas>
     `;
@@ -87,4 +86,6 @@ function renderPareto(containerId) {
             }
         }
     });
-}
+
+    console.log('✅ renderPareto 已成功掛載並執行');
+};
