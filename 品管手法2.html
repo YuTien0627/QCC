@@ -5,12 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>常用品管工具總覽 - 專業互動面板</title>
     <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<!-- Annotation（以後可用） -->
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@2.2.1"></script>
-<!-- 柏拉圖 -->
-<script src="柏拉圖.js"></script>
+  
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Noto+Sans+TC:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         body {
@@ -218,15 +213,20 @@
 
     <script>
         const toolData = {
-            'pareto': {
-                tag: '舊 QC 七手法',
-                color: 'amber',
-                title: '柏拉圖 (Pareto)',
-                desc: '掌握「重要少數」原則。實務應用中，應先處理累積百分比達 80% 的前幾大項目。',
-                render: (section) => {
-                    renderPareto(`svg-${section}`);
-                }
-            },
+            'pareto':  {
+    tag: '舊 QC 七手法',
+    color: 'amber',
+    title: '柏拉圖 (Pareto)',
+    desc: '掌握「重要少數」原則。實務應用中，應先處理累積百分比達 80% 的前幾大項目。',
+    render: async (section) => {
+        const container = document.getElementById(`svg-${section}`);
+        if (!container) return;
+
+        const response = await fetch('柏拉圖.html');
+        const html = await response.text();
+        container.innerHTML = html;
+    }
+},
             'fishbone': {
                 tag: '舊 QC 七手法', color: 'amber', title: '特性要因圖',
                 desc: '分析問題的「人、機、料、法、環」(5M1E)。建議由右向左思考，不斷問「為什麼？」，展開各層次的小骨頭，直到找出可執行的真因。',
