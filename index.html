@@ -141,48 +141,15 @@ function goHome(){
     loadIframe('首頁.html');
 }
 
-<script>
-/* ------------------- GitHub 最後更新時間 ------------------- */
-async function updateTimeFromGitHub() {
-
-    const OWNER = "yutien0627";   // 例如 yutien0627
-    const REPO  = "QCC";     // 例如 QCC
-
-    const url = `https://api.github.com/repos/${OWNER}/${REPO}/commits?per_page=1`;
-
-    try {
-        const response = await fetch(url);
-        const data = await response.json();
-
-        // 取得最後一次 commit 時間
-        const commitTime = data[0].commit.committer.date;
-        const date = new Date(commitTime);
-
-        const fmt = new Intl.DateTimeFormat('zh-TW', {
-            timeZone: 'Asia/Taipei',
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
-            hour12: false
-        });
-
-        const txt = fmt.format(date).replace(/\//g, '-');
-        document.getElementById('last-updated').textContent =
-            "最後更新時間：" + txt;
-
-    } catch (error) {
-        document.getElementById('last-updated').textContent =
-            "最後更新時間：無法取得";
-        console.error(error);
-    }
-}
-
-// 頁面載入後執行一次
-document.addEventListener("DOMContentLoaded", updateTimeFromGitHub);
-</script>
-
+/* ------------------- 更新時間 ------------------- */ 
+function updateTime(){ 
+const t = new Date(); 
+const fmt = new Intl.DateTimeFormat('zh-TW', { 
+timeZone: 'Asia/Taipei', 
+year:'numeric', month:'2-digit', day:'2-digit', 
+hour:'2-digit', minute:'2-digit', hour12:false }); 
+const txt = fmt.format(t).replace(/\//g,'-'); 
+document.getElementById('last-updated').textContent = "最後更新時間：" + txt; }
 
 /* ------------------- 初始化 ------------------- */
 goHome();
