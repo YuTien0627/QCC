@@ -122,28 +122,33 @@
             AI 輔助撰寫工具
         </h2>
 
-        <!-- 說明文字 -->
-        <p class="text-gray-600 text-sm">
-            點擊下方按鈕，即可直接開啟「奇美品質改善小幫手」，由 AI 協助你釐清邏輯、撰寫與優化成果報告書。
-        </p>
+        <!-- 說明文字 + 按鈕（同一列） -->
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
 
-        <!-- 單一按鈕 -->
-        <div class="mt-2">
+            <!-- 說明文字（桌機不換行） -->
+            <p class="text-gray-600 text-sm md:whitespace-nowrap">
+                點擊右方按鈕，即可直接開啟「奇美品質改善小幫手」，由 AI 協助你釐清邏輯、撰寫與優化成果報告書。
+            </p>
+
+            <!-- 按鈕（綠藍漸層） -->
             <a href="https://chatgpt.com/g/g-695229fefa348191a7819c7a947ce193-qi-mei-pin-zhi-gai-shan-xiao-bang-shou"
                target="_blank"
                rel="noopener noreferrer"
-               class="inline-flex items-center justify-center gap-3 px-8 py-4 
-                      bg-blue-600 text-white text-lg font-semibold rounded-full
-                      shadow-lg hover:bg-blue-700 hover:shadow-xl
-                      transition-all active:scale-[0.97]">
+               class="inline-flex items-center justify-center gap-3
+                      px-6 py-3 shrink-0
+                      bg-gradient-to-r from-emerald-500 via-teal-500 to-blue-500
+                      text-white text-base font-semibold rounded-full
+                      shadow-lg hover:from-emerald-600 hover:via-teal-600 hover:to-blue-600
+                      hover:shadow-xl transition-all active:scale-[0.97]">
 
-                <span class="text-2xl">✨</span>
+                <span class="text-xl">✨</span>
                 開啟 AI 品質改善小幫手
             </a>
-        </div>
 
+        </div>
     </div>
 </section>
+
 
         <!-- 兩欄式布局：左側步驟列表 + 右側詳情內容 -->
         <section class="grid lg:grid-cols-3 gap-6 items-start">
