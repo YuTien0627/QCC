@@ -131,7 +131,6 @@ function loadIframe(page){
         }
     };
 
-    updateTime();
 }
 
 /* ------------------- 首頁 ------------------- */
@@ -142,18 +141,114 @@ function goHome(){
 }
 
 /* ------------------- 更新時間 ------------------- */ 
-function updateTime(){ 
-const t = new Date(); 
-const fmt = new Intl.DateTimeFormat('zh-TW', { 
-timeZone: 'Asia/Taipei', 
-year:'numeric', month:'2-digit', day:'2-digit', 
-hour:'2-digit', minute:'2-digit', hour12:false }); 
-const txt = fmt.format(t).replace(/\//g,'-'); 
-document.getElementById('last-updated').textContent = "最後更新時間：" + txt; }
+<script>
+/* ------------------- 更新時間：抓 GitHub Pages「最後發布時間」 ------------------- */
+async function updateTimeFromGitHubPages() {
+    const OWNER = "YuTien0627";
+    const REPO  = "QCC";
+    const el = document.getElementById('last-updated');
+
+    el.textContent = "最後更新時間：載入中…";
+
+    const fmt = new Intl.DateTimeFormat('zh-TW', {
+        timeZone: 'Asia/Taipei',
+        year:'numeric', month:'2-digit', day:'2-digit',
+        hour:'2-digit', minute:'2-digit', hour12:false
+    });
+
+    try {
+        // 1) 優先抓「Pages 最後一次發布(build)時間」= 最接近你說的「完成發布的時間」
+        const pagesBuildUrl = `https://api.github.com/repos/${OWNER}/${REPO}/pages/builds?per_page=1`;
+        const r1 = await fetch(pagesBuildUrl, { cache: "no-store" });
+
+        if (r1.ok) {
+            const builds = await r1.json();
+            if (Array.isArray(builds) && builds.length > 0) {
+                // updated_at 通常代表該次 build 狀態更新完成時間（接近 deploy 完成）
+                const d = new Date(builds[0].updated_at || builds[0].created_at);
+                el.textContent = "最後更新時間：" + fmt.format(d).replace(/\//g,'-');
+                return;
+            }
+        }
+
+        // 2) 備援：抓最新 commit 時間（若 Pages builds API 不可用或沒資料）
+        const commitUrl = `https://api.github.com/repos/${OWNER}/${REPO}/commits?per_page=1`;
+        const r2 = await fetch(commitUrl, { cache: "no-store" });
+        if (!r2.ok) throw new Error("GitHub API 取得失敗");
+
+        const commits = await r2.json();
+        const commitTime = commits?.[0]?.commit?.committer?.date;
+        if (!commitTime) throw new Error("找不到 commit 時間");
+
+        const d2 = new Date(commitTime);
+        el.textContent = "最後更新時間：" + fmt.format(d2).replace(/\//g,'-');
+
+    } catch (e) {
+        el.textContent = "最後更新時間：無法取得（請稍後再試）";
+        console.error(e);
+    }
+}
+
+/* ------------------- iframe 載入與撐高 ------------------- */
+function loadIframe(page){
+    const iframe = document.getElementById('content-frame');
+    iframe.src = page;
+
+    iframe.onload = () => {
+        try {
+            const doc = iframe.contentDocument || iframe.contentWindow.document;
+            iframe.style.height = doc.body.scrollHeight + 'px';
+        } catch(e){
+            iframe.style.height = '1200px';
+        }
+    };
+
+    // ❌ 不要在這裡更新時間（避免切換頁籤就變動）
+}
 
 /* ------------------- 初始化 ------------------- */
 goHome();
+updateTimeFromGitHubPages(); // ✅ 只在進站時抓 GitHub「最後發布/更新」時間
 </script>
 
+
+/* ------------------- 初始化 ------------------- */
+goHome();
+
+/* ------------------- 回到最上方按鈕 ------------------- */
+const backToTopBtn = document.getElementById('backToTop');
+
+// 監聽捲動，超過一定高度才顯示
+window.addEventListener('scroll', () => {
+    if (window.scrollY > 300) {
+        backToTopBtn.classList.remove('hidden');
+    } else {
+        backToTopBtn.classList.add('hidden');
+    }
+});
+
+// 點擊後平滑回到最上方
+backToTopBtn.addEventListener('click', () => {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+});
+
+</script>
+
+<!-- 回到最上方按鈕 -->
+<button id="backToTop"
+    aria-label="回到最上方"
+    class="fixed bottom-6 right-6 z-50 hidden
+           w-12 h-12 rounded-full
+           bg-teal-600 text-white text-xl
+           shadow-lg hover:bg-teal-700 hover:shadow-xl
+           transition-all duration-300
+           active:scale-95">
+    ↑
+</button>
+    
+    
 </body>
 </html>
