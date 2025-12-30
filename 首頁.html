@@ -1,37 +1,147 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QCC 新手入門首頁</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QCC 新手入門首頁</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
+
 <body class="bg-emerald-50">
+  <div class="max-w-5xl mx-auto py-10 px-4 sm:px-6">
 
-<div class="text-center py-10">
-    <h2 class="text-2xl font-bold text-teal-700">🔍平台介紹</h2>
-    <p class="mt-4 text-gray-700">這是一個陪你完成 QCC 的輔助平台。
-這裡提供的是「思考方向、撰寫邏輯與實務提醒」，
-不是唯一標準答案，也不是制式範本。
-    每個團隊的改善背景、問題情境與做法都不盡相同，
-只要邏輯合理、過程清楚、改善有依據，就是好的 QCC。
-你可以把這個平台當成一位陪你一起整理想法、避免迷路的神隊友。
-📌小提醒
-這裡的內容是「參考與引導」，不是評審標準
-不需要一模一樣照抄，請依團隊實際狀況調整
-寫得清楚、想得通，比寫得漂亮更重要</p>
+    <!-- ✅ 簡介（改為有「標題區塊」的樣式） -->
+    <section class="bg-white rounded-2xl shadow-lg border border-teal-100 overflow-hidden">
+      <div class="p-6 sm:p-8 border-l-8 border-teal-600">
 
-<!-- 我要報名按鈕 -->
-<div class="mt-6">
-    <a href="https://apps.powerapps.com/play/e/default-24de0681-c8f7-46e8-8da7-1f5b393d834d/a/15771135-a7a2-496d-a09d-1006a166594a?tenantId=24de0681-c8f7-46e8-8da7-1f5b393d834d&hint=52b538fa-7443-485b-9a4b-f577016feb80&sourcetime=1764946072435"
-       target="_blank"
-       rel="noopener noreferrer"
-       class="inline-flex items-center px-6 py-3 rounded-full bg-teal-600 text-white font-semibold text-lg shadow-md hover:bg-teal-700 hover:shadow-lg transition">
-        我要報名
-    </a>
-</div>
+        <!-- 標題區塊：簡介 -->
+        <div class="inline-flex items-center gap-2 bg-teal-50 px-5 py-2 rounded-full text-teal-800 shadow-sm whitespace-nowrap">
+          <span class="text-xl">🧭</span>
+          <span class="font-extrabold">簡介</span>
+        </div>
 
-</div>
+        <p class="mt-4 text-gray-700 leading-relaxed">
+          這是一個陪你完成 <span class="font-semibold text-teal-700">QCC 成果報告</span> 的輔助平台。
+          這裡提供的是 <span class="font-semibold">思考方向、撰寫邏輯與實務提醒</span>，
+          不是唯一標準答案，也不是制式範本。
+        </p>
 
+        <p class="mt-3 text-gray-700 leading-relaxed">
+          每個團隊的改善背景、問題情境與做法都不盡相同；
+          只要 <span class="font-semibold text-teal-700">邏輯合理、過程清楚、改善有依據</span>，
+          就是一個好的 QCC。你可以把這個平台當成一位
+          <span class="font-semibold">陪你一起整理想法、避免迷路的神隊友</span>。
+        </p>
+
+        <!-- ✅ 小提醒（左）＋ 我要報名（右）同一列 -->
+        <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4 items-stretch">
+
+          <!-- 小提醒：左邊區塊 -->
+          <div class="bg-white rounded-xl border border-teal-100 p-5">
+            <h2 class="font-bold text-teal-800 mb-2 flex items-center gap-2">📌 小提醒</h2>
+            <ul class="list-disc list-inside text-sm text-gray-700 space-y-1">
+              <li>這裡的內容是「參考與引導」，不是評審標準</li>
+              <li>不需要一模一樣照抄，請依團隊實際狀況調整</li>
+              <li><span class="font-semibold text-teal-700">寫得清楚、想得通</span>，比寫得漂亮更重要</li>
+            </ul>
+          </div>
+
+          <!-- 我要報名：右邊區塊 -->
+          <div class="bg-white rounded-xl border border-teal-100 p-5 flex flex-col justify-center items-center text-center">
+            <p class="text-sm text-gray-600 mb-4">
+              想加入今年的 QCC 活動嗎？點擊右方按鈕完成報名。
+            </p>
+            <a href="https://apps.powerapps.com/play/e/default-24de0681-c8f7-46e8-8da7-1f5b393d834d/a/15771135-a7a2-496d-a09d-1006a166594a?tenantId=24de0681-c8f7-46e8-8da7-1f5b393d834d&hint=52b538fa-7443-485b-9a4b-f577016feb80&sourcetime=1764946072435"
+               target="_blank"
+               rel="noopener noreferrer"
+               class="inline-flex items-center px-8 py-3 rounded-full bg-teal-600 text-white font-semibold text-lg shadow-md hover:bg-teal-700 hover:shadow-lg transition">
+              我要報名
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ✅ 互動指南（上方標題區塊） -->
+    <div class="mt-8">
+      <div class="inline-flex items-center gap-2 bg-white px-5 py-2 rounded-full text-teal-800 shadow-sm border border-teal-100 whitespace-nowrap">
+        <span class="text-xl">🧩</span>
+        <span class="font-extrabold">互動指南</span>
+      </div>
+    </div>
+
+    <!-- ✅ 串接後續頁面視覺：互動指南 / 資源百寶箱 -->
+    <section class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
+
+      <!-- 互動指南卡 -->
+      <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+        <div class="p-6 border-l-8 border-indigo-500">
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <h3 class="text-xl font-extrabold text-gray-800">🧩 互動指南</h3>
+              <p class="text-sm text-gray-600 mt-1">
+                依 QCC 步驟帶你走：每一步該想什麼、怎麼寫、常見錯誤是什麼。
+              </p>
+            </div>
+            <span class="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200 whitespace-nowrap">
+              建議先從這裡開始
+            </span>
+          </div>
+
+          <ul class="mt-4 space-y-2 text-sm text-gray-700">
+            <li class="flex gap-2"><span>✅</span><span>快速釐清因果與邏輯</span></li>
+            <li class="flex gap-2"><span>✅</span><span>每步驟提供撰寫重點與提醒</span></li>
+            <li class="flex gap-2"><span>✅</span><span>降低迷路、少走冤枉路</span></li>
+          </ul>
+
+          <div class="mt-5">
+            <!-- TODO：把檔名改成你的互動指南頁面（例如：index.html 或 QCC報告書撰寫攻略.html） -->
+            <a href="index.html"
+               class="inline-flex items-center px-6 py-2 rounded-full bg-indigo-500 text-white font-semibold shadow-md hover:bg-indigo-600 transition">
+              前往互動指南 →
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 資源百寶箱卡 -->
+      <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+        <div class="p-6 border-l-8 border-teal-600">
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <h3 class="text-xl font-extrabold text-gray-800">🏆 資源百寶箱</h3>
+              <p class="text-sm text-gray-600 mt-1">
+                歷年課程影音、講義、外部案例一次收齊，隨時補強你的改善功力。
+              </p>
+            </div>
+            <span class="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full bg-teal-50 text-teal-800 border border-teal-200 whitespace-nowrap">
+              影音＆講義
+            </span>
+          </div>
+
+          <ul class="mt-4 space-y-2 text-sm text-gray-700">
+            <li class="flex gap-2"><span>📌</span><span>推薦順序：工具 → 問解 → 課達</span></li>
+            <li class="flex gap-2"><span>📚</span><span>講義可新分頁預覽、方便使用</span></li>
+            <li class="flex gap-2"><span>🌐</span><span>外部案例可做標竿與靈感</span></li>
+          </ul>
+
+          <div class="mt-5">
+            <!-- TODO：把檔名改成你的資源百寶箱頁面（例如：參考資料.html） -->
+            <a href="參考資料.html"
+               class="inline-flex items-center px-6 py-2 rounded-full bg-teal-600 text-white font-semibold shadow-md hover:bg-teal-700 transition">
+              前往資源百寶箱 →
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <p class="mt-6 text-center text-xs text-gray-500">
+      建議使用順序：先走「互動指南」把架構走一遍，再到「資源百寶箱」補充影音與講義 📌
+    </p>
+
+  </div>
 </body>
 </html>
