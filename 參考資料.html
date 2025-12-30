@@ -210,26 +210,39 @@
             },
     ];
 
+     const repoBase = "/QCC/";
+
+    function toAbsolutePath(path) {
+        const clean = String(path).replace(/^\/+/, "");
+        return repoBase.replace(/\/+$/, "/") + clean;
+    }
+
     function renderVideos() {
         const listContainer = document.getElementById('video-list');
+
         listContainer.innerHTML = videoData.map((video, index) => {
-            const targetUrl = `video.html?url=${encodeURIComponent(video.link)}`;
+            const videoUrl = `video.html?url=${encodeURIComponent(video.link)}`;
+            const handoutHref = encodeURI(toAbsolutePath(video.handoutLink));
+
             return `
-            <div class="flex flex-col sm:flex-row p-5 bg-white border border-gray-200 rounded-xl hover:shadow-lg transition duration-300 transform resource-card">
+            <div class="flex flex-col sm:flex-row p-5 bg-white border border-gray-200 rounded-xl hover:shadow-lg transition duration-300 resource-card">
                 <div class="sm:w-3/5">
-                    <span class="inline-flex items-center px-3 py-1 text-xs font-semibold leading-5 rounded-full bg-teal-100 text-teal-800 mb-1">
+                    <span class="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full bg-teal-100 text-teal-800 mb-1">
                         ${video.type}
                     </span>
                     <h4 class="text-xl font-bold text-gray-800 mt-1">${index + 1}. ${video.title}</h4>
                     <p class="mt-1 text-sm text-gray-600">${video.consultant} · ${video.date}</p>
                 </div>
-                <div class="sm:w-2/5 mt-4 sm:mt-0 sm:text-right flex flex-col sm:flex-row items-start sm:items-center sm:justify-end space-y-2 sm:space-y-0 sm:space-x-3 flex-shrink-0">
-                    <a href="${targetUrl}" target="_blank"
-                       class="inline-flex items-center text-white bg-indigo-500 hover:bg-indigo-600 px-4 py-2 rounded-full font-semibold text-sm transition duration-150 ease-in-out shadow-md">
+
+                <div class="sm:w-2/5 mt-4 sm:mt-0 flex flex-col sm:flex-row gap-2 justify-end">
+                    <a href="${videoUrl}" target="_blank" rel="noopener noreferrer"
+                       class="inline-flex items-center text-white bg-indigo-500 hover:bg-indigo-600 px-4 py-2 rounded-full font-semibold text-sm shadow-md">
                         觀看影音
                     </a>
-                    <a href="${video.handoutLink}" target="_blank"
-                       class="inline-flex items-center text-teal-800 bg-teal-50 border-2 border-teal-700 hover:bg-teal-700 hover:text-white px-4 py-2 rounded-full font-semibold text-sm transition duration-150 ease-in-out shadow-md">
+
+                    <!-- ✅ 講義：新分頁預覽（全部一致） -->
+                    <a href="${handoutHref}" target="_blank" rel="noopener noreferrer"
+                       class="inline-flex items-center text-teal-800 bg-teal-50 border-2 border-teal-700 hover:bg-teal-700 hover:text-white px-4 py-2 rounded-full font-semibold text-sm shadow-md">
                         講義下載
                     </a>
                 </div>
@@ -238,40 +251,7 @@
         }).join('');
     }
 
-    function setupTabs() {
-        const tabsNav = document.getElementById('tabs-nav');
-        const tabButtons = tabsNav.querySelectorAll('.tab-button');
-        const tabContents = document.querySelectorAll('.tab-content');
-
-        const activateTab = (activeTabId) => {
-            tabContents.forEach(content => content.classList.add('hidden'));
-            const activeContent = document.getElementById(activeTabId);
-            if (activeContent) activeContent.classList.remove('hidden');
-
-            tabButtons.forEach(button => {
-                button.classList.remove('border-teal-600','text-teal-800','bg-teal-50');
-                button.classList.add('border-transparent','text-gray-500','hover:text-teal-700','hover:border-teal-400');
-            });
-            const activeButton = document.querySelector(`.tab-button[data-tab="${activeTabId}"]`);
-            if (activeButton) {
-                activeButton.classList.add('border-teal-600','text-teal-800','bg-teal-50');
-                activeButton.classList.remove('border-transparent','text-gray-500','hover:text-teal-700','hover:border-teal-400');
-            }
-        };
-
-        tabButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                activateTab(button.getAttribute('data-tab'));
-            });
-        });
-
-        activateTab('videos');
-    }
-
-    window.addEventListener('load', () => {
-        renderVideos();
-        setupTabs();
-    });
+    window.addEventListener('load', renderVideos);
 </script>
 
 </body>
