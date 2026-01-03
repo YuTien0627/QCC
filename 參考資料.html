@@ -135,6 +135,7 @@
 </div>
 
 <script>
+    // --- 1. 資料與配置 ---
     const videoData = [
         {
             title: "多元品管工具介紹",
@@ -160,65 +161,68 @@
             type: "QCC 實作步驟",
             handoutLink: "課程講義/03_【講義】2018.04.18 品質提升活動課程-課題達成型步驟介紹.pdf",
         },
-       {
-                title: "流程分析、流程改造及精實介紹",
-                consultant: "張國昌顧問（精捷顧問公司）",
-                date: "2019 年 5 月",
-                link: "http://training.chimei.org.tw/mod/ipsafety/1070523010/107052301.wmv",
-                type: "流程管理",
-                handoutLink: "課程講義/04_【講義】2018.05.23 流程分析、流程改造及精實介紹.pdf",
-            },
-            {
-                title: "HFMEA 及預防型介紹",
-                consultant: "張國昌顧問（精捷顧問公司）",
-                date: "2019 年 5 月",
-                link: "http://training.chimei.org.tw/mod/ipsafety/1080510007/20190510.wmv",
-                type: "風險管理",
-                handoutLink: "課程講義/05_【講義】2018.05.23 HFMEA及預防型介紹.pdf",
-            },
-            {
-                title: "流程改造步驟介紹",
-                consultant: "張國昌顧問（精捷顧問公司）",
-                date: "2019 年 5 月",
-                link: "http://training.chimei.org.tw/mod/ipsafety/1080510008/20190510.mp4",
-                type: "流程管理",
-                handoutLink: "課程講義/06_【講義】2019.05.10 流程改造步驟介紹.pdf",
-            },
-            {
-                title: "善用PDCA循環-落實品質改善的核心價值",
-                consultant: "廖熏香顧問（品質管理部）",
-                date: "2025 年 7 月",
-                link: "http://training.chimei.org.tw/mod/ipsafety/1140724004/PDCA.mp4",
-                type: "PDCA",
-                handoutLink: "課程講義/07_【講義】2025.07.24 善用PDCA循環－落實品質改善的核心價值.pdf",
-            },
-            {
-                title: "RCA 根本原因分析理論與應用（上集）",
-                consultant: "石崇良司長（衛生福利部）",
-                date: "2019 年 7 月",
-                link: "http://training.chimei.org.tw/mod/ipsafety/1080715002/2019071501.wmv",
-                type: "根本原因分析",
-                handoutLink: "課程講義/08_【講義】2019-1 RCA基本概念-石崇良司長.pdf",
-            },
-            {
-                title: "RCA 根本原因分析理論與應用（下集）",
-                consultant: "石崇良司長（衛生福利部）",
-                date: "2019 年 7 月",
-                link: "http://training.chimei.org.tw/mod/ipsafety/1080715003/2019071502.wmv",
-                type: "根本原因分析",
-                handoutLink: "課程講義/09_【講義】2019-2 RCA操作-石崇良司長.pdf",
-            },
+        {
+            title: "流程分析、流程改造及精實介紹",
+            consultant: "張國昌顧問（精捷顧問公司）",
+            date: "2019 年 5 月",
+            link: "http://training.chimei.org.tw/mod/ipsafety/1070523010/107052301.wmv",
+            type: "流程管理",
+            handoutLink: "課程講義/04_【講義】2018.05.23 流程分析、流程改造及精實介紹.pdf",
+        },
+        {
+            title: "HFMEA 及預防型介紹",
+            consultant: "張國昌顧問（精捷顧問公司）",
+            date: "2019 年 5 月",
+            link: "http://training.chimei.org.tw/mod/ipsafety/1080510007/20190510.wmv",
+            type: "風險管理",
+            handoutLink: "課程講義/05_【講義】2018.05.23 HFMEA及預防型介紹.pdf",
+        },
+        {
+            title: "流程改造步驟介紹",
+            consultant: "張國昌顧問（精捷顧問公司）",
+            date: "2019 年 5 月",
+            link: "http://training.chimei.org.tw/mod/ipsafety/1080510008/20190510.mp4",
+            type: "流程管理",
+            handoutLink: "課程講義/06_【講義】2019.05.10 流程改造步驟介紹.pdf",
+        },
+        {
+            title: "善用PDCA循環-落實品質改善的核心價值",
+            consultant: "廖熏香顧問（品質管理部）",
+            date: "2025 年 7 月",
+            link: "http://training.chimei.org.tw/mod/ipsafety/1140724004/PDCA.mp4",
+            type: "PDCA",
+            handoutLink: "課程講義/07_【講義】2025.07.24 善用PDCA循環－落實品質改善的核心價值.pdf",
+        },
+        {
+            title: "RCA 根本原因分析理論與應用（上集）",
+            consultant: "石崇良司長（衛生福利部）",
+            date: "2019 年 7 月",
+            link: "http://training.chimei.org.tw/mod/ipsafety/1080715002/2019071501.wmv",
+            type: "根本原因分析",
+            handoutLink: "課程講義/08_【講義】2019-1 RCA基本概念-石崇良司長.pdf",
+        },
+        {
+            title: "RCA 根本原因分析理論與應用（下集）",
+            consultant: "石崇良司長（衛生福利部）",
+            date: "2019 年 7 月",
+            link: "http://training.chimei.org.tw/mod/ipsafety/1080715003/2019071502.wmv",
+            type: "根本原因分析",
+            handoutLink: "課程講義/09_【講義】2019-2 RCA操作-石崇良司長.pdf",
+        }
     ];
 
-     const repoBase = "/QCC/";
+    const repoBase = "/QCC/";
 
+    // --- 2. 輔助函數 ---
     function toAbsolutePath(path) {
         const clean = String(path).replace(/^\/+/, "");
         return repoBase.replace(/\/+$/, "/") + clean;
     }
 
+    // --- 3. 渲染功能 ---
     function renderVideos() {
         const listContainer = document.getElementById('video-list');
+        if (!listContainer) return;
 
         listContainer.innerHTML = videoData.map((video, index) => {
             const videoUrl = `video.html?url=${encodeURIComponent(video.link)}`;
@@ -233,26 +237,55 @@
                     <h4 class="text-xl font-bold text-gray-800 mt-1">${index + 1}. ${video.title}</h4>
                     <p class="mt-1 text-sm text-gray-600">${video.consultant} · ${video.date}</p>
                 </div>
-
                 <div class="sm:w-2/5 mt-4 sm:mt-0 flex flex-col sm:flex-row gap-2 justify-end">
                     <a href="${videoUrl}" target="_blank" rel="noopener noreferrer"
                        class="inline-flex items-center text-white bg-indigo-500 hover:bg-indigo-600 px-4 py-2 rounded-full font-semibold text-sm shadow-md">
                        觀看影音
                     </a>
-
-                    <!-- ✅ 講義：新分頁預覽（全部一致） -->
                     <a href="${handoutHref}" target="_blank" rel="noopener noreferrer"
                       class="inline-flex items-center text-teal-800 bg-teal-50 border-2 border-teal-700 hover:bg-teal-700 hover:text-white px-4 py-2 rounded-full font-semibold text-sm shadow-md">
                       講義下載
                     </a>
-
                 </div>
             </div>
             `;
         }).join('');
     }
 
-    window.addEventListener('load', renderVideos);
+    // --- 4. 頁籤切換邏輯 ---
+    function initTabs() {
+        const tabs = document.querySelectorAll('.tab-button');
+        const contents = document.querySelectorAll('.tab-content');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const target = tab.getAttribute('data-tab');
+
+                // 更新按鈕樣式
+                tabs.forEach(t => {
+                    t.classList.remove('border-teal-600', 'text-teal-800', 'bg-teal-50');
+                    t.classList.add('border-transparent', 'text-gray-500');
+                });
+                tab.classList.add('border-teal-600', 'text-teal-800', 'bg-teal-50');
+                tab.classList.remove('border-transparent', 'text-gray-500');
+
+                // 切換顯示內容
+                contents.forEach(content => {
+                    if (content.id === target) {
+                        content.classList.remove('hidden');
+                    } else {
+                        content.classList.add('hidden');
+                    }
+                });
+            });
+        });
+    }
+
+    // --- 5. 初始化執行 ---
+    window.addEventListener('load', () => {
+        renderVideos();
+        initTabs();
+    });
 </script>
 
 </body>
