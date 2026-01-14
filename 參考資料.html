@@ -32,7 +32,7 @@
         <p class="mt-1 text-sm sm:text-base md:text-lg font-medium text-teal-50">
             歡迎加入品管圈！這裡有您需要的影音課程、講義及外部案例，陪您從新手變高手。
         </p>
-        <p class="mt-3 inline-flex items-center text-xs sm:text-sm bg-white px-3 py-1 rounded-full text-teal-800 shadow-sm">
+        <p class="mt-3 inline-flex items-center text-xs sm:text-sm bg-white px-3 py-0.5 rounded-lg text-teal-800 shadow-sm">
             <span class="mr-1">✨</span>
             建議搭配首頁「QCC 新手入門互動指南」一起使用
         </p>
@@ -43,12 +43,12 @@
         <nav class="flex flex-wrap gap-2 sm:space-x-6 p-4 sm:p-5 items-center" aria-label="Tabs" id="tabs-nav">
             <button
                 data-tab="videos"
-                class="tab-button inline-flex items-center px-4 py-2 border-b-4 font-semibold text-sm sm:text-base leading-5 focus:outline-none transition duration-150 ease-in-out border-teal-600 text-teal-800 whitespace-nowrap rounded-t-lg bg-teal-50">
+                class="tab-button inline-flex items-center px-4 py-1.5 border-b-4 font-semibold text-sm sm:text-base leading-5 focus:outline-none transition duration-150 ease-in-out border-teal-600 text-teal-800 whitespace-nowrap rounded-t-lg bg-teal-50">
                 <span class="mr-2">📺</span> 歷年課程與講義
             </button>
             <button
                 data-tab="external"
-                class="tab-button inline-flex items-center px-4 py-2 border-b-4 font-semibold text-sm sm:text-base leading-5 focus:outline-none transition duration-150 ease-in-out border-transparent text-gray-500 hover:text-teal-700 hover:border-teal-400 whitespace-nowrap rounded-t-lg">
+                class="tab-button inline-flex items-center px-4 py-1.5 border-b-4 font-semibold text-sm sm:text-base leading-5 focus:outline-none transition duration-150 ease-in-out border-transparent text-gray-500 hover:text-teal-700 hover:border-teal-400 whitespace-nowrap rounded-t-lg">
                 <span class="mr-2">💡</span> 外部案例資源
             </button>
         </nav>
@@ -102,7 +102,7 @@
                     </p>
                     <div class="mt-4 flex flex-wrap gap-3 items-center">
                         <a href="https://nhqa.jct.org.tw/publicUI/A/A102.aspx" target="_blank"
-                           class="inline-flex items-center text-white bg-teal-600 hover:bg-teal-700 px-4 py-2 rounded-full font-medium text-sm transition duration-150 ease-in-out shadow-md">
+                           class="inline-flex items-center text-white bg-teal-600 hover:bg-teal-700 px-4 py-1 rounded-xl font-medium text-sm transition duration-150 ease-in-out shadow-md">
                             前往獲獎主題查詢
                         </a>
                         <span class="text-xs text-gray-500">建議：先看與自己科別或主題相近的案例</span>
@@ -123,7 +123,7 @@
                     </p>
                     <div class="mt-4 flex flex-wrap gap-3 items-center">
                         <a href="https://tw.zinio.com/" target="_blank"
-                           class="inline-flex items-center text-white bg-teal-600 hover:bg-teal-700 px-4 py-2 rounded-full font-medium text-sm transition duration-150 ease-in-out shadow-md">
+                           class="inline-flex items-center text-white bg-teal-600 hover:bg-teal-700 px-4 py-1 rounded-xl font-medium text-sm transition duration-150 ease-in-out shadow-md">
                             前往 Zinio 平台（需登入）
                         </a>
                         <span class="text-xs text-gray-500">小提醒：可搜尋「團結圈」「品管圈」或醫院名稱</span>
@@ -231,19 +231,19 @@
             return `
             <div class="flex flex-col sm:flex-row p-5 bg-white border border-gray-200 rounded-xl hover:shadow-lg transition duration-300 resource-card">
                 <div class="sm:w-3/5">
-                    <span class="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full bg-teal-100 text-teal-800 mb-1">
+                    <span class="inline-flex items-center px-3 py-0.5 text-xs font-semibold rounded-lg bg-teal-100 text-teal-800 mb-1">
                         ${video.type}
                     </span>
                     <h4 class="text-xl font-bold text-gray-800 mt-1">${index + 1}. ${video.title}</h4>
                     <p class="mt-1 text-sm text-gray-600">${video.consultant} · ${video.date}</p>
                 </div>
-                <div class="sm:w-2/5 mt-4 sm:mt-0 flex flex-col sm:flex-row gap-2 justify-end">
+                <div class="sm:w-2/5 mt-4 sm:mt-0 flex flex-col sm:flex-row gap-2 justify-end items-center">
                     <a href="${videoUrl}" target="_blank" rel="noopener noreferrer"
-                       class="inline-flex items-center text-white bg-indigo-500 hover:bg-indigo-600 px-4 py-2 rounded-full font-semibold text-sm shadow-md">
+                       class="inline-flex items-center text-white bg-indigo-500 hover:bg-indigo-600 px-4 py-1 rounded-xl font-semibold text-sm shadow-md">
                        觀看影音
                     </a>
                     <a href="${handoutHref}" target="_blank" rel="noopener noreferrer"
-                      class="inline-flex items-center text-teal-800 bg-teal-50 border-2 border-teal-700 hover:bg-teal-700 hover:text-white px-4 py-2 rounded-full font-semibold text-sm shadow-md">
+                      class="inline-flex items-center text-teal-800 bg-teal-50 border-2 border-teal-700 hover:bg-teal-700 hover:text-white px-4 py-1 rounded-xl font-semibold text-sm shadow-md">
                       講義下載
                     </a>
                 </div>
