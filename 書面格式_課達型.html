@@ -111,37 +111,42 @@
             </p>
         </section>
 
-        <!-- AI 連結區塊 (標題即為超連結) -->
-        <section class="bg-blue-50 p-6 rounded-xl shadow-md  border-l-8 border-blue-500">
-            <div class="flex flex-col gap-4">
-                <div class="text-center md:text-left">
-                    <h2 class="text-2xl font-bold text-blue-700 mb-1 flex items-center justify-center md:justify-start">
-                        <span class="mr-2 text-3xl">🤖</span> AI 輔助撰寫工具
-                    </h2>
-                    <p class="text-gray-500 text-sm mb-4">點擊下方按鈕即可直接開啟 AI 工具協助撰寫成果報告書。</p>
-                </div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- 左邊: GPT -->
-                    <a href="https://chatgpt.com" target="_blank" rel="noopener noreferrer" 
-                       class="group bg-blue-50 p-8 rounded-xl border border-blue-100 hover:bg-blue-100 transition-all active:scale-[0.98]">
-                        <h3 class="font-bold text-xl text-blue-800 flex items-center justify-center md:justify-start group-hover:text-blue-600">
-                            <span class="mr-3 text-2xl group-hover:scale-110 transition-transform">✨</span> 
-                            ChatGPT 網站
-                        </h3>
-                    </a>
-                    
-                    <!-- 右邊: Gemini -->
-                    <a href="https://gemini.google.com" target="_blank" rel="noopener noreferrer" 
-                       class="group bg-blue-50 p-8 rounded-xl border border-blue-100 hover:bg-blue-100 transition-all active:scale-[0.98]">
-                        <h3 class="font-bold text-xl text-blue-800 flex items-center justify-center md:justify-start group-hover:text-blue-600">
-                            <span class="mr-3 text-2xl group-hover:scale-110 transition-transform">💎</span> 
-                            Gemini 網站
-                        </h3>
-                    </a>
-                </div>
-            </div>
-        </section>
+  <!-- AI 連結區塊 -->
+<section class="bg-blue-50 p-6 rounded-xl shadow-md border-l-8 border-blue-500">
+    <div class="flex flex-col gap-4 text-center md:text-left">
+        
+        <!-- 標題 -->
+        <h2 class="text-2xl font-bold text-blue-700 flex items-center justify-center md:justify-start">
+            <span class="mr-2 text-3xl">🤖</span>
+            AI 輔助撰寫工具
+        </h2>
+
+        <!-- 說明文字 + 按鈕（同一列） -->
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+
+            <!-- 說明文字（桌機不換行） -->
+            <p class="text-gray-600 text-sm md:whitespace-nowrap">
+                點擊右方按鈕，即可直接開啟「奇美品質改善小幫手」，由 AI 協助你釐清邏輯、撰寫與優化成果報告書。
+            </p>
+
+            <!-- 按鈕（綠藍漸層） -->
+            <a href="https://chatgpt.com/g/g-695229fefa348191a7819c7a947ce193-qi-mei-pin-zhi-gai-shan-xiao-bang-shou"
+               target="_blank"
+               rel="noopener noreferrer"
+               class="inline-flex items-center justify-center gap-3
+                      px-6 py-3 shrink-0
+                      bg-gradient-to-r from-emerald-500 via-teal-500 to-blue-500
+                      text-white text-base font-semibold rounded-full
+                      shadow-lg hover:from-emerald-600 hover:via-teal-600 hover:to-blue-600
+                      hover:shadow-xl transition-all active:scale-[0.97]">
+
+                <span class="text-xl">✨</span>
+                開啟 AI 品質改善小幫手
+            </a>
+
+        </div>
+    </div>
+</section>
 
         <!-- 兩欄式布局：左側步驟列表 + 右側詳情內容（架構與問題型相同） -->
         <section class="grid lg:grid-cols-3 gap-6 items-start">
