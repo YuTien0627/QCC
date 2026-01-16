@@ -216,7 +216,7 @@
             'pareto':  {
                 tag: '舊 QC 七手法', color: 'amber', title: '柏拉圖 (Pareto)',
                 desc: '掌握「重要少數」原則。實務應用中，應先處理累積百分比達 80% 的前幾大項目。若要讓改善效果立竿見影，這就是你的第一步。',
-                svg: `<svg viewBox="0 0 100 80" class="w-full h-full"><rect x="10" y="20" width="15" height="40" fill="#f59e0b" rx="1"/><rect x="28" y="35" width="15" height="25" fill="#fbbf24" rx="1"/><rect x="46" y="45" width="15" height="15" fill="#fcd34d" rx="1"/><rect x="64" y="52" width="15" height="8" fill="#fde68a" rx="1"/><path d="M17.5 60 L35.5 35 L53.5 20 L71.5 15" stroke="#ef4444" fill="none" stroke-width="2" stroke-linecap="round"/><circle cx="17.5" cy="60" r="2" fill="#ef4444" /><circle cx="35.5" cy="35" r="2" fill="#ef4444" /><circle cx="53.5" cy="20" r="2" fill="#ef4444" /><circle cx="71.5" cy="15" r="2" fill="#ef4444" /><line x1="5" y1="60" x2="95" y2="60" stroke="#475569" stroke-width="1"/></svg>`
+                img: 'image/fishbone.png'
             },
             'fishbone': {
                 tag: '舊 QC 七手法', color: 'amber', title: '特性要因圖',
@@ -310,7 +310,7 @@
                 content.classList.remove('hidden');
                 
                 title.innerText = data.title;
-                svgContainer.innerHTML = data.svg;
+                svgContainer.innerHTML = `<img src="${data.img}" alt="${data.title}" class="max-w-full max-h-full object-contain drop-shadow-md">`;
                 desc.innerText = data.desc;
                 
                 content.classList.remove('fade-out');
