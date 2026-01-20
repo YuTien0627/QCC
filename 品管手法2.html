@@ -220,7 +220,7 @@
             },
             'fishbone': {
                 tag: '舊 QC 七手法', color: 'amber', title: '特性要因圖',
-                desc: '分析問題的「人、機、料、法、環」(5M1E)。建議由右向左思考，不斷問「為什麼？」，展開各層次的小骨頭，直到找出可執行的真因。',
+                desc: '分析問題的「人、機、料、法、環」(5M1E)。不斷問「為什麼？」，展開各層次的小骨頭，直到找出的真因。',
                 img: 'image/fishbone.png' 
             },
             'checksheet': {
@@ -231,27 +231,28 @@
             'stratification': {
                 tag: '舊 QC 七手法', color: 'amber', title: '層別法 (Stratification)',
                 desc: '當數據混雜在一起看不出規律時，請依班次、日期或機台分開看。透過比較「好」與「壞」的層次，問題癥結往往會自動浮現。',
-                svg: `<svg viewBox="0 0 100 80" class="w-full h-full"><circle cx="30" cy="25" r="6" fill="#3b82f6" opacity="0.8"/><circle cx="42" cy="18" r="6" fill="#3b82f6" opacity="0.8"/><rect x="60" y="45" width="12" height="12" fill="#ef4444" opacity="0.8"/><rect x="75" y="52" width="12" height="12" fill="#ef4444" opacity="0.8"/><text x="20" y="45" font-size="4" fill="#3b82f6">班次 A</text><text x="65" y="40" font-size="4" fill="#ef4444">班次 B</text></svg>`
+                img: 'image/層別法.png'
             },
             'scatter': {
                 tag: '舊 QC 七手法', color: 'amber', title: '散佈圖 (Scatter)',
-                desc: '用於確認因果假設。如果魚骨圖推論出溫度影響品質，散佈圖就能證實兩者是否有強相關，避免落入經驗主義的陷阱。',
-                svg: `<svg viewBox="0 0 100 80" class="w-full h-full"><line x1="15" y1="65" x2="90" y2="65" stroke="#475569" stroke-width="2" /><line x1="15" y1="10" x2="15" y2="65" stroke="#475569" stroke-width="2" /><circle cx="25" cy="55" r="2" fill="#6366f1" /><circle cx="35" cy="48" r="2" fill="#6366f1" /><circle cx="45" cy="40" r="2" fill="#6366f1" /><circle cx="55" cy="32" r="2" fill="#6366f1" /><circle cx="65" cy="25" r="2" fill="#6366f1" /><circle cx="80" cy="15" r="2" fill="#6366f1" /><line x1="15" y1="65" x2="90" y2="10" stroke="#cbd5e1" stroke-dasharray="4" /></svg>`
+                desc: '代表原因的自變數放置X軸，代表結果的依變數則為Y軸。',
+                img: 'image/散佈圖.png'
             },
             'control': {
                 tag: '舊 QC 七手法', color: 'amber', title: '管制圖 (Control Chart)',
                 desc: '製程的「紅綠燈」。連續多點走升或單點跳出邊界，都是「異常變異」警訊。這不是用來篩選不良品，而是用來維持製程穩定的主動工具。',
-                svg: `<svg viewBox="0 0 100 80" class="w-full h-full"><line x1="10" y1="20" x2="90" y2="20" stroke="#ef4444" stroke-dasharray="3" /><line x1="10" y1="40" x2="90" y2="40" stroke="#10b981" /><line x1="10" y1="60" x2="90" y2="60" stroke="#ef4444" stroke-dasharray="3" /><polyline points="10,45 25,25 40,55 55,30 70,45 85,35" fill="none" stroke="#3b82f6" stroke-width="2" /><text x="92" y="22" font-size="4" fill="#ef4444">UCL</text><text x="92" y="42" font-size="4" fill="#10b981">CL</text></svg>`
+                img: 'image/管制圖.png'
             },
             'histogram': {
                 tag: '舊 QC 七手法', color: 'amber', title: '直方圖 (Histogram)',
-                desc: '對比客戶規格(USL/LSL)。如果分佈很散，表示精準度不足；如果分佈偏向一邊，表示設定有偏差。圖形應呈現中央集中的鐘形。',
-                svg: `<svg viewBox="0 0 100 80" class="w-full h-full"><rect x="20" y="50" width="10" height="15" fill="#f59e0b" stroke="white" /><rect x="30" y="30" width="10" height="35" fill="#f59e0b" stroke="white" /><rect x="40" y="15" width="10" height="50" fill="#f59e0b" stroke="white" /><rect x="50" y="25" width="10" height="40" fill="#f59e0b" stroke="white" /><rect x="60" y="45" width="10" height="20" fill="#f59e0b" stroke="white" /><path d="M15 65 Q45 0, 80 65" fill="none" stroke="#475569" stroke-width="1" stroke-dasharray="2"/></svg>`
+                desc: '重點：直方圖與長條圖不太一樣；【直方圖】的柱狀間【不能】有空隙；長條圖的柱狀圖則是分開的',
+                desc: '因此，長條圖主要是用於離散資料；直方圖則是連續資料',
+                img: 'image/直方圖.png'
             },
             'affinity': {
                 tag: '新 QC 七手法', color: 'indigo', title: '親和圖 (KJ法)',
                 desc: '打破固有思維。適用於問題模糊、不知從何下手的初期。將所有便利貼貼出來，讓團隊透過「感覺」將相似的分類，重新結構化問題。',
-                svg: `<svg viewBox="0 0 100 80" class="w-full h-full"><rect x="10" y="20" width="35" height="45" rx="4" fill="none" stroke="#3b82f6" stroke-dasharray="2"/><rect x="55" y="20" width="35" height="45" rx="4" fill="none" stroke="#3b82f6" stroke-dasharray="2"/><rect x="15" y="25" width="10" height="8" fill="#bfdbfe" rx="1" /><rect x="30" y="30" width="10" height="8" fill="#bfdbfe" rx="1" /><rect x="60" y="40" width="10" height="8" fill="#bfdbfe" rx="1" /><rect x="75" y="45" width="10" height="8" fill="#bfdbfe" rx="1" /></svg>`
+                img: 'image/親和圖.png'
             },
             'relation': {
                 tag: '新 QC 七手法', color: 'indigo', title: '關聯圖',
@@ -260,28 +261,29 @@
             },
             'tree': {
                 tag: '新 QC 七手法', color: 'indigo', title: '系統圖',
-                desc: '思考「HOW-HOW」法。從大目的開始問「要達成它該怎麼做？」，不斷延伸，直到最末端的節點是具體、可分派給員工執行的動作為止。',
+                desc: '可運用「why-why」法，找到真正原因。',
                 img: 'image/系統圖.png' 
             },
             'matrix': {
                 tag: '新 QC 七手法', color: 'indigo', title: '矩陣圖',
-                desc: '釐親責任或需求對應。橫軸放需求，縱軸放功能，在交點評分。這能確保每一個客戶痛點都有對應的技術對策，不留漏洞。',
-                svg: `<svg viewBox="0 0 100 80" class="w-full h-full"><line x1="20" y1="20" x2="80" y2="20" stroke="#cbd5e1" /><line x1="20" y1="40" x2="80" y2="40" stroke="#cbd5e1" /><line x1="20" y1="60" x2="80" y2="60" stroke="#cbd5e1" /><line x1="40" y1="10" x2="40" y2="70" stroke="#cbd5e1" /><line x1="60" y1="10" x2="60" y2="70" stroke="#cbd5e1" /><circle cx="40" cy="40" r="4" fill="none" stroke="#ef4444" stroke-width="2" /><circle cx="60" cy="20" r="3" fill="none" stroke="#3b82f6" /></svg>`
+                desc: '通常使用矩陣圖進行評價項目，計算出評價總分及優先順序',
+                img: 'image/矩陣圖.png'
             },
             'pdpc': {
-                tag: '新 QC 七手法', color: 'indigo', title: 'PDPC 法',
-                desc: '「防患未然」的劇本。針對專案可能的失敗路徑標註「不可行」，並拉出分支尋找替代方案。它是確保重大變革成功最關鍵的預測工具。',
-                svg: `<svg viewBox="0 0 100 80" class="w-full h-full"><rect x="10" y="15" width="15" height="10" fill="none" stroke="#2563eb" /><path d="M25 20 L40 20 L55 40" stroke="#ef4444" stroke-dasharray="3" /><text x="58" y="45" font-size="6" fill="#ef4444">✘ 故障</text><path d="M40 20 L55 10" stroke="#10b981" /><text x="58" y="15" font-size="6" fill="#10b981">✔ 備援</text></svg>`
+                tag: '新 QC 七手法', color: 'indigo', title: '過程決策計畫圖(PDPC)',
+                desc: '「防患未然」的劇本。',
+                desc: '圖中矩形代表【解決問題的方法】；圓角矩形為【預想可能的結果】；此外，常用菱形作為判斷過程',
+                img: 'image/過程決策計畫圖.png'
             },
             'arrow': {
                 tag: '新 QC 七手法', color: 'indigo', title: '箭線圖',
-                desc: '找出「關鍵路徑」。如果在關鍵路徑上的工作延誤 1 天，整個專案就延誤 1 天。管理者應將資源集中配置在這些關鍵任務上。',
-                svg: `<svg viewBox="0 0 100 80" class="w-full h-full"><circle cx="15" cy="40" r="5" fill="none" stroke="#2563eb" /><circle cx="50" cy="20" r="5" fill="none" stroke="#2563eb" /><circle cx="50" cy="60" r="5" fill="none" stroke="#2563eb" /><circle cx="85" cy="40" r="5" fill="none" stroke="#2563eb" /><path d="M20 37 L45 23 M20 43 L45 57 M55 23 L80 37 M55 57 L80 43" stroke="#94a3b8" fill="none" stroke-width="1.5"/></svg>`
+                desc: '若為「並行作業」時，則將同時上下排列中，如作業3、4；箭頭圖可使用「作業工作時間/總工作時間」，例如：作業1為7分鐘，而總工作時間為45分鐘，故表示「7/45」。',
+                img: 'image/箭線圖.png'
             },
             'matrixdata': {
-                tag: '新 QC 七手法', color: 'indigo', title: '矩陣數據分析',
-                desc: '當品質特性太多且互相牽連時，利用降維技術找出主成分。雖然計算較複雜，但能給出最科學的評估結論。',
-                svg: `<svg viewBox="0 0 100 80" class="w-full h-full"><line x1="50" y1="10" x2="50" y2="70" stroke="#94a3b8" /><line x1="10" y1="40" x2="90" y2="40" stroke="#94a3b8" /><ellipse cx="65" cy="25" rx="15" ry="8" fill="#3b82f6" opacity="0.3" transform="rotate(-20 65 25)" /><circle cx="62" cy="24" r="1" fill="#1e293b" /><circle cx="68" cy="26" r="1" fill="#1e293b" /></svg>`
+                tag: '新 QC 七手法', color: 'indigo', title: '矩陣數據分析(主成分分析法)',
+                desc: '使方法為多變量分析之一，建議具備相關數理基礎或統計軟體操作能力。',
+                img: 'image/矩陣數據分析.png'
             }
         };
 
