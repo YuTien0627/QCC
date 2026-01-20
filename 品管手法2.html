@@ -172,7 +172,7 @@
                                 <td class="p-5 text-sm text-slate-600">預測計畫執行風險，預先制定應急對策。</td>
                             </tr>
                             <tr class="tool-row border-b border-slate-50" onmouseenter="updatePreview('arrow', 'new')" data-tool="arrow">
-                                <td class="p-5 font-bold text-indigo-700 text-lg">箭線圖 (PERT)</td>
+                                <td class="p-5 font-bold text-indigo-700 text-lg">箭頭圖 (PERT)</td>
                                 <td class="p-5 text-sm text-slate-600">規劃作業流程先後順序的工，掌握整個作業流程全貌及問題點。</td>
                             </tr>
                             <tr class="tool-row border-b border-slate-50" onmouseenter="updatePreview('matrixdata', 'new')" data-tool="matrixdata">
@@ -231,16 +231,16 @@
             'stratification': {
                 tag: '舊 QC 七手法', color: 'amber', title: '層別法 (Stratification)',
                 desc: '當數據混雜在一起看不出規律時，請依班次、日期或機台分開看。透過比較「好」與「壞」的層次，問題癥結往往會自動浮現。',
-                
+                img: 'image/層別法.png'
             },
             'scatter': {
                 tag: '舊 QC 七手法', color: 'amber', title: '散佈圖 (Scatter)',
-                desc: '代表原因的自變數放置X軸，代表結果的依變數則為Y軸。',
+                desc: '代表原因的自變數放置X軸，代表結果的依變數則為Y軸。與矩陣數據分析差異在於，矩陣數據分析是分析三種以上的變數，而散佈圖則是分析兩種變數之間的關係。',
                 img: 'image/散佈圖.png'
             },
             'control': {
                 tag: '舊 QC 七手法', color: 'amber', title: '管制圖 (Control Chart)',
-                desc: '製程的「紅綠燈」。連續多點走升或單點跳出邊界，都是「異常變異」警訊。這不是用來篩選不良品，而是用來維持製程穩定的主動工具。',
+                desc: '連續多點走升或單點跳出邊界，都是「異常變異」警訊。',
                 img: 'image/管制圖.png'
             },
             'histogram': {
