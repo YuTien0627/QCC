@@ -87,7 +87,7 @@
                             </tr>
                             <tr class="tool-row border-b border-slate-50" onmouseenter="updatePreview('checksheet', 'old')" data-tool="checksheet">
                                 <td class="p-5 font-bold text-amber-700 text-lg">查檢表</td>
-                                <td class="p-5 text-sm text-slate-600">現場數據收集的利器，讓數據收集標準化。</td>
+                                <td class="p-5 text-sm text-slate-600">現場數據收集的利器。</td>
                             </tr>
                             <tr class="tool-row border-b border-slate-50" onmouseenter="updatePreview('stratification', 'old')" data-tool="stratification">
                                 <td class="p-5 font-bold text-amber-700 text-lg">層別法</td>
@@ -95,15 +95,15 @@
                             </tr>
                             <tr class="tool-row border-b border-slate-50" onmouseenter="updatePreview('scatter', 'old')" data-tool="scatter">
                                 <td class="p-5 font-bold text-amber-700 text-lg">散佈圖</td>
-                                <td class="p-5 text-sm text-slate-600">分析成對變數間的相關性 (正相關、負相關)。</td>
+                                <td class="p-5 text-sm text-slate-600">分析兩個變數間的相關性 (正相關、負相關)。</td>
                             </tr>
                             <tr class="tool-row border-b border-slate-50" onmouseenter="updatePreview('control', 'old')" data-tool="control">
                                 <td class="p-5 font-bold text-amber-700 text-lg">管制圖</td>
-                                <td class="p-5 text-sm text-slate-600">監控製程穩定性，區分偶然與異常變異。</td>
+                                <td class="p-5 text-sm text-slate-600">監控品質穩定性，確認指標是否有異常。</td>
                             </tr>
                             <tr class="tool-row border-b border-slate-50" onmouseenter="updatePreview('histogram', 'old')" data-tool="histogram">
                                 <td class="p-5 font-bold text-amber-700 text-lg">直方圖</td>
-                                <td class="p-5 text-sm text-slate-600">評估製程能力，觀察數據的分佈型態與偏向。</td>
+                                <td class="p-5 text-sm text-slate-600">觀察數據的分佈型態與偏向。</td>
                             </tr>
                         </tbody>
                     </table>
@@ -153,7 +153,7 @@
                         <tbody>
                             <tr class="tool-row border-b border-slate-50" onmouseenter="updatePreview('affinity', 'new')" data-tool="affinity">
                                 <td class="p-5 font-bold text-indigo-700 text-lg">親和圖 (KJ法)</td>
-                                <td class="p-5 text-sm text-slate-600">歸納零散創意或語言資料，釐清模糊問題。</td>
+                                <td class="p-5 text-sm text-slate-600">歸納零散的想法、意見、敘述或語言資料，釐清之間的關係。</td>
                             </tr>
                             <tr class="tool-row border-b border-slate-50" onmouseenter="updatePreview('relation', 'new')" data-tool="relation">
                                 <td class="p-5 font-bold text-indigo-700 text-lg">關聯圖</td>
@@ -161,23 +161,23 @@
                             </tr>
                             <tr class="tool-row border-b border-slate-50" onmouseenter="updatePreview('tree', 'new')" data-tool="tree">
                                 <td class="p-5 font-bold text-indigo-700 text-lg">系統圖</td>
-                                <td class="p-5 text-sm text-slate-600">目標逐層分解至可執行手段，確保計畫落地。</td>
+                                <td class="p-5 text-sm text-slate-600">透過樹狀結構逐層展開，找到最終的原因或方策。</td>
                             </tr>
                             <tr class="tool-row border-b border-slate-50" onmouseenter="updatePreview('matrix', 'new')" data-tool="matrix">
                                 <td class="p-5 font-bold text-indigo-700 text-lg">矩陣圖</td>
-                                <td class="p-5 text-sm text-slate-600">評估要素間的關聯強度，常用於 QFD 分析。</td>
+                                <td class="p-5 text-sm text-slate-600">將現象、原因、對策或評價等排列成矩陣形式，找出彼此相關程度的方法。</td>
                             </tr>
                             <tr class="tool-row border-b border-slate-50" onmouseenter="updatePreview('pdpc', 'new')" data-tool="pdpc">
-                                <td class="p-5 font-bold text-indigo-700 text-lg">PDPC 法</td>
+                                <td class="p-5 font-bold text-indigo-700 text-lg">PDPC法</td>
                                 <td class="p-5 text-sm text-slate-600">預測計畫執行風險，預先制定應急對策。</td>
                             </tr>
                             <tr class="tool-row border-b border-slate-50" onmouseenter="updatePreview('arrow', 'new')" data-tool="arrow">
                                 <td class="p-5 font-bold text-indigo-700 text-lg">箭線圖 (PERT)</td>
-                                <td class="p-5 text-sm text-slate-600">控管專案進度，找出關鍵路徑優化時程。</td>
+                                <td class="p-5 text-sm text-slate-600">規劃作業流程先後順序的工，掌握整個作業流程全貌及問題點。</td>
                             </tr>
                             <tr class="tool-row border-b border-slate-50" onmouseenter="updatePreview('matrixdata', 'new')" data-tool="matrixdata">
                                 <td class="p-5 font-bold text-indigo-700 text-lg">矩陣數據分析</td>
-                                <td class="p-5 text-sm text-slate-600">多變量數據降維分析，量化複雜評估指標。</td>
+                                <td class="p-5 text-sm text-slate-600">分析三個變數以上之間的相關性(多變量分析)。</td>
                             </tr>
                         </tbody>
                     </table>
@@ -231,7 +231,7 @@
             'stratification': {
                 tag: '舊 QC 七手法', color: 'amber', title: '層別法 (Stratification)',
                 desc: '當數據混雜在一起看不出規律時，請依班次、日期或機台分開看。透過比較「好」與「壞」的層次，問題癥結往往會自動浮現。',
-                img: 'image/層別法.png'
+                
             },
             'scatter': {
                 tag: '舊 QC 七手法', color: 'amber', title: '散佈圖 (Scatter)',
@@ -281,7 +281,7 @@
             },
             'matrixdata': {
                 tag: '新 QC 七手法', color: 'indigo', title: '矩陣數據分析(主成分分析法)',
-                desc: '使方法為多變量分析之一，建議具備相關數理基礎或統計軟體操作能力。',
+                desc: '與散佈圖差異在於，矩陣數據分析是分析三種以上的變數，而散佈圖則是分析兩種變數之間的關係。使方法為多變量分析之一，建議具備相關數理基礎或統計軟體操作能力。',
                 img: 'image/矩陣數據分析圖.png'
             }
         };
