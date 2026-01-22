@@ -12,6 +12,7 @@
             width: 100%;
             border: none;
             display: none; /* 初始隱藏 */
+            overflow: hidden;
         }
         .tab-btn { transition: all 0.3s ease; }
         .tab-btn.active { 
@@ -40,7 +41,7 @@
 
     <div class="max-w-5xl mx-auto">
         <!-- 內容區域容器 -->
-        <div class="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100 min-h-[650px] flex flex-col relative">
+        <div class="bg-white rounded-3xl shadow-xl border border-gray-100 flex flex-col relative transition-all duration-500">
             
             <!-- 頂部頁籤導航條 -->
             <div id="top-nav" class="bg-gray-50/50 border-b border-gray-100 p-4 flex flex-wrap gap-3">
@@ -63,13 +64,13 @@
                 
                 <!-- [引導視圖] 初始進入時顯示 -->
                 <div id="guide-view" class="p-8 md:p-12 fade-in">
-                    <div class="max-w-3xl mx-auto">
-                        <div class="text-center mb-12">
+                    <div class="max-w-3xl mx-auto text-center">
+                        <div class="mb-12">
                             <h2 class="text-3xl font-bold text-gray-800 mb-4">想要解決問題，先選對好的「武器」</h2>
                             <p class="text-gray-600 text-lg">我們將品質管理分為「硬工具」與「軟手法」，點擊下方卡片即可開始深入學習。</p>
                         </div>
 
-                        <div class="grid md:grid-cols-2 gap-8">
+                        <div class="grid md:grid-cols-2 gap-8 text-left">
                             <!-- 工具引導卡片 -->
                             <div onclick="switchTab('品管工具.html', document.getElementById('btn-tools'))" class="guide-card p-8 rounded-2xl bg-white cursor-pointer group">
                                 <div class="w-16 h-16 bg-teal-100 text-teal-600 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-teal-600 group-hover:text-white transition-colors">
@@ -105,14 +106,14 @@
                 <div id="loading-spinner" class="absolute inset-0 flex items-center justify-center bg-white z-20 hidden">
                     <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-teal-600"></div>
                 </div>
-                <iframe id="content-display" src="" class="fade-in relative z-10"></iframe>
+                <iframe id="content-display" src="" scrolling="no" class="fade-in relative z-10 transition-all duration-300"></iframe>
 
             </div>
         </div>
 
         <!-- 底部裝飾與提示 -->
         <footer class="mt-8 flex flex-col md:flex-row justify-between items-center text-gray-400 text-sm italic px-4">
-            <p>※ 建議在電腦端瀏覽以獲得最佳圖表顯示效果</p>
+            <p>※ 頁面會根據內容自動調整長度</p>
             <p>QCC 互動手冊系列作品</p>
         </footer>
     </div>
@@ -144,6 +145,7 @@
             
             iframe.style.display = 'block';
             iframe.style.opacity = '0';
+            iframe.style.height = '0px'; // 先重設高度
             
             // 延遲載入確保切換順暢
             setTimeout(() => {
@@ -154,16 +156,32 @@
                 spinner.classList.add('hidden');
                 iframe.style.opacity = '1';
                 
-                // 自動調整高度
+                // 動態調整高度的關鍵邏輯
                 try {
                     const doc = iframe.contentDocument || iframe.contentWindow.document;
-                    const height = Math.max(doc.body.scrollHeight, 650);
-                    iframe.style.height = (height + 50) + 'px';
+                    // 使用 documentElement.scrollHeight 能更精確抓取內容完整長度
+                    const contentHeight = doc.documentElement.scrollHeight || doc.body.scrollHeight;
+                    iframe.style.height = contentHeight + 'px';
                 } catch(e) {
-                    iframe.style.height = "1200px";
+                    // 若跨網域限制，則設定一個較大的預設高度
+                    iframe.style.height = "1500px";
+                    console.log("無法動態計算高度，使用預設值");
                 }
             };
         }
+        
+        // 定期檢查高度（防止內容是非同步載入導致 onload 時高度不準）
+        setInterval(() => {
+            if (iframe.style.display === 'block') {
+                try {
+                    const doc = iframe.contentDocument || iframe.contentWindow.document;
+                    const contentHeight = doc.documentElement.scrollHeight || doc.body.scrollHeight;
+                    if (contentHeight > 0 && iframe.style.height !== contentHeight + 'px') {
+                        iframe.style.height = contentHeight + 'px';
+                    }
+                } catch(e) {}
+            }
+        }, 1000);
     </script>
 
 </body>
