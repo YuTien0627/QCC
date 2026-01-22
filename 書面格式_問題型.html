@@ -647,6 +647,83 @@
     activateStep('1');
 })();
 </script>
+    <script>
+        const footerSection = document.getElementById('last-updated-section');
 
+        /**
+         * 智慧同步：使用 postMessage 替代直接 DOM 操作以避免跨網域安全性錯誤 (CORS)
+         */
+        function syncParentUI() {
+            if (window.parent && window.parent !== window) {
+                // 發送訊息給父頁面
+                window.parent.postMessage({
+                    type: 'qcc-sync-ui',
+                    navId: 'nav-btn-selection',
+                    showTabs: 'tool-tabs',
+                    hideTabs: 'format-tabs'
+                }, '*');
+
+                // 使用 try-catch 包裹直接存取的備援邏輯
+                try {
+                    if (typeof window.parent.activateNav === 'function') {
+                        window.parent.activateNav('nav-btn-selection');
+                    }
+                    const parentToolTabs = window.parent.document.getElementById('tool-tabs');
+                    if (parentToolTabs) parentToolTabs.classList.remove('hidden');
+                } catch (e) {
+                    // 若直接存取失敗，則依賴 postMessage 通訊
+                    console.log("正在使用跨網域安全模式通訊...");
+                }
+                
+                // 隱藏子頁面自己的 Footer，避免重複
+                if (footerSection) footerSection.remove(); 
+            }
+        }
+
+        /**
+         * 跳轉至父頁面對應頁籤
+         */
+        function navigateToParentTab(page, tabIndex) {
+            if (window.parent && window.parent !== window) {
+                // 發送跳轉請求給父頁面
+                window.parent.postMessage({
+                    type: 'qcc-navigate',
+                    page: page,
+                    tabIndex: tabIndex
+                }, '*');
+
+                try {
+                    const parentDoc = window.parent.document;
+                    const tabs = parentDoc.querySelectorAll('#tool-tabs .sub-tab');
+                    if (window.parent.loadToolPage && tabs[tabIndex]) {
+                        window.parent.loadToolPage(page, tabs[tabIndex]);
+                    } else if (window.parent.loadIframe) {
+                        window.parent.loadIframe(page);
+                    }
+                } catch (e) {
+                    // 若直接存取失敗，由父頁面的 message listener 處理
+                }
+            } else {
+                window.location.href = page;
+            }
+        }
+
+        /**
+         * 向父頁面回報高度
+         */
+        function reportHeight() {
+            if (window.parent && window.parent !== window) {
+                const h = document.body.scrollHeight;
+                // 優先使用 postMessage
+                window.parent.postMessage({ type: 'resize', height: h + 50 }, '*');
+                
+                try {
+                    const pFrame = window.parent.document.getElementById('content-frame');
+                    if (pFrame) {
+                        pFrame.style.height = (h + 50) + 'px';
+                    }
+                } catch (e) {}
+            }
+        }
 </body>
 </html>
