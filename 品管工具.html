@@ -25,9 +25,19 @@
         }
     </script>
     <style>
+        /* 移除內部滾輪，由父頁面控制高度，但保留內容高度計算能力 */
+        html {
+            overflow-y: visible;
+            overflow-x: hidden;
+            background-color: #ecfdf5; /* 與 index 背景一致 */
+        }
+        
         body {
             font-family: 'Inter', 'Noto Sans TC', sans-serif;
-            background-color: #ecfdf5;
+            background-color: #ecfdf5; /* 與 index 背景一致 */
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* 避免出現子捲軸 */
         }
         
         /* 頁首風格：白底卡片＋上方青色粗條 */
@@ -56,14 +66,17 @@
         .breadcrumb-node { @apply flex items-center bg-secondary-purple text-white text-sm font-semibold px-3 py-1 rounded-full shadow-md; cursor: pointer; }
         .breadcrumb-node-active { @apply bg-primary-pink text-white; }
         .breadcrumb-node-result { @apply bg-primary-pink/20 text-gray-800; }
+        
+        /* 激活父頁面頁籤的樣式 (對應 index.html 內的 active-tab) */
+        .active-tab { background-color: #0d9488 !important; color: white !important; font-weight: 700 !important; }
     </style>
 </head>
-<body class="min-h-screen py-10 px-4">
+<body class="py-6 px-4">
 
     <div id="app" class="w-full max-w-4xl mx-auto">
 
-        <!-- 頁首：套用 header-card 樣式 -->
-        <header class="text-center mb-10 p-8 header-card">
+        <!-- 頁首 -->
+        <header id="page-header" class="text-center mb-10 p-8 header-card">
             <h1 class="text-4xl md:text-5xl font-extrabold text-gray-800 mb-3 leading-tight">
                 🛠️ 品管工具選哪招？跟我走！ 💡
             </h1>
@@ -73,11 +86,11 @@
         <!-- 歷史足跡 -->
         <div id="history-trail" class="flex flex-wrap gap-2 mb-8 items-center justify-center min-h-[40px] border-b pb-4 border-gray-200/50"></div>
 
-        <!-- 決策樹（Body） -->
+        <!-- 決策樹內容區 -->
         <div id="question-card-container" class="w-full"></div>
 
         <!-- 重置按鈕 -->
-        <div id="reset-button-container" class="mt-12 pt-4 border-t border-gray-200/50 text-center">
+        <div id="reset-button-container" class="mt-12 pt-4 border-t border-gray-200/50 text-center pb-10">
             <button class="btn btn-reset px-6 py-3" onclick="navigate('Q1')">🔄 重置挑戰</button>
         </div>
     </div>
@@ -106,6 +119,60 @@
         let history = [];
         const historyTrailDiv = document.getElementById('history-trail');
         const questionCardContainer = document.getElementById('question-card-container');
+
+        /**
+         * 智慧同步：主動叫出父頁面的次級頁籤並同步導覽狀態
+         */
+        function syncParentUI() {
+            if (window.parent && window.parent !== window) {
+                // 使用 postMessage 進行安全跨網域通訊 (針對您的 SecurityError 進行預防)
+                window.parent.postMessage({
+                    type: 'qcc-sync-ui',
+                    navId: 'nav-btn-selection',
+                    showTabs: 'tool-tabs',
+                    hideTabs: 'format-tabs',
+                    subTabIndex: 0 // 品管工具索引為 0
+                }, '*');
+
+                // 嘗試直接同步 (如果同網域)
+                try {
+                    if (typeof window.parent.activateNav === 'function') {
+                        window.parent.activateNav('nav-btn-selection');
+                    }
+                    const parentToolTabs = window.parent.document.getElementById('tool-tabs');
+                    if (parentToolTabs) parentToolTabs.classList.remove('hidden');
+                    
+                    const subTabs = window.parent.document.querySelectorAll('.sub-tab');
+                    subTabs.forEach((tab, idx) => {
+                        tab.classList.remove('active-tab');
+                        if (idx === 0) tab.classList.add('active-tab');
+                    });
+                } catch (e) {}
+            }
+        }
+
+        /**
+         * 強化高度回報：確保在父頁面中沒有滾輪
+         */
+        function reportHeight() {
+            if (window.parent && window.parent !== window) {
+                const appContainer = document.getElementById('app');
+                const h = Math.max(
+                    document.documentElement.scrollHeight,
+                    document.body.scrollHeight,
+                    appContainer ? appContainer.offsetHeight + 100 : 800
+                );
+                
+                window.parent.postMessage({ type: 'resize', height: h }, '*');
+                
+                try {
+                    const pFrame = window.parent.document.getElementById('content-frame');
+                    if (pFrame) {
+                        pFrame.style.height = h + 'px';
+                    }
+                } catch (e) {}
+            }
+        }
 
         function getStepTitle(key) {
             if (key === 'Q1') return "挑戰類型";
@@ -177,7 +244,8 @@
                     </div>
                     <p class="text-base text-center text-gray-500 mb-4 font-semibold">恭喜您完成評估！</p>
                     <div class="text-center space-y-4">
-                        <button class="bg-primary-pink text-white border-b-4 border-pink-700 hover:bg-pink-600 active:translate-y-1 active:shadow-sm text-lg font-bold px-8 py-3 rounded-full shadow-md transition duration-300 w-full md:w-auto" onclick="window.location.href='${targetUrl}';">
+                        <button class="bg-primary-pink text-white border-b-4 border-pink-700 hover:bg-pink-600 active:translate-y-1 active:shadow-sm text-lg font-bold px-8 py-3 rounded-full shadow-md transition duration-300 w-full md:w-auto" 
+                                onclick="if(window.parent && window.parent.loadIframe) { window.parent.loadIframe('${targetUrl}'); } else { window.location.href='${targetUrl}'; }">
                             ▶️ 前往【${result.methodology}】詳細實施步驟
                         </button>
                     </div>
@@ -209,6 +277,7 @@
             }
 
             window.scrollTo({ top: 0, behavior: 'smooth' });
+            setTimeout(reportHeight, 100);
         }
 
         function navigate(nextState, questionKey, selectedText) {
@@ -244,7 +313,12 @@
                 }
             `;
             document.head.appendChild(style);
+            
+            syncParentUI();
             renderLadder();
+            
+            window.addEventListener('resize', reportHeight);
+            setInterval(reportHeight, 1500); 
         })();
     </script>
 </body>
