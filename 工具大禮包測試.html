@@ -13,6 +13,13 @@
             border: none;
             display: none; /* 初始隱藏 */
         }
+        .tab-btn { transition: all 0.3s ease; }
+        .tab-btn.active { 
+            background-color: #0d9488; 
+            color: white; 
+            box-shadow: 0 4px 12px -2px rgba(13, 148, 136, 0.3);
+            font-weight: 700;
+        }
         .guide-card {
             transition: all 0.3s ease;
             border: 1px solid #e2e8f0;
@@ -35,6 +42,22 @@
         <!-- 內容區域容器 -->
         <div class="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100 min-h-[650px] flex flex-col relative">
             
+            <!-- 頂部頁籤導航條 -->
+            <div id="top-nav" class="bg-gray-50/50 border-b border-gray-100 p-4 flex flex-wrap gap-3">
+                <button id="btn-home" onclick="showGuide()" 
+                    class="tab-btn active px-6 py-2.5 rounded-xl font-bold flex items-center bg-white text-gray-600 border border-gray-200 hover:bg-teal-50">
+                    🏠 導覽首頁
+                </button>
+                <button id="btn-tools" onclick="switchTab('品管工具.html', this)" 
+                    class="tab-btn px-6 py-2.5 rounded-xl bg-white text-gray-600 border border-gray-200 font-bold flex items-center hover:bg-teal-50">
+                    🛠️ 品管工具
+                </button>
+                <button id="btn-methods" onclick="switchTab('品管手法2.html', this)" 
+                    class="tab-btn px-6 py-2.5 rounded-xl bg-white text-gray-600 border border-gray-200 font-bold flex items-center hover:bg-teal-50">
+                    📚 品管手法
+                </button>
+            </div>
+
             <!-- 動態內容區 -->
             <div class="flex-grow relative">
                 
@@ -48,7 +71,7 @@
 
                         <div class="grid md:grid-cols-2 gap-8">
                             <!-- 工具引導卡片 -->
-                            <div onclick="switchTab('品管工具.html')" class="guide-card p-8 rounded-2xl bg-white cursor-pointer group">
+                            <div onclick="switchTab('品管工具.html', document.getElementById('btn-tools'))" class="guide-card p-8 rounded-2xl bg-white cursor-pointer group">
                                 <div class="w-16 h-16 bg-teal-100 text-teal-600 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-teal-600 group-hover:text-white transition-colors">
                                     <span class="text-3xl">📊</span>
                                 </div>
@@ -62,13 +85,13 @@
                             </div>
 
                             <!-- 手法引導卡片 -->
-                            <div onclick="switchTab('品管手法2.html')" class="guide-card p-8 rounded-2xl bg-white cursor-pointer group">
+                            <div onclick="switchTab('品管手法2.html', document.getElementById('btn-methods'))" class="guide-card p-8 rounded-2xl bg-white cursor-pointer group">
                                 <div class="w-14 h-14 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-blue-600 group-hover:text-white transition-colors">
                                     <span class="text-3xl">🧠</span>
                                 </div>
                                 <h3 class="text-2xl font-bold text-gray-800 mb-3">品管手法</h3>
                                 <p class="text-gray-500 leading-relaxed mb-6">
-                                    著重於改善邏輯與團隊合作。如 PDCA、5W2H 等決策流程。當您需要規劃改善路徑時，請點此開始。
+                                    著重於改善邏輯與團隊合作。如 PDCA、5W2H 等決策流程。當您需要規劃改善路徑時，請點此開始處理。
                                 </p>
                                 <span class="text-blue-600 font-bold flex items-center">
                                     進入探索手法 <span class="ml-2 group-hover:translate-x-1 transition-transform">→</span>
@@ -99,7 +122,22 @@
         const iframe = document.getElementById('content-display');
         const spinner = document.getElementById('loading-spinner');
 
-        function switchTab(page) {
+        function showGuide() {
+            // 更新按鈕樣式
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('btn-home').classList.add('active');
+
+            // 切換視圖
+            iframe.style.display = 'none';
+            guideView.classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function switchTab(page, btn) {
+            // 更新按鈕樣式
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+
             // 隱藏引導畫面，顯示載入動畫
             guideView.classList.add('hidden');
             spinner.classList.remove('hidden');
