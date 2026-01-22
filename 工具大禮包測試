@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>工具大禮包 - QCC 互動指南</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Inter', 'Microsoft JhengHei', sans-serif; background-color: #f8fafc; }
+        .tab-btn { transition: all 0.3s ease; }
+        .tab-btn.active { 
+            background-color: #0d9488; 
+            color: white; 
+            box-shadow: 0 4px 12px -2px rgba(13, 148, 136, 0.3);
+        }
+        #content-display {
+            width: 100%;
+            border: none;
+            display: none; /* 初始隱藏 */
+        }
+        .guide-card {
+            transition: all 0.3s ease;
+            border: 1px solid #e2e8f0;
+        }
+        .guide-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            border-color: #0d9488;
+        }
+        .fade-in { animation: fadeIn 0.6s ease-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+
+    <div class="max-w-5xl mx-auto">
+        <!-- 頁面標頭 -->
+        <header class="mb-10 text-center md:text-left">
+            <h1 class="text-4xl font-black text-gray-900 flex items-center justify-center md:justify-start">
+                <span class="bg-teal-600 text-white p-2 rounded-lg mr-4 shadow-lg">🎁</span>
+                工具大禮包
+            </h1>
+            <p class="text-gray-500 mt-3 text-lg">歡迎來到 QCC 核心資源庫，請選擇您想探索的領域。</p>
+        </header>
+
+        <!-- 內容區域容器 -->
+        <div class="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100 min-h-[650px] flex flex-col">
+            
+            <!-- 頂部頁籤控制列 -->
+            <div class="bg-gray-50/50 border-b border-gray-100 p-4 flex flex-wrap gap-3">
+                <button id="btn-home" onclick="showGuide()" 
+                    class="tab-btn active px-6 py-2.5 rounded-xl font-bold flex items-center">
+                    🏠 導覽首頁
+                </button>
+                <button id="btn-tools" onclick="switchTab('品管工具.html', this)" 
+                    class="tab-btn px-6 py-2.5 rounded-xl bg-white text-gray-600 border border-gray-200 font-bold flex items-center hover:bg-teal-50">
+                    🛠️ 品管工具
+                </button>
+                <button id="btn-methods" onclick="switchTab('品管手法.html', this)" 
+                    class="tab-btn px-6 py-2.5 rounded-xl bg-white text-gray-600 border border-gray-200 font-bold flex items-center hover:bg-teal-50">
+                    📚 品管手法
+                </button>
+            </div>
+
+            <!-- 動態內容區 -->
+            <div class="flex-grow relative">
+                
+                <!-- [引導視圖] 初始進入時顯示 -->
+                <div id="guide-view" class="p-8 md:p-12 fade-in">
+                    <div class="max-w-3xl mx-auto">
+                        <div class="text-center mb-12">
+                            <h2 class="text-2xl font-bold text-gray-800 mb-4">想要解決問題，先選對好的「武器」</h2>
+                            <p class="text-gray-600">我們將品質管理分為「硬工具」與「軟手法」，點擊下方卡片即可開始深入學習。</p>
+                        </div>
+
+                        <div class="grid md:grid-cols-2 gap-8">
+                            <!-- 工具引導卡片 -->
+                            <div onclick="switchTab('品管工具.html', document.getElementById('btn-tools'))" class="guide-card p-6 rounded-2xl bg-white cursor-pointer group">
+                                <div class="w-14 h-14 bg-teal-100 text-teal-600 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-teal-600 group-hover:text-white transition-colors">
+                                    <span class="text-3xl">📊</span>
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-800 mb-3">品管工具</h3>
+                                <p class="text-gray-500 text-sm leading-relaxed mb-4">
+                                    著重於數據蒐集與統計分析。如柏拉圖、魚骨圖等。當您有數據卻不知道如何解讀時，請從這裡開始。
+                                </p>
+                                <span class="text-teal-600 font-bold text-sm flex items-center">
+                                    進入探索 <span class="ml-2 group-hover:translate-x-1 transition-transform">→</span>
+                                </span>
+                            </div>
+
+                            <!-- 手法引導卡片 -->
+                            <div onclick="switchTab('品管手法.html', document.getElementById('btn-methods'))" class="guide-card p-6 rounded-2xl bg-white cursor-pointer group">
+                                <div class="w-14 h-14 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                                    <span class="text-3xl">🧠</span>
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-800 mb-3">品管手法</h3>
+                                <p class="text-gray-500 text-sm leading-relaxed mb-4">
+                                    著重於改善邏輯與團隊合作。如 PDCA、5W2H 等。當您需要規劃改善路徑或凝聚共識時，這裡是您的首選。
+                                </p>
+                                <span class="text-blue-600 font-bold text-sm flex items-center">
+                                    進入探索 <span class="ml-2 group-hover:translate-x-1 transition-transform">→</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- [Iframe 視圖] 切換後顯示 -->
+                <div id="loading-spinner" class="absolute inset-0 flex items-center justify-center bg-white z-20 hidden">
+                    <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-teal-600"></div>
+                </div>
+                <iframe id="content-display" src="" class="fade-in relative z-10"></iframe>
+
+            </div>
+        </div>
+
+        <!-- 底部裝飾與提示 -->
+        <footer class="mt-8 flex flex-col md:flex-row justify-between items-center text-gray-400 text-sm italic px-4">
+            <p>※ 建議在電腦端瀏覽以獲得最佳圖表顯示效果</p>
+            <p>QCC 互動手冊系列作品</p>
+        </footer>
+    </div>
+
+    <script>
+        const guideView = document.getElementById('guide-view');
+        const iframe = document.getElementById('content-display');
+        const spinner = document.getElementById('loading-spinner');
+
+        function showGuide() {
+            // 回到引導畫面
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('btn-home').classList.add('active');
+            
+            iframe.style.display = 'none';
+            guideView.classList.remove('hidden');
+        }
+
+        function switchTab(page, btn) {
+            // 切換按鈕樣式
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            // 隱藏引導畫面，顯示載入動畫
+            guideView.classList.add('hidden');
+            spinner.classList.remove('hidden');
+            iframe.style.display = 'block';
+            iframe.style.opacity = '0';
+            
+            // 延遲載入以確保動畫順暢
+            setTimeout(() => {
+                iframe.src = page;
+            }, 100);
+
+            iframe.onload = () => {
+                spinner.classList.add('hidden');
+                iframe.style.opacity = '1';
+                
+                // 自動調整高度
+                try {
+                    const doc = iframe.contentDocument || iframe.contentWindow.document;
+                    const height = Math.max(doc.body.scrollHeight, 650);
+                    iframe.style.height = (height + 50) + 'px';
+                } catch(e) {
+                    iframe.style.height = "1200px";
+                }
+            };
+        }
+    </script>
+
+</body>
+</html>
