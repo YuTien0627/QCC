@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>工具大禮包 - QCC 互動指南</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Noto+Sans+TC:wght@400;700;900&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
@@ -27,24 +28,11 @@
     <style>
         body { 
             font-family: 'Inter', 'Noto Sans TC', sans-serif; 
-            background-color: #ecfdf5; 
+            background-color: #f8fafc; /* 與品管手法2一致 */
             margin: 0;
             padding: 0;
+            color: #1e293b;
             overflow-x: hidden;
-        }
-        
-        #content-display {
-            width: 100%;
-            border: none;
-            display: none; 
-            overflow: hidden;
-        }
-        
-        .tab-btn { transition: all 0.3s ease; border-bottom: 3px solid transparent; }
-        .tab-btn.active { 
-            color: #0d9488; 
-            border-color: #0d9488; 
-            font-weight: 700;
         }
         
         .guide-card {
@@ -53,183 +41,121 @@
         }
         .guide-card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
             border-color: #0d9488;
         }
-        
-        .fade-in { animation: fadeIn 0.6s ease-out; }
+        .fade-in { animation: fadeIn 0.8s ease-out; }
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        
+        /* 更新時間樣式 */
         #last-updated { 
-            margin-top: 1.5rem; 
-            text-align: right; 
-            color: #64748b; 
+            margin-bottom: 0.5rem;
+            color: #94a3b8; 
             font-size: 0.875rem; 
             font-style: italic;
         }
     </style>
 </head>
-<body class="p-4 sm:p-6 lg:p-8">
+<body class="p-4 md:p-10">
 
-    <div class="max-w-5xl mx-auto">
-        <!-- 主容器 -->
-        <div class="bg-white rounded-3xl shadow-xl border border-gray-100 flex flex-col relative transition-all duration-500 overflow-hidden">
-            
-            <!-- 頁籤導覽列 (新增部分) -->
-            <nav id="toolkit-nav" class="bg-white border-b border-gray-100 p-2 flex justify-center space-x-2 sm:space-x-6 sticky top-0 z-50">
-                <button id="btn-home" onclick="showGuide()" class="tab-btn active px-4 py-3 text-gray-500 hover:text-teal-600 flex items-center">
-                    <span class="mr-2">🏠</span> 導覽首頁
-                </button>
-                <button id="btn-tools" onclick="switchTab('品管工具.html', this)" class="tab-btn px-4 py-3 text-gray-500 hover:text-teal-600 flex items-center">
-                    <span class="mr-2">🛠️</span> 品管工具
-                </button>
-                <button id="btn-methods" onclick="switchTab('品管手法2.html', this)" class="tab-btn px-4 py-3 text-gray-500 hover:text-teal-600 flex items-center">
-                    <span class="mr-2">📚</span> 品管手法
-                </button>
-            </nav>
+    <div class="max-w-7xl mx-auto">
+        <!-- 標頭引導區域 -->
+        <div class="max-w-3xl mx-auto text-center mb-12">
+            <div class="inline-block px-4 py-1.5 mb-4 rounded-full bg-teal-100 text-teal-700 text-sm font-bold tracking-wide">
+                QCC TOOLKIT
+            </div>
+            <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-4 leading-tight">
+                想要解決問題，先選對好的「武器」
+            </h2>
+            <p class="text-gray-600">
+                我們將品質管理分為「硬工具」與「軟手法」，請點擊下方卡片。
+                <br><span class="text-xs text-gray-400">（系統將自動連結至上方頁籤並自動調整高度）</span>
+            </p>
+        </div>
 
-            <!-- 內容顯示區域 -->
-            <div class="flex-grow relative">
-                
-                <!-- [引導視圖] 初始進入或點擊首頁時顯示 -->
-                <div id="guide-view" class="p-8 md:p-12 fade-in">
-                    <div class="max-w-3xl mx-auto text-center">
-                        <div class="mb-12">
-                            <h2 class="text-3xl font-bold text-gray-800 mb-4 tracking-tight">想要解決問題，先選對好的「武器」</h2>
-                            <p class="text-gray-600 text-lg">
-                                品管工具著重於數據分析，品管手法則提供邏輯路徑。<br>
-                                請點擊下方卡片開始探索詳情。
-                            </p>
+        <!-- 核心入口區域 -->
+        <div id="guide-view" class="fade-in px-4">
+            <!-- 兩大入口卡片 -->
+            <div class="grid md:grid-cols-2 gap-8 lg:gap-12 mb-10">
+                <!-- 工具引導卡片 -->
+                <div onclick="navigateToParentTab('品管工具.html', 0)" class="guide-card p-10 rounded-3xl bg-white cursor-pointer group relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-teal-50 rounded-full -mr-16 -mt-16 transition-all group-hover:bg-teal-100"></div>
+                    
+                    <div class="relative z-10">
+                        <div class="w-16 h-16 bg-teal-600 text-white rounded-2xl flex items-center justify-center mb-8 shadow-lg shadow-teal-200">
+                            <span class="text-3xl">📊</span>
                         </div>
-
-                        <div class="grid md:grid-cols-2 gap-8 text-left">
-                            <!-- 品管工具卡片 -->
-                            <div onclick="switchTab('品管工具.html', document.getElementById('btn-tools'))" class="guide-card p-8 rounded-2xl bg-white cursor-pointer group">
-                                <div class="w-14 h-14 bg-teal-100 text-teal-600 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-teal-600 group-hover:text-white transition-all">
-                                    <span class="text-2xl">📊</span>
-                                </div>
-                                <h3 class="text-2xl font-bold text-gray-800 mb-3">品管工具</h3>
-                                <p class="text-gray-500 leading-relaxed mb-6">
-                                    著重數據蒐集與統計。如柏拉圖、魚骨圖。當您有數據卻不知如何解析時，點此開始。
-                                </p>
-                                <span class="text-teal-600 font-bold flex items-center group-hover:translate-x-1 transition-transform">
-                                    進入探索工具 →
-                                </span>
-                            </div>
-
-                            <!-- 品管手法卡片 -->
-                            <div onclick="switchTab('品管手法2.html', document.getElementById('btn-methods'))" class="guide-card p-8 rounded-2xl bg-white cursor-pointer group">
-                                <div class="w-14 h-14 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-blue-600 group-hover:text-white transition-all">
-                                    <span class="text-2xl">🧠</span>
-                                </div>
-                                <h3 class="text-2xl font-bold text-gray-800 mb-3">品管手法</h3>
-                                <p class="text-gray-500 leading-relaxed mb-6">
-                                    著重改善邏輯與步驟。如 PDCA、5W2H。當您需要規劃改善計畫時，點此開始。
-                                </p>
-                                <span class="text-blue-600 font-bold flex items-center group-hover:translate-x-1 transition-transform">
-                                    進入探索手法 →
-                                </span>
-                            </div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-4">品管工具 (QC Tools)</h3>
+                        <p class="text-gray-500 leading-relaxed mb-8 h-20">
+                            著重於數據蒐集與統計分析。如柏拉圖、魚骨圖等。當您有數據卻不知道如何解讀時，請點此開始。
+                        </p>
+                        <div class="flex items-center text-teal-600 font-bold group-hover:translate-x-2 transition-transform">
+                            立即進入探索 <span class="ml-2 text-xl">→</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- [Iframe 視圖] 切換後顯示 -->
-                <div id="loading-spinner" class="absolute inset-0 flex items-center justify-center bg-white z-20 hidden">
-                    <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-teal-600"></div>
+                <!-- 手法引導卡片 -->
+                <div onclick="navigateToParentTab('品管手法2.html', 1)" class="guide-card p-10 rounded-3xl bg-white cursor-pointer group relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-blue-50 rounded-full -mr-16 -mt-16 transition-all group-hover:bg-blue-100"></div>
+                    
+                    <div class="relative z-10">
+                        <div class="w-16 h-16 bg-blue-600 text-white rounded-2xl flex items-center justify-center mb-8 shadow-lg shadow-blue-200">
+                            <span class="text-3xl">🧠</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-4">品管手法 (Methodology)</h3>
+                        <p class="text-gray-500 leading-relaxed mb-8 h-20">
+                            著重於改善邏輯與團隊合作。如 PDCA、5W2H 等決策流程。當您需要規劃改善路徑時，請點此開始。
+                        </p>
+                        <div class="flex items-center text-blue-600 font-bold group-hover:translate-x-2 transition-transform">
+                            立即進入探索 <span class="ml-2 text-xl">→</span>
+                        </div>
+                    </div>
                 </div>
-                <iframe id="content-display" src="" scrolling="no" class="fade-in relative z-10 transition-all duration-300"></iframe>
-
             </div>
         </div>
 
-        <!-- 頁尾資訊與更新時間 -->
-        <footer class="mt-8 px-4">
-            <div id="last-updated">最後更新時間：載入中…</div>
-            <div class="flex flex-col md:flex-row justify-between items-center text-gray-400 text-xs mt-3 italic gap-2">
-                <p>※ 頁面內容將根據選取項目自動調整長度</p>
-                <p>© 2024 QCC 互動手冊開發團隊</p>
-            </div>
-        </footer>
+        
     </div>
 
     <script>
-        const guideView = document.getElementById('guide-view');
-        const iframe = document.getElementById('content-display');
-        const spinner = document.getElementById('loading-spinner');
-
         /**
-         * 顯示導覽首頁 (卡片視圖)
-         */
-        function showGuide() {
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById('btn-home').classList.add('active');
-            
-            iframe.style.display = 'none';
-            guideView.classList.remove('hidden');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            reportHeight();
-        }
-
-        /**
-         * 切換至子頁面 (Iframe 視圖)
-         */
-        function switchTab(page, btn) {
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            if (btn) btn.classList.add('active');
-            
-            guideView.classList.add('hidden');
-            spinner.classList.remove('hidden');
-            
-            iframe.style.display = 'block';
-            iframe.style.opacity = '0';
-            iframe.style.height = '0px'; 
-            
-            setTimeout(() => {
-                iframe.src = page;
-            }, 50);
-
-            iframe.onload = () => {
-                spinner.classList.add('hidden');
-                iframe.style.opacity = '1';
-                reportHeight();
-            };
-        }
-
-        /**
-         * 向父頁面回報高度，確保不出現滾輪
+         * 自動向父頁面回報高度，確保不出現滾輪
          */
         function reportHeight() {
-            let height;
-            if (iframe.style.display === 'block') {
-                try {
-                    const doc = iframe.contentDocument || iframe.contentWindow.document;
-                    height = doc.documentElement.scrollHeight || doc.body.scrollHeight;
-                    iframe.style.height = height + 'px';
-                } catch(e) {
-                    height = 1500; // 備援高度
-                    iframe.style.height = height + 'px';
-                }
-            } else {
-                height = document.body.scrollHeight;
-            }
-
-            // 與父分頁 (index) 通訊
             if (window.parent && window.parent !== window) {
+                const height = document.body.scrollHeight;
                 try {
-                    const parentIframe = window.parent.document.getElementById('content-frame');
-                    if (parentIframe) {
-                        parentIframe.style.height = (height + 100) + 'px';
+                    const iframe = window.parent.document.getElementById('content-frame');
+                    if (iframe) {
+                        iframe.style.height = height + 'px';
                     }
                 } catch (e) {
-                    window.parent.postMessage({ type: 'resize', height: height + 100 }, '*');
+                    window.parent.postMessage({ type: 'resize', height: height }, '*');
                 }
             }
         }
-        
+
+        /**
+         * 核心功能：與父頁面 (index.html) 的 tool-tabs 連動
+         */
+        function navigateToParentTab(page, tabIndex) {
+            if (window.parent && typeof window.parent.loadToolPage === 'function') {
+                const parentDoc = window.parent.document;
+                const tabs = parentDoc.querySelectorAll('#tool-tabs .sub-tab');
+                
+                if (tabs && tabs[tabIndex]) {
+                    window.parent.loadToolPage(page, tabs[tabIndex]);
+                } else {
+                    window.parent.loadIframe(page);
+                }
+            } else {
+                window.location.href = page;
+            }
+        }
+
         /**
          * 抓取 GitHub 最後更新時間
          */
@@ -258,15 +184,15 @@
                     el.textContent = "最後更新時間：" + fmt.format(new Date(commits[0].commit.committer.date)).replace(/\//g,'-');
                 }
             } catch (e) {
-                el.textContent = "最後更新時間：正在同步最新版本…";
+                el.textContent = "最後更新時間：正在與 GitHub 同步中…";
             }
         }
 
         // 初始化
         updateTimeFromGitHub();
-        
-        // 定期監測高度變化
-        setInterval(reportHeight, 1000);
+        window.addEventListener('load', reportHeight);
+        window.addEventListener('resize', reportHeight);
+        setInterval(reportHeight, 500);
     </script>
 
 </body>
