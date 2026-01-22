@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>品管工具選哪招？跟我走！</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Noto+Sans+TC:wght@400;700;900&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
@@ -69,9 +70,27 @@
         
         /* 激活父頁面頁籤的樣式 (對應 index.html 內的 active-tab) */
         .active-tab { background-color: #0d9488 !important; color: white !important; font-weight: 700 !important; }
+
+        /* Modal 動畫樣式 */
+        .modal-fade-in { animation: modalFadeIn 0.3s ease-out; }
+        @keyframes modalFadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
     </style>
 </head>
 <body class="py-6 px-4">
+
+    <!-- [提示視窗：頁面建置中] -->
+    <div id="comingSoonModal" class="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm hidden px-4">
+        <div class="bg-white rounded-[2.5rem] p-10 max-w-sm w-full shadow-2xl text-center modal-fade-in border border-slate-100">
+            <div class="text-7xl mb-6 text-yellow-500">🚧</div>
+            <h3 class="text-2xl font-black text-slate-800 mb-3">頁面建置中</h3>
+            <p class="text-slate-500 mb-8 leading-relaxed">
+                這部分內容正在努力趕工中，<br>請密切關注後續更新！
+            </p>
+            <button onclick="closeModal()" class="w-full py-4 bg-teal-600 text-white rounded-2xl font-bold shadow-lg shadow-teal-100 hover:bg-teal-700 transition-all active:scale-95">
+                知道了
+            </button>
+        </div>
+    </div>
 
     <div id="app" class="w-full max-w-4xl mx-auto">
 
@@ -120,12 +139,17 @@
         const historyTrailDiv = document.getElementById('history-trail');
         const questionCardContainer = document.getElementById('question-card-container');
 
+        // 已完成開發的頁面清單
+        const COMPLETED_PAGES = ['書面格式_問題型.html', '書面格式_課達型.html'];
+
+        function closeModal() { document.getElementById('comingSoonModal').classList.add('hidden'); }
+        function showModal() { document.getElementById('comingSoonModal').classList.remove('hidden'); }
+
         /**
          * 智慧同步：主動叫出父頁面的次級頁籤並同步導覽狀態
          */
         function syncParentUI() {
             if (window.parent && window.parent !== window) {
-                // 安全跨網域通訊
                 window.parent.postMessage({
                     type: 'qcc-sync-ui',
                     navId: 'nav-btn-selection',
@@ -156,6 +180,12 @@
          * @param {number} subTabIndex - 父頁面 format-tabs 內的按鈕索引 (0:問題型, 1:課達型)
          */
         function navigateToFormatSection(page, subTabIndex) {
+            // 檢查頁面是否已完成
+            if (!COMPLETED_PAGES.includes(page)) {
+                showModal();
+                return;
+            }
+
             if (window.parent && window.parent !== window) {
                 // 發送跳轉訊息給父頁面
                 window.parent.postMessage({
