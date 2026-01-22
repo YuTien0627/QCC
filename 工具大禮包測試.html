@@ -35,6 +35,14 @@
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        /* 更新時間樣式 */
+        #last-updated { 
+            margin-top: 1rem; 
+            text-align: right; 
+            color: #64748b; 
+            font-size: 0.875rem; 
+            font-style: italic;
+        }
     </style>
 </head>
 <body class="p-4 sm:p-8">
@@ -43,7 +51,7 @@
         <!-- 內容區域容器 -->
         <div class="bg-white rounded-3xl shadow-xl border border-gray-100 flex flex-col relative transition-all duration-500">
             
-            <!-- 頂部頁籤導航條 -->
+            <!-- 頂部頁籤導覽條 -->
             <div id="top-nav" class="bg-gray-50/50 border-b border-gray-100 p-4 flex flex-wrap gap-3">
                 <button id="btn-home" onclick="showGuide()" 
                     class="tab-btn active px-6 py-2.5 rounded-xl font-bold flex items-center bg-white text-gray-600 border border-gray-200 hover:bg-teal-50">
@@ -111,10 +119,13 @@
             </div>
         </div>
 
-        <!-- 底部裝飾與提示 -->
-        <footer class="mt-8 flex flex-col md:flex-row justify-between items-center text-gray-400 text-sm italic px-4">
-            <p>※ 頁面會根據內容自動調整長度</p>
-            <p>QCC 互動手冊系列作品</p>
+        <!-- 底部裝飾與更新時間 -->
+        <footer class="mt-8 px-4">
+            <div id="last-updated">最後更新時間：載入中…</div>
+            <div class="flex flex-col md:flex-row justify-between items-center text-gray-400 text-xs mt-2 italic">
+                <p>※ 頁面會根據內容自動調整長度</p>
+                <p>QCC 互動手冊系列作品</p>
+            </div>
         </footer>
     </div>
 
@@ -124,53 +135,73 @@
         const spinner = document.getElementById('loading-spinner');
 
         function showGuide() {
-            // 更新按鈕樣式
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.getElementById('btn-home').classList.add('active');
-
-            // 切換視圖
             iframe.style.display = 'none';
             guideView.classList.remove('hidden');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function switchTab(page, btn) {
-            // 更新按鈕樣式
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             if (btn) btn.classList.add('active');
-
-            // 隱藏引導畫面，顯示載入動畫
             guideView.classList.add('hidden');
             spinner.classList.remove('hidden');
-            
             iframe.style.display = 'block';
             iframe.style.opacity = '0';
-            iframe.style.height = '0px'; // 先重設高度
-            
-            // 延遲載入確保切換順暢
-            setTimeout(() => {
-                iframe.src = page;
-            }, 50);
-
+            iframe.style.height = '0px'; 
+            setTimeout(() => { iframe.src = page; }, 50);
             iframe.onload = () => {
                 spinner.classList.add('hidden');
                 iframe.style.opacity = '1';
-                
-                // 動態調整高度的關鍵邏輯
                 try {
                     const doc = iframe.contentDocument || iframe.contentWindow.document;
-                    // 使用 documentElement.scrollHeight 能更精確抓取內容完整長度
                     const contentHeight = doc.documentElement.scrollHeight || doc.body.scrollHeight;
                     iframe.style.height = contentHeight + 'px';
                 } catch(e) {
-                    // 若跨網域限制，則設定一個較大的預設高度
                     iframe.style.height = "1500px";
-                    console.log("無法動態計算高度，使用預設值");
                 }
             };
         }
         
-        // 定期檢查高度（防止內容是非同步載入導致 onload 時高度不準）
+        // 更新時間功能 (從原 index 移植)
+        async function updateTimeFromGitHubPages() {
+            const OWNER = "YuTien0627";
+            const REPO  = "QCC";
+            const el = document.getElementById('last-updated');
+            const fmt = new Intl.DateTimeFormat('zh-TW', {
+                timeZone: 'Asia/Taipei',
+                year:'numeric', month:'2-digit', day:'2-digit',
+                hour:'2-digit', minute:'2-digit', hour12:false
+            });
+            try {
+                const pagesBuildUrl = `https://api.github.com/repos/${OWNER}/${REPO}/pages/builds?per_page=1`;
+                const r1 = await fetch(pagesBuildUrl, { cache: "no-store" });
+                if (r1.ok) {
+                    const builds = await r1.json();
+                    if (Array.isArray(builds) && builds.length > 0) {
+                        const d = new Date(builds[0].updated_at || builds[0].created_at);
+                        el.textContent = "最後更新時間：" + fmt.format(d).replace(/\//g,'-');
+                        return;
+                    }
+                }
+                const commitUrl = `https://api.github.com/repos/${OWNER}/${REPO}/commits?per_page=1`;
+                const r2 = await fetch(commitUrl, { cache: "no-store" });
+                if (!r2.ok) throw new Error("GitHub API 取得失敗");
+                const commits = await r2.json();
+                const commitTime = commits?.[0]?.commit?.committer?.date;
+                if (!commitTime) throw new Error("找不到 commit 時間");
+                const d2 = new Date(commitTime);
+                el.textContent = "最後更新時間：" + fmt.format(d2).replace(/\//g,'-');
+            } catch (e) {
+                el.textContent = "最後更新時間：無法取得（請稍後再試）";
+            }
+        }
+
+        // 初始化
+        updateTimeFromGitHubPages();
+
+        // 定期檢查 iframe 高度
         setInterval(() => {
             if (iframe.style.display === 'block') {
                 try {
