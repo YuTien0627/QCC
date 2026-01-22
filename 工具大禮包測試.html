@@ -7,12 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { font-family: 'Inter', 'Noto Sans TC', sans-serif; background-color: #f8fafc; }
-        .tab-btn { transition: all 0.3s ease; }
-        .tab-btn.active { 
-            background-color: #eff6ff; 
-            color:6px solid #3b82f6; 
-            box-shadow: 0 4px 12px -2px rgba(13, 148, 136, 0.3);
-        }
+        
         #content-display {
             width: 100%;
             border: none;
@@ -37,22 +32,18 @@
 <body class="p-4 sm:p-8">
 
     <div class="max-w-5xl mx-auto">
-
-
         <!-- 內容區域容器 -->
-        <div class="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100 min-h-[650px] flex flex-col">
+        <div class="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100 min-h-[650px] flex flex-col relative">
             
-
-
-   <!-- 動態內容區 -->
+            <!-- 動態內容區 -->
             <div class="flex-grow relative">
                 
                 <!-- [引導視圖] 初始進入時顯示 -->
                 <div id="guide-view" class="p-8 md:p-12 fade-in">
                     <div class="max-w-3xl mx-auto">
                         <div class="text-center mb-12">
-                            <h2 class="text-2xl font-bold text-gray-800 mb-4">想要解決問題，先選對好的「武器」</h2>
-                            <p class="text-gray-600">我們將品質管理分為「硬工具」與「軟手法」，點擊下方卡片即可開始深入學習。</p>
+                            <h2 class="text-3xl font-bold text-gray-800 mb-4">想要解決問題，先選對好的「武器」</h2>
+                            <p class="text-gray-600 text-lg">我們將品質管理分為「硬工具」與「軟手法」，點擊下方卡片即可開始深入學習。</p>
                         </div>
 
                         <div class="grid md:grid-cols-2 gap-8">
@@ -72,12 +63,12 @@
 
                             <!-- 手法引導卡片 -->
                             <div onclick="switchTab('品管手法2.html')" class="guide-card p-8 rounded-2xl bg-white cursor-pointer group">
-                                <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                                <div class="w-14 h-14 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-blue-600 group-hover:text-white transition-colors">
                                     <span class="text-3xl">🧠</span>
                                 </div>
                                 <h3 class="text-2xl font-bold text-gray-800 mb-3">品管手法</h3>
                                 <p class="text-gray-500 leading-relaxed mb-6">
-                                    著重於改善邏輯與團隊合作。如 PDCA、5W2H 等。當您需要規劃改善路徑時，請點此開始。
+                                    著重於改善邏輯與團隊合作。如 PDCA、5W2H 等決策流程。當您需要規劃改善路徑時，請點此開始。
                                 </p>
                                 <span class="text-blue-600 font-bold flex items-center">
                                     進入探索手法 <span class="ml-2 group-hover:translate-x-1 transition-transform">→</span>
@@ -108,30 +99,18 @@
         const iframe = document.getElementById('content-display');
         const spinner = document.getElementById('loading-spinner');
 
-        function showGuide() {
-            // 回到引導畫面
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById('btn-home').classList.add('active');
-            
-            iframe.style.display = 'none';
-            guideView.classList.remove('hidden');
-        }
-
-        function switchTab(page, btn) {
-            // 切換按鈕樣式
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-
+        function switchTab(page) {
             // 隱藏引導畫面，顯示載入動畫
             guideView.classList.add('hidden');
             spinner.classList.remove('hidden');
+            
             iframe.style.display = 'block';
             iframe.style.opacity = '0';
             
-            // 延遲載入以確保動畫順暢
+            // 延遲載入確保切換順暢
             setTimeout(() => {
                 iframe.src = page;
-            }, 100);
+            }, 50);
 
             iframe.onload = () => {
                 spinner.classList.add('hidden');
