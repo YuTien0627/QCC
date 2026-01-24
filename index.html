@@ -1,28 +1,32 @@
 <!DOCTYPE html>
 <html lang="zh-TW" class="scroll-smooth">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>品管圈（QCC）新手入門互動指南</title>
-<script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>品管圈（QCC）新手入門互動指南</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 
-<style>
-    body { font-family: 'Inter', sans-serif; background-color: #ecfdf5; }
-    .nav-button { transition: 0.3s; border-bottom: 3px solid transparent; }
-    .nav-button.active { color: #0d9488; border-color: #0d9488; font-weight: 700; }
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #ecfdf5; }
+        .nav-button { transition: 0.3s; border-bottom: 3px solid transparent; }
+        .nav-button.active { color: #0d9488; border-color: #0d9488; font-weight: 700; }
 
-    .format-tab, .sub-tab { transition: 0.3s; min-height: 40px; }
-    .active-tab { background-color: #0d9488 !important; color: white !important; font-weight: 700 !important; }
+        .format-tab, .sub-tab { transition: 0.3s; min-height: 40px; }
+        .active-tab { background-color: #0d9488 !important; color: white !important; font-weight: 700 !important; }
 
-    #content-frame { width: 100%; border: none; min-height: 500px; }
-    #last-updated { margin-top: 1rem; text-align: right; color: #555; font-size: 0.9rem; }
-</style>
+        #content-frame { width: 100%; border: none; min-height: 500px; }
+        #last-updated { margin-top: 1rem; text-align: right; color: #555; font-size: 0.9rem; }
+        
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+    </style>
 </head>
-< class="antialiased">
+<body class="antialiased">
 
 <div class="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8">
 
-    <!-- 標題 -->
     <header class="text-center py-10 bg-white shadow-xl rounded-xl mb-6 border-t-8 border-teal-600">
         <div class="flex flex-col items-center">
             <div class="flex items-center justify-center mb-2">
@@ -34,54 +38,63 @@
         </div>
     </header>
 
-    <!-- 第一層導航 -->
     <nav class="sticky top-0 z-10 flex justify-center bg-white p-2 rounded-xl shadow-lg mb-4 space-x-4">
         <button id="nav-btn-home" onclick="goHome()" class="nav-button active text-lg px-6 py-2">🚀 首頁</button>
-
         <button id="nav-btn-selection" onclick="showToolTabs()" class="nav-button text-lg px-6 py-2">🎁 工具大禮包</button>
-
         <button id="nav-btn-format" onclick="showFormatTabs()" class="nav-button text-lg px-6 py-2">📝 書面格式</button>
-
         <button id="nav-btn-tools" onclick="loadExternalPage('參考資料.html', 'nav-btn-tools')" class="nav-button text-lg px-6 py-2">🛠️ 參考資料</button>
-
         <button id="nav-btn-quiz" onclick="loadExternalPage('小測驗.html', 'nav-btn-quiz')" class="nav-button text-lg px-6 py-2">🎯 小試身手</button>
     </nav>
 
-    <!-- 書面格式 tabs -->
     <div id="format-tabs" class="flex justify-center mt-4 space-x-3 hidden">
         <button class="format-tab px-4 py-2 bg-gray-200 rounded-lg" onclick="loadFormatPage('書面格式_問題型.html', this)">🧩 問題解決型</button>
         <button class="format-tab px-4 py-2 bg-gray-200 rounded-lg" onclick="loadFormatPage('書面格式_課達型.html', this)">💡 課題達成型</button>
     </div>
 
-    <!-- 工具 tabs -->
     <div id="tool-tabs" class="flex justify-center mt-4 space-x-3 hidden">
         <button class="sub-tab px-4 py-2 bg-gray-200 rounded-lg" onclick="loadToolPage('品管工具.html', this)">🛠️ 品管工具</button>
         <button class="sub-tab px-4 py-2 bg-gray-200 rounded-lg" onclick="loadToolPage('品管手法2.html', this)">📚 品管手法</button>
     </div>
 
-    <!-- 內容 -->
     <div class="px-4">
         <iframe id="content-frame"></iframe>
     </div>
 
-    <!-- 更新時間 -->
     <div id="last-updated"></div>
 </div>
 
-<!-- ✅ 回到最上方按鈕（右下角浮動） -->
+<div id="feedback-fab" onclick="toggleFeedbackModal()" 
+     class="fixed bottom-24 right-6 z-[9999] w-12 h-12 rounded-full bg-blue-600 text-white shadow-lg cursor-pointer flex items-center justify-center hover:bg-blue-700 hover:scale-110 transition-all duration-300 active:scale-95">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+    </svg>
+</div>
+
 <button id="backToTop"
     aria-label="回到最上方"
-    class="fixed bottom-6 right-6 z-50 hidden
-           w-12 h-12 rounded-full
-           bg-teal-600 text-white text-xl
-           shadow-lg hover:bg-teal-700 hover:shadow-xl
-           transition-all duration-300
-           active:scale-95">
+    class="fixed bottom-6 right-6 z-[9998] hidden w-12 h-12 rounded-full bg-teal-600 text-white text-xl shadow-lg hover:bg-teal-700 transition-all duration-300 active:scale-95">
     ↑
 </button>
 
+<div id="feedback-modal" 
+     class="fixed inset-0 z-[10000] hidden items-center justify-center bg-black/50 backdrop-blur-sm p-4"
+     onclick="handleOverlayClick(event)">
+    <div class="bg-white w-full max-w-2xl h-[85vh] rounded-2xl shadow-2xl flex flex-col relative" style="animation: slideUp 0.3s ease-out;">
+        <div class="flex items-center justify-between p-4 border-b">
+            <h3 class="font-bold text-gray-800 text-lg">💡您的建議是我們持續改善的動力。<br>不論是功能錯誤、內容補充或使用心得，歡迎告訴我們。</h3>
+            <button onclick="toggleFeedbackModal()" class="text-3xl text-gray-400 hover:text-gray-600 leading-none">&times;</button>
+        </div>
+        <div class="flex-1 overflow-hidden">
+            <iframe src="https://forms.office.com/r/bD284wNPjB" class="w-full h-full border-none">載入中…</iframe>
+        </div>
+        <div class="p-3 text-center text-xs text-gray-400 bg-gray-50 rounded-b-2xl">
+            感謝您協助奇美醫院品質管理部建立更好的資源平台
+        </div>
+    </div>
+</div>
+
 <script>
-/* ------------------- 共用功能 ------------------- */
+/* ------------------- 導航功能 ------------------- */
 function activateNav(id){
     document.querySelectorAll('.nav-button').forEach(btn => btn.classList.remove('active'));
     document.getElementById(id)?.classList.add('active');
@@ -90,11 +103,9 @@ function activateNav(id){
 function clearTabs() {
     document.getElementById('format-tabs').classList.add('hidden');
     document.getElementById('tool-tabs').classList.add('hidden');
-    document.querySelectorAll('.format-tab, .sub-tab')
-        .forEach(el => el.classList.remove('active-tab'));
+    document.querySelectorAll('.format-tab, .sub-tab').forEach(el => el.classList.remove('active-tab'));
 }
 
-/* ------------------- 書面格式 ------------------- */
 function showFormatTabs(){
     activateNav('nav-btn-format');
     clearTabs();
@@ -108,7 +119,6 @@ function loadFormatPage(page, btn){
     loadIframe(page);
 }
 
-/* ------------------- 工具大禮包 ------------------- */
 function showToolTabs(){
     activateNav('nav-btn-selection');
     clearTabs();
@@ -122,205 +132,78 @@ function loadToolPage(page, btn){
     loadIframe(page);
 }
 
-/* ------------------- 參考資料 / 小測驗 ------------------- */
 function loadExternalPage(page, navId){
     activateNav(navId);
     clearTabs();
     loadIframe(page);
 }
 
-/* ------------------- iframe 載入與撐高 ------------------- */
 function loadIframe(page){
     const iframe = document.getElementById('content-frame');
     iframe.src = page;
-
     iframe.onload = () => {
         try {
             const doc = iframe.contentDocument || iframe.contentWindow.document;
-            iframe.style.height = doc.body.scrollHeight + 'px';
+            iframe.style.height = (doc.body.scrollHeight + 50) + 'px';
         } catch(e){
             iframe.style.height = '1200px';
         }
     };
-
-    // ❌ 不要在這裡更新時間（避免每次切換頁籤就變動）
 }
 
-/* ------------------- 首頁 ------------------- */
 function goHome(){
     activateNav('nav-btn-home');
     clearTabs();
     loadIframe('首頁.html');
 }
 
-/* ------------------- 更新時間：抓 GitHub Pages 最後發布時間 ------------------- */
+/* ------------------- GitHub 更新時間 ------------------- */
 async function updateTimeFromGitHubPages() {
-    const OWNER = "YuTien0627";
-    const REPO  = "QCC";
+    const OWNER = "YuTien0627", REPO = "QCC";
     const el = document.getElementById('last-updated');
-
-    el.textContent = "最後更新時間：載入中…";
-
-    const fmt = new Intl.DateTimeFormat('zh-TW', {
-        timeZone: 'Asia/Taipei',
-        year:'numeric', month:'2-digit', day:'2-digit',
-        hour:'2-digit', minute:'2-digit', hour12:false
-    });
+    const fmt = new Intl.DateTimeFormat('zh-TW', { year:'numeric', month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit', hour12:false });
 
     try {
-        // 1) 優先抓 Pages builds（最接近「完成發布」時間）
-        const pagesBuildUrl = `https://api.github.com/repos/${OWNER}/${REPO}/pages/builds?per_page=1`;
-        const r1 = await fetch(pagesBuildUrl, { cache: "no-store" });
-
-        if (r1.ok) {
-            const builds = await r1.json();
-            if (Array.isArray(builds) && builds.length > 0) {
-                const d = new Date(builds[0].updated_at || builds[0].created_at);
-                el.textContent = "最後更新時間：" + fmt.format(d).replace(/\//g,'-');
-                return;
-            }
-        }
-
-        // 2) 備援：抓最新 commit 時間
-        const commitUrl = `https://api.github.com/repos/${OWNER}/${REPO}/commits?per_page=1`;
-        const r2 = await fetch(commitUrl, { cache: "no-store" });
-        if (!r2.ok) throw new Error("GitHub API 取得失敗");
-
-        const commits = await r2.json();
-        const commitTime = commits?.[0]?.commit?.committer?.date;
-        if (!commitTime) throw new Error("找不到 commit 時間");
-
-        const d2 = new Date(commitTime);
-        el.textContent = "最後更新時間：" + fmt.format(d2).replace(/\//g,'-');
-
+        const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/commits?per_page=1`, { cache: "no-store" });
+        const commits = await res.json();
+        const d = new Date(commits[0].commit.committer.date);
+        el.textContent = "最後更新時間：" + fmt.format(d).replace(/\//g,'-');
     } catch (e) {
-        el.textContent = "最後更新時間：無法取得（請稍後再試）";
-        console.error(e);
+        el.textContent = "最後更新時間：無法取得";
     }
 }
 
-/* ------------------- 回到最上方按鈕 ------------------- */
+/* ------------------- 回到最上方 ------------------- */
 const backToTopBtn = document.getElementById('backToTop');
-
 window.addEventListener('scroll', () => {
-    if (window.scrollY > 300) {
-        backToTopBtn.classList.remove('hidden');
-    } else {
-        backToTopBtn.classList.add('hidden');
-    }
+    if (window.scrollY > 300) backToTopBtn.classList.remove('hidden');
+    else backToTopBtn.classList.add('hidden');
 });
+backToTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
-backToTopBtn.addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-});
+/* ------------------- 回饋視窗控制 ------------------- */
+function toggleFeedbackModal() {
+    const modal = document.getElementById('feedback-modal');
+    if (modal.classList.contains('hidden')) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        document.body.style.overflow = 'hidden';
+    } else {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+        document.body.style.overflow = 'auto';
+    }
+}
+
+function handleOverlayClick(e) {
+    if (e.target === document.getElementById('feedback-modal')) toggleFeedbackModal();
+}
 
 /* ------------------- 初始化 ------------------- */
-goHome();
-updateTimeFromGitHubPages();
-</script>
-<div id="feedback-fab" onclick="toggleFeedbackModal()" style="position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; background: linear-gradient(135deg, #1a73e8, #00d2ff); border-radius: 50%; box-shadow: 0 4px 15px rgba(0,0,0,0.3); cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 9999; transition: transform 0.3s;">
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-    </svg>
-</div>
-
-<button id="backToTop"
-    aria-label="回到最上方"
-    class="fixed bottom-6 right-6 z-50 hidden
-           w-12 h-12 rounded-full
-           bg-teal-600 text-white text-xl
-           shadow-lg hover:bg-teal-700 hover:shadow-xl
-           transition-all duration-300
-           active:scale-95">
-    ↑
-</button>
-
-<div id="feedback-fab" onclick="toggleFeedbackModal()" 
-     style="position: fixed; bottom: 85px; right: 24px; width: 60px; height: 60px; 
-            background: linear-gradient(135deg, #1a73e8, #00d2ff); border-radius: 50%; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3); cursor: pointer; display: flex; 
-            align-items: center; justify-content: center; z-index: 9999; transition: transform 0.3s;">
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-    </svg>
-    <span style="position: absolute; right: 70px; background: white; padding: 4px 10px; border-radius: 6px; font-size: 12px; color: #1a73e8; box-shadow: 0 2px 5px rgba(0,0,0,0.1); white-space: nowrap; font-weight: bold;">回饋建議</span>
-</div>
-
-<div id="feedback-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 10000; align-items: center; justify-content: center; backdrop-filter: blur(5px);">
-    <div style="background: white; width: 95%; max-width: 800px; height: 85vh; border-radius: 20px; position: relative; display: flex; flex-direction: column; overflow: hidden; animation: slideUp 0.4s ease;">
-        
-        <div style="padding: 15px 25px; background: #f8f9fa; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center;">
-            <div style="display: flex; align-items: center;">
-                <span style="color: #1a73e8; font-weight: bold; margin-right: 8px;">💡</span>
-                <h3 style="margin: 0; color: #2b5797; font-size: 1.1rem; font-weight: bold;">讓我們一起優化指南</h3>
-            </div>
-            <span onclick="toggleFeedbackModal()" style="cursor: pointer; font-size: 28px; color: #999; line-height: 1;">&times;</span>
-        </div>
-
-        <div style="flex: 1; overflow: hidden;">
-            <iframe 
-                src="https://forms.office.com/r/bD284wNPjB" 
-                width="100%" 
-                height="100%" 
-                frameborder="0" 
-                marginheight="0" 
-                marginwidth="0"
-                style="border: none; width: 100%; height: 100%;">
-                載入中…
-            </iframe>
-        </div>
-        
-        <div style="padding: 10px; text-align: center; font-size: 0.8rem; color: #aaa; background: white; border-top: 1px solid #eee;">
-            感謝您協助奇美醫院品質管理部
-        </div>
-    </div>
-</div>
-
-<style>
-    @keyframes slideUp {
-        from { transform: translateY(50px); opacity: 0; }
-        to { transform: translateY(0); opacity: 1; }
-    }
-    #feedback-fab:hover {
-        transform: scale(1.1);
-    }
-    #feedback-fab:hover span {
-        display: block;
-    }
-</style>
-
-<script>
-    /* ------------------- 回到最上方按鈕邏輯 ------------------- */
-    const backToTopBtn = document.getElementById('backToTop');
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 300) {
-            backToTopBtn.classList.remove('hidden');
-        } else {
-            backToTopBtn.classList.add('hidden');
-        }
-    });
-    backToTopBtn.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-
-    /* ------------------- 回饋 Modal 控制邏輯 ------------------- */
-    function toggleFeedbackModal() {
-        const modal = document.getElementById('feedback-modal');
-        if (modal.style.display === 'none' || modal.style.display === '') {
-            modal.style.display = 'flex';
-            document.body.style.overflow = 'hidden'; // 禁止底層頁面捲動
-        } else {
-            modal.style.display = 'none';
-            document.body.style.overflow = 'auto'; // 恢復底層頁面捲動
-        }
-    }
-
-    // 點擊背景區域也可關閉視窗
-    document.getElementById('feedback-modal').addEventListener('click', function(e) {
-        if (e.target === this) {
-            toggleFeedbackModal();
-        }
-    });
+window.onload = () => {
+    goHome();
+    updateTimeFromGitHubPages();
+};
 </script>
 </body>
 </html>
