@@ -18,7 +18,7 @@
     #last-updated { margin-top: 1rem; text-align: right; color: #555; font-size: 0.9rem; }
 </style>
 </head>
-<body class="antialiased">
+< class="antialiased">
 
 <div class="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8">
 
@@ -224,15 +224,40 @@ updateTimeFromGitHubPages();
     </svg>
 </div>
 
+<button id="backToTop"
+    aria-label="回到最上方"
+    class="fixed bottom-6 right-6 z-50 hidden
+           w-12 h-12 rounded-full
+           bg-teal-600 text-white text-xl
+           shadow-lg hover:bg-teal-700 hover:shadow-xl
+           transition-all duration-300
+           active:scale-95">
+    ↑
+</button>
+
+<div id="feedback-fab" onclick="toggleFeedbackModal()" 
+     style="position: fixed; bottom: 85px; right: 24px; width: 60px; height: 60px; 
+            background: linear-gradient(135deg, #1a73e8, #00d2ff); border-radius: 50%; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3); cursor: pointer; display: flex; 
+            align-items: center; justify-content: center; z-index: 9999; transition: transform 0.3s;">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+    </svg>
+    <span style="position: absolute; right: 70px; background: white; padding: 4px 10px; border-radius: 6px; font-size: 12px; color: #1a73e8; box-shadow: 0 2px 5px rgba(0,0,0,0.1); white-space: nowrap; font-weight: bold;">回饋建議</span>
+</div>
+
 <div id="feedback-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 10000; align-items: center; justify-content: center; backdrop-filter: blur(5px);">
-    <div style="background: white; width: 90%; max-width: 800px; height: 85vh; border-radius: 20px; position: relative; display: flex; flex-direction: column; overflow: hidden; animation: slideUp 0.4s ease;">
+    <div style="background: white; width: 95%; max-width: 800px; height: 85vh; border-radius: 20px; position: relative; display: flex; flex-direction: column; overflow: hidden; animation: slideUp 0.4s ease;">
         
         <div style="padding: 15px 25px; background: #f8f9fa; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center;">
-            <h3 style="margin: 0; color: #2b5797; font-size: 1.2rem;">讓我們一起優化指南</h3>
+            <div style="display: flex; align-items: center;">
+                <span style="color: #1a73e8; font-weight: bold; margin-right: 8px;">💡</span>
+                <h3 style="margin: 0; color: #2b5797; font-size: 1.1rem; font-weight: bold;">讓我們一起優化指南</h3>
+            </div>
             <span onclick="toggleFeedbackModal()" style="cursor: pointer; font-size: 28px; color: #999; line-height: 1;">&times;</span>
         </div>
 
-        <div style="flex: 1; overflow-y: auto;">
+        <div style="flex: 1; overflow: hidden;">
             <iframe 
                 src="https://forms.office.com/r/bD284wNPjB" 
                 width="100%" 
@@ -240,12 +265,12 @@ updateTimeFromGitHubPages();
                 frameborder="0" 
                 marginheight="0" 
                 marginwidth="0"
-                style="border: none;">
+                style="border: none; width: 100%; height: 100%;">
                 載入中…
             </iframe>
         </div>
         
-        <div style="padding: 10px; text-align: center; font-size: 0.8rem; color: #aaa; background: white;">
+        <div style="padding: 10px; text-align: center; font-size: 0.8rem; color: #aaa; background: white; border-top: 1px solid #eee;">
             感謝您協助奇美醫院品質管理部
         </div>
     </div>
@@ -257,29 +282,45 @@ updateTimeFromGitHubPages();
         to { transform: translateY(0); opacity: 1; }
     }
     #feedback-fab:hover {
-        transform: scale(1.1) rotate(5deg);
+        transform: scale(1.1);
+    }
+    #feedback-fab:hover span {
+        display: block;
     }
 </style>
 
 <script>
+    /* ------------------- 回到最上方按鈕邏輯 ------------------- */
+    const backToTopBtn = document.getElementById('backToTop');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 300) {
+            backToTopBtn.classList.remove('hidden');
+        } else {
+            backToTopBtn.classList.add('hidden');
+        }
+    });
+    backToTopBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    /* ------------------- 回饋 Modal 控制邏輯 ------------------- */
     function toggleFeedbackModal() {
         const modal = document.getElementById('feedback-modal');
         if (modal.style.display === 'none' || modal.style.display === '') {
             modal.style.display = 'flex';
-            document.body.style.overflow = 'hidden'; // 打開時禁止主頁面捲動
+            document.body.style.overflow = 'hidden'; // 禁止底層頁面捲動
         } else {
             modal.style.display = 'none';
-            document.body.style.overflow = 'auto'; // 關閉時恢復捲動
+            document.body.style.overflow = 'auto'; // 恢復底層頁面捲動
         }
     }
 
-    // 點擊視窗外部區域也可關閉
-    window.onclick = function(event) {
-        const modal = document.getElementById('feedback-modal');
-        if (event.target == modal) {
+    // 點擊背景區域也可關閉視窗
+    document.getElementById('feedback-modal').addEventListener('click', function(e) {
+        if (e.target === this) {
             toggleFeedbackModal();
         }
-    }
+    });
 </script>
 </body>
 </html>
