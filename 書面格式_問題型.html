@@ -16,7 +16,7 @@
         .step-panel-shell { border-radius: 1.5rem; box-shadow: 0 25px 45px -18px rgba(15, 23, 42, 0.45); background-color: #ffffff; }
         .sub-section-title { border-left: 6px solid #0d9488; padding-left: 0.75rem; }
         
-        /* 案例卡片樣式：移除圖片後的緊湊佈局 */
+        /* 案例卡片樣式 */
         .case-item { transition: all 0.3s ease; border-left: 4px solid #ef4444; }
         .case-item:hover { background-color: #fef2f2; transform: translateX(5px); }
         
@@ -67,9 +67,49 @@
         <section class="bg-yellow-50 p-5 sm:p-6 rounded-xl shadow-md border-l-8 border-yellow-400">
             <p class="text-gray-800 text-base sm:text-lg text-center leading-relaxed">
                 💡 <span class="font-semibold text-yellow-700">新手小提醒：</span>
-                QCC 報告書就像是團隊的英雄故事。左邊先選擇 <span class="font-bold text-teal-600">「第幾步」</span>，右邊就會出現對應的撰寫攻略。
+                QCC 報告書就像是團隊的英雄故事。<br class="hidden sm:inline">
+                左邊先選擇 <span class="font-bold text-teal-600">「第幾步」</span>，右邊就會出現對應的撰寫攻略與常見陷阱，
+                跟著一步一步完成，就能搭出一份有架構又有亮點的作品！
             </p>
         </section>
+
+  <!-- AI 連結區塊 -->
+<section class="bg-blue-50 p-6 rounded-xl shadow-md border-l-8 border-blue-500">
+    <div class="flex flex-col gap-4 text-center md:text-left">
+        
+        <!-- 標題 -->
+        <h2 class="text-2xl font-bold text-blue-700 flex items-center justify-center md:justify-start">
+            <span class="mr-2 text-3xl">🤖</span>
+            AI 輔助撰寫工具
+        </h2>
+
+        <!-- 說明文字 + 按鈕（同一列） -->
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+
+            <!-- 說明文字（桌機不換行） -->
+            <p class="text-gray-600 text-sm md:whitespace-nowrap">
+                點擊右方按鈕，即可直接開啟「奇美品質改善小幫手」，由 AI 協助你釐清邏輯、撰寫與優化成果報告書。
+            </p>
+
+            <!-- 按鈕（綠藍漸層） -->
+            <a href="https://chatgpt.com/g/g-695229fefa348191a7819c7a947ce193-qi-mei-pin-zhi-gai-shan-xiao-bang-shou"
+               target="_blank"
+               rel="noopener noreferrer"
+               class="inline-flex items-center justify-center gap-3
+                      px-6 py-3 shrink-0
+                      bg-gradient-to-r from-emerald-500 via-teal-500 to-blue-500
+                      text-white text-base font-semibold rounded-full
+                      shadow-lg hover:from-emerald-600 hover:via-teal-600 hover:to-blue-600
+                      hover:shadow-xl transition-all active:scale-[0.97]">
+
+                <span class="text-xl">✨</span>
+                開啟 AI 品質改善小幫手
+            </a>
+
+        </div>
+    </div>
+</section>
+
 
         <section class="grid lg:grid-cols-3 gap-6 items-start">
             <aside class="lg:col-span-1 bg-white rounded-2xl shadow-lg p-4 sm:p-5 border border-teal-50">
@@ -469,24 +509,18 @@
                                 <li>報告結尾草草帶過，沒有好好收束學習成果。</li>
                             </ul>
                         </div>
-                    </div>
-
-                </div>
-            </section>
         </section>
     </main>
 </div>
 
 <div id="case-gallery-modal" class="fixed inset-0 z-[10001] hidden items-center justify-center bg-black/60 backdrop-blur-sm p-4">
     <div class="bg-white w-full max-w-4xl h-[80vh] rounded-2xl shadow-2xl flex flex-col relative animate-[slideUp_0.3s_ease-out]">
-        
         <div class="flex items-center justify-between p-6 border-b border-red-100 bg-red-50 rounded-t-2xl">
             <h3 class="text-2xl font-bold text-red-800 flex items-center"><span class="mr-2 font-normal">📂</span> 院內改善案例參考</h3>
-            <button onclick="toggleCaseGallery()" class="text-4xl text-gray-400 hover:text-red-600">&times;</button>
+            <button onclick="toggleCaseGallery()" class="text-4xl text-gray-400 hover:text-red-600 transition-colors">&times;</button>
         </div>
 
         <div class="flex-1 overflow-y-auto p-6 space-y-4">
-            
             <div class="case-item p-4 bg-white rounded-lg border border-gray-100 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div class="flex-1">
                     <div class="flex items-center gap-3 mb-2">
@@ -500,9 +534,12 @@
                         <span class="text-[10px] bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">#雷達圖</span>
                     </div>
                 </div>
-                <div class="flex gap-2">
-                    <button onclick="openPdfPreview('您的PDF連結_A')" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-bold hover:bg-gray-200">👀 預覽</button>
-                    <a href="您的PDF連結_A" download class="px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-bold hover:bg-red-700 text-center">📥 下載</a>
+                <div class="flex items-center">
+                    <a href="https://YuTien0627.github.io/QCC/問題解決型/【問題解決型】2022醫品協會競賽-銅獎-降低新生兒尿布性皮膚炎發生率(寶貝呼呼圈)20221005final.pdf" 
+                       target="_blank" 
+                       class="w-full md:w-auto px-6 py-3 bg-red-600 text-white rounded-lg text-sm font-bold hover:bg-red-700 transition active:scale-95 shadow-md flex items-center justify-center text-center">
+                        <span class="mr-2">🔍</span> 預覽下載
+                    </a>
                 </div>
             </div>
 
@@ -518,24 +555,17 @@
                         <span class="text-[10px] bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">#流程圖</span>
                     </div>
                 </div>
-                <div class="flex gap-2">
-                    <button onclick="openPdfPreview('您的PDF連結_B')" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-bold hover:bg-gray-200">👀 預覽</button>
-                    <a href="您的PDF連結_B" download class="px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-bold hover:bg-red-700 text-center">📥 下載</a>
+                <div class="flex items-center">
+                    <a href="https://YuTien0627.github.io/QCC/問題解決型/您的PDF連結_B.pdf" 
+                       target="_blank" 
+                       class="w-full md:w-auto px-6 py-3 bg-red-600 text-white rounded-lg text-sm font-bold hover:bg-red-700 transition active:scale-95 shadow-md flex items-center justify-center text-center">
+                        <span class="mr-2">🔍</span> 預覽下載
+                    </a>
                 </div>
             </div>
-
         </div>
-    </div>
-</div>
-
-<div id="pdf-preview-modal" class="fixed inset-0 z-[10002] hidden items-center justify-center bg-black/80 p-4">
-    <div class="bg-white w-full max-w-5xl h-full rounded-xl flex flex-col shadow-2xl overflow-hidden">
-        <div class="p-4 border-b flex justify-between items-center bg-gray-50">
-            <h4 class="font-bold text-gray-700">案例線上預覽 (PDF)</h4>
-            <button onclick="closePdfPreview()" class="px-6 py-2 bg-red-600 text-white rounded-lg font-bold hover:bg-red-700">關閉預覽</button>
-        </div>
-        <div class="flex-1">
-            <iframe id="pdf-iframe" class="w-full h-full" src=""></iframe>
+        <div class="p-4 bg-gray-50 text-center text-xs text-gray-400 rounded-b-2xl">
+            提示：點擊「預覽下載」將在新分頁開啟檔案，您可利用該頁面右上角圖示進行存檔。
         </div>
     </div>
 </div>
@@ -552,31 +582,18 @@
     }
 
     navCards.forEach(card => card.addEventListener('click', () => activateStep(card.dataset.stepBtn)));
-    activateStep('1');
+    
+    // 如果存在步驟則預覽第一步
+    if(navCards.length > 0) activateStep('1');
 })();
 
-// 案例清單彈窗
+// 案例清單彈窗控制
 function toggleCaseGallery() {
     const modal = document.getElementById('case-gallery-modal');
     const isHidden = modal.classList.contains('hidden');
     modal.classList.toggle('hidden', !isHidden);
     modal.classList.toggle('flex', isHidden);
     document.body.style.overflow = isHidden ? 'hidden' : 'auto';
-}
-
-// PDF 預覽
-function openPdfPreview(url) {
-    const previewModal = document.getElementById('pdf-preview-modal');
-    const iframe = document.getElementById('pdf-iframe');
-    // 使用 Google Viewer 預覽 PDF
-    iframe.src = `https://docs.google.com/viewer?url=${encodeURIComponent(url)}&embedded=true`;
-    previewModal.classList.remove('hidden');
-    previewModal.classList.add('flex');
-}
-
-function closePdfPreview() {
-    document.getElementById('pdf-preview-modal').classList.add('hidden');
-    document.getElementById('pdf-iframe').src = "";
 }
 </script>
 </body>
