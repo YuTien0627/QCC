@@ -71,7 +71,48 @@
     </style>
 </head>
 <body class="antialiased">
+<div id="announcement-bar" class="w-full bg-amber-100 border-b border-amber-200 py-2 relative overflow-hidden hidden">
+    <div class="max-w-6xl mx-auto px-4 flex items-center justify-between">
+        <div class="flex-1 overflow-hidden relative h-6">
+            <div class="absolute whitespace-nowrap animate-marquee flex items-center space-x-8">
+                <span class="text-amber-800 text-sm font-medium">
+                    🛠️ 網站維護公告：平台陸續進行內容優化，將於2026/03/02正式上線！。
+                </span>
+                <span class="text-amber-800 text-sm font-medium">
+                    🚀 新增功能：現已支援 Microsoft Forms 線上回饋！歡迎各位同仁多加利用。
+                </span>
+            </div>
+        </div>
+        <button onclick="closeAnnouncement()" class="ml-4 text-amber-500 hover:text-amber-700 transition-colors text-xl leading-none">&times;</button>
+    </div>
+</div>
 
+<style>
+    /* 跑馬燈動畫邏輯 */
+    @keyframes marquee {
+        0% { transform: translateX(50%); }
+        100% { transform: translateX(-100%); }
+    }
+    .animate-marquee {
+        animation: marquee 25s linear infinite;
+    }
+    /* 滑鼠移入時暫停，方便閱讀 */
+    .animate-marquee:hover {
+        animation-play-state: paused;
+    }
+</style>
+
+<script>
+    // 顯示公告欄 (您可以視情況控制此變數)
+    const showBar = true; 
+    if (showBar) {
+        document.getElementById('announcement-bar').classList.remove('hidden');
+    }
+
+    function closeAnnouncement() {
+        document.getElementById('announcement-bar').style.display = 'none';
+    }
+</script>
 <div class="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8">
 
     <header class="text-center py-10 bg-white shadow-xl rounded-xl mb-6 border-t-8 border-teal-600">
